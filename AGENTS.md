@@ -52,7 +52,7 @@ Step → verify: Check.
 Weak goals (“make it work”) force constant clarification. Strong ones let you move independently.
 
 
-There is file called @BigPicturePlan.md where you can see what we are going to build, and what the plan. this file needs to be updated by you whenever we hit a milestone.
+There is file called @BigPicturePlan.md where you can see what we are going to build, and what the plan. this file needs to be updated by you whenever we hit a milestone, a milestone can be new feature/mechanic that is meaningful for you to remember for later.
 After each item is marked done, you need to provide description with tech context, so other llm's understand codebase easier. 
 --
-Whenever you feel ready for commit,  you  suggest commit name. 
+Whenever you feel ready for commit,  you  suggest commit name, example of standard we use feat(landing page): added new hero section.

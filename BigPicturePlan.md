@@ -109,6 +109,5 @@ This should look like a coherent product, not three disconnected screens. One de
 14. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
 15. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
 
-## C) Milestones
+## C) Milestones include only actually important for context milestones. 
 
-- Added a GitHub Actions Lighthouse CI workflow at [`.github/workflows/lighthouse-ci.yml`](/Users/jakubjochymek/WebstormProjects/PrReviewerPhotoAid/my-app/.github/workflows/lighthouse-ci.yml) that runs only on `pull_request`.
