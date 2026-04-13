@@ -43,3 +43,8 @@ Then storybook creation via copying design system (user role) Then lets build si
 
 i revise output and put it in BigPicturePlan.md  i m aware this plan might change in future, but for now i d like to have big picture plan for llm to catch context and have a to do list.
 
+
+now i d like to do  a) vercel deploy, i like having it done first. b) lighthouse connection to github so i can see results on each pr.
+
+done, vercel deployed, lighthouse https://github.com/GoogleChrome/lighthouse-ci/
+
