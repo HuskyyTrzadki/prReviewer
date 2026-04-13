@@ -46,5 +46,7 @@ i revise output and put it in BigPicturePlan.md  i m aware this plan might chang
 
 now i d like to do  a) vercel deploy, i like having it done first. b) lighthouse connection to github so i can see results on each pr.
 
-done, vercel deployed, lighthouse https://github.com/GoogleChrome/lighthouse-ci/
+done, vercel deployed, lighthouse https://github.com/GoogleChrome/lighthouse-ci/ is showing in ci/cd. 100 on everything obiously. i put a warning if its below 80.
+
+
 
