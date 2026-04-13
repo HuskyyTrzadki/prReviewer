@@ -48,5 +48,6 @@ now i d like to do  a) vercel deploy, i like having it done first. b) lighthouse
 
 done, vercel deployed, lighthouse https://github.com/GoogleChrome/lighthouse-ci/ is showing in ci/cd. 100 on everything obiously. i put a warning if its below 80.
 
+first goal done. now "Define the design tokens", the trick i m going to use is that website https://designmd.me/ it extracts design to md file so ai can recreate it. its in design-inspiration.md
 
-
+one thought i have now that i think i m just going to so super simple storybook. 

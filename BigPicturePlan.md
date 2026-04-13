@@ -96,7 +96,7 @@ This should look like a coherent product, not three disconnected screens. One de
 1. [x] Set up the Next.js app with App Router, TypeScript, Tailwind, basic linting/formatting, and the initial feature-driven folder structure.
    Milestone context: The app uses Next.js App Router (`src/app`), TypeScript (`tsconfig.json` + typed route files), Tailwind v4 (`src/app/globals.css` with `@import "tailwindcss"`), and ESLint via `eslint.config.mjs` + `npm run lint`. Initial feature-driven structure is now in place under `src/features/*` and `src/shared/*` (kept intentionally empty with `.gitkeep` placeholders) so next milestones can add domain logic without restructuring routes.
 2. Define the design tokens, typography scale, spacing system, and shared layout primitives based on the reference visual language.
-3. Create Storybook and recreate the core user-facing design system components before composing full pages.
+3. Create Storybook and “recreate enough of the visual language to ship the landing and dashboard fast.
 4. Build the simple landing page from those reusable components, starting with the hero and repo URL input flow.
 5. Add the remaining landing sections: social proof, how-it-works, scoring dimensions, dashboard preview, and footer.
 6. Implement repository URL parsing, validation, and the transition from landing page submission to analysis.
