@@ -108,3 +108,7 @@ This should look like a coherent product, not three disconnected screens. One de
 13. ensure test coverage is done for URL parsing, scoring payload/schema validation, critical UI states, and at least one end-to-end happy path.
 14. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
 15. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
+
+## C) Milestones
+
+- Added a GitHub Actions Lighthouse CI workflow at [`.github/workflows/lighthouse-ci.yml`](/Users/jakubjochymek/WebstormProjects/PrReviewerPhotoAid/my-app/.github/workflows/lighthouse-ci.yml) that runs only on `pull_request`.
