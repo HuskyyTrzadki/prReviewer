@@ -78,7 +78,7 @@
   }
 
   .ds-nav {
-    @apply border-b border-silver bg-white;
+    @apply min-h-[4.5rem] border-b border-silver bg-white;
   }
 
   .ds-trust-bar {
@@ -101,12 +101,16 @@
     @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray outline-none transition-colors duration-150 focus:border-indigo-violet focus:ring-2 focus:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  .ds-input-error {
+    @apply border-error-red focus:border-error-red focus:ring-error-red/10;
+  }
+
   .ds-display-1 {
-    @apply font-serif text-[2.5rem] leading-[1.1] tracking-[-0.03em] text-navy sm:text-[3.5rem] lg:text-[4.5rem];
+    @apply font-serif text-[2.5rem] font-bold leading-[1.1] tracking-[-0.03em] text-navy sm:text-[3.5rem] lg:text-[4.5rem];
   }
 
   .ds-display-2 {
-    @apply font-serif text-[2rem] leading-[1.15] tracking-[-0.02em] text-navy sm:text-[2.5rem];
+    @apply font-serif text-[1.75rem] font-bold leading-[1.15] tracking-[-0.02em] text-navy sm:text-[2rem] lg:text-[2.5rem];
   }
 
   .ds-heading-3 {
@@ -118,11 +122,11 @@
   }
 
   .ds-body-lg {
-    @apply font-sans text-[1.125rem] leading-[1.5] text-dark-slate sm:text-[1.25rem] lg:text-[1.5rem];
+    @apply font-sans text-[1.125rem] font-medium leading-[1.5] text-dark-slate sm:text-[1.25rem] lg:text-[1.5rem];
   }
 
   .ds-body {
-    @apply font-sans text-base leading-[1.375] text-dark-slate;
+    @apply font-sans text-base font-medium leading-[1.375] text-dark-slate;
   }
 
   .ds-body-secondary {
