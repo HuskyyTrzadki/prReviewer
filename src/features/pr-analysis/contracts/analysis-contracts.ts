@@ -8,7 +8,7 @@ export const normalizedRepositorySchema = z.object({
   owner: z.string().trim().min(1),
   repo: z.string().trim().min(1),
   fullName: z.string().trim().min(1),
-  canonicalUrl: z.url(),
+  canonicalUrl: z.string().url(),
 });
 
 export const analyzeRepositoryRequestSchema = z.object({
@@ -30,10 +30,10 @@ export const analyzeRepositorySuccessSchema = z.object({
   status: z.literal("success"),
   repository: normalizedRepositorySchema,
   repoId: repoIdSchema,
-  redirectUrl: z.string().startsWith("/results/"),
+  redirectUrl: z.string().regex(/^\/results\/[^/]+$/),
 });
 
-export const analyzeRepositoryResponseSchema = z.union([
+export const analyzeRepositoryResponseSchema = z.discriminatedUnion("status", [
   analyzeRepositorySuccessSchema,
   analysisApiErrorSchema,
 ]);
