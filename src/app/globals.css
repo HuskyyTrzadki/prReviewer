@@ -34,6 +34,19 @@
   --shadow-soft: 0 1px 3px rgba(29, 36, 58, 0.08);
   --shadow-float: 0 2px 8px rgba(29, 36, 58, 0.16);
   --shadow-overlay: 0 4px 16px rgba(29, 36, 58, 0.2);
+  --animate-hero-entry: hero-entry 0.7s ease-out both;
+
+  @keyframes hero-entry {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 @layer base {
@@ -142,5 +155,11 @@
 
   .ds-overline {
     @apply font-sans text-xs font-semibold uppercase tracking-[0.12em] text-cool-gray;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-hero-entry {
+    animation: none;
   }
 }
