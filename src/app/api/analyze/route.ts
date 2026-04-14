@@ -29,12 +29,18 @@ const createErrorResponse = (
 const createRepoId = (fullName: string) =>
   `repo_${Buffer.from(fullName, "utf8").toString("base64url")}`;
 
-export const POST = async (request: NextRequest) => {
-  let rawBody: unknown;
-
+const readJsonBody = async (request: NextRequest) => {
   try {
-    rawBody = await request.json();
+    return await request.json();
   } catch {
+    return null;
+  }
+};
+
+export const POST = async (request: NextRequest) => {
+  const rawBody = await readJsonBody(request);
+
+  if (rawBody === null) {
     return createErrorResponse(
       "INVALID_REQUEST_BODY",
       "Request body must be valid JSON with a repositoryUrl field.",
