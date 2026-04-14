@@ -57,3 +57,4 @@ After each item is marked done, you need to provide description with tech contex
 --
 Whenever you feel ready for commit,  you  suggest commit name, example of standard we use feat(landing page): added new hero section.
 use english only.
+Whenever user asks to understand something, explain it using examples.

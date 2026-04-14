@@ -55,3 +55,5 @@ one thought i have now that i think i m just going to so super simple storybook.
 i apply tailwind-design-system skill and create a design config.
 
 Storybook created, its not perfect.. however it achieves a goal, which is to see a color patterns, font sizes, gaps.. looks correct, later on can be polished
+
+I notice that actually i d like to start implementing logic soon, so i simplify plan a bit, to just put a searchbar as a starting point.

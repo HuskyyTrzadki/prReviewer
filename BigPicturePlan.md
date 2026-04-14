@@ -101,15 +101,16 @@ This should look like a coherent product, not three disconnected screens. One de
    Milestone context: Storybook is configured via `.storybook/main.ts` and `.storybook/preview.ts` to load only `src/features/design-system/stories/**` and reuse the app token layer from `src/app/globals.css`. The initial shipping-oriented story set is in place for foundations (`Colors`, `Typography`), primitives (`Button`, `Input`, `Card`), layout rhythm (`Container Section`), and reusable landing compositions (`Hero`, `Trust Strip`) so LP and dashboard sections can be assembled from validated visual blocks instead of ad hoc styling.
 4. Build the simple landing page from those reusable components, starting with the hero and repo URL input flow.
 5. Add the remaining landing sections: social proof, how-it-works, scoring dimensions, dashboard preview, and footer.
-6. Implement repository URL parsing, validation, and the transition from landing page submission to analysis.
+6. Implement repository URL parsing and validation, and define the analysis request/response contracts shared by the landing flow and results page.
 7. Build the server analysis flow for GitHub repositories, including merged PR fetching, normalization, and clear error mapping.
 8. Add the LLM scoring pipeline with structured output validation and repository-level aggregation.
 9. Persist analysis results under a deterministic key and expose a stable results route for revisits and shareability.
-10. Build the dashboard shell with total score, dimension breakdown, repository summary, and loading/error/empty states.
-11. Implement the PR results list with sorting, filtering, score display, metadata, and external diff links.
-12. ensure performance budgets are enforced on the landing page, with minimal client JavaScript, optimized assets, and strong mobile Lighthouse results.
-13. ensure test coverage is done for URL parsing, scoring payload/schema validation, critical UI states, and at least one end-to-end happy path.
-14. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
-15. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
+10. Wire the landing page submission to the real analysis flow and transition the user to the results experience.
+11. Build the dashboard shell with total score, dimension breakdown, repository summary, and loading/error/empty states.
+12. Implement the PR results list with sorting, filtering, score display, metadata, and external diff links.
+13. ensure performance budgets are enforced on the landing page, with minimal client JavaScript, optimized assets, and strong mobile Lighthouse results.
+14. ensure test coverage is done for URL parsing, scoring payload/schema validation, critical UI states, and at least one end-to-end happy path.
+15. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
+16. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
 
 ## C) Milestones include only actually important for context milestones. 
