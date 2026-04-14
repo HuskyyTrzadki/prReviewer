@@ -69,3 +69,113 @@ i wonder whether we should have separate /analyze page, talking to gpt.
 small fail, i noticed i have different account thats commiting and different owner. The issue is that on vercel you cant 
 add another account to project as it requires pro plan.
 
+for step 6(i need to research quite a bit), i wrote fullstack websites as well, however of course on BE i dont feel as confident as on FE.
+
+interesting output from llm, i provided codex quite a lot of next.js documentations via skills.
+"•One important Next.js constraint came out of the docs: the future results page
+should not fetch your own internal route handler from a Server Component. The
+contract module should be shared, but the results page should validate persisted/
+loading data directly on the server side instead of doing an extra internal HTTP
+hop."
+
+after few refinements for step 6 we have this plan, i make sure i understand it.
+
+----------
+" # Step 6 Plan: Repository Input Contract and Analyze Stub
+
+## Summary
+
+- Do not fetch GitHub data in this step.
+- Add a shared parser + schema layer under src/features/pr-analysis.
+- Add a public POST /api/analyze stub endpoint that validates input and returns
+  typed success/error responses.
+- Keep the future results route as /results/[repoId], with repoId treated as an
+  opaque identifier.
+- Do not wire the landing form to the stub yet; step 10 remains the real
+  integration milestone.
+
+## Key Changes
+
+- Add zod and define shared contracts in a single module, e.g. src/features/pr-
+  analysis/contracts/analysis-contracts.ts.
+- Add a parser module, e.g. src/features/pr-analysis/lib/repository-url.ts, with
+  one main entrypoint such as parseGitHubRepositoryInput(input).
+- The parser should normalize valid input into:
+    - owner
+    - repo
+    - fullName
+    - canonicalUrl
+- Accept only GitHub repository URL forms in this milestone:
+    - https://github.com/owner/repo
+    - trailing slash
+    - optional .git
+    - scheme-less github.com/owner/repo
+- Reject:
+    - empty or malformed input
+    - non-GitHub hosts
+    - gist URLs
+    - owner-only paths
+    - extra resource paths like /pull/123
+- Prefer a discriminated parse result over boolean helpers or uncontrolled throws.
+- Define these shared schemas:
+    - AnalyzeRepositoryRequestSchema
+    - NormalizedRepositorySchema
+    - AnalysisApiErrorSchema
+    - AnalyzeRepositorySuccessSchema
+    - AnalyzeRepositoryResponseSchema
+    - RepositoryAnalysisResultSchema
+- Keep error codes scoped to what step 6 can truly detect:
+    - INVALID_REQUEST_BODY
+    - INVALID_REPOSITORY_URL
+    - UNSUPPORTED_REPOSITORY_HOST
+    - UNSUPPORTED_REPOSITORY_RESOURCE
+- Do not add PRIVATE_REPOSITORY, NO_MERGED_PULL_REQUESTS, GITHUB_RATE_LIMITED, or
+  similar codes yet.
+- Add src/app/api/analyze/route.ts:
+    - POST only
+    - validate JSON body with Zod
+    - parse and normalize the repo URL
+    - map failures to typed 400 responses
+    - return typed placeholder success with repository, repoId, and redirectUrl
+- Keep repoId opaque in the contract. The stub may derive it from normalized repo
+  data internally for now, but the contract must not promise a slug algorithm.
+- For the future results page, share the same result schema, but do not plan to
+  fetch your own route handler from a Server Component. Validate loaded server-
+  side data directly with the shared schema.
+
+## Commit Split
+
+1. feat(pr-analysis): add GitHub repository URL parser and normalization
+2. feat(pr-analysis): add shared analysis contracts and result schemas
+3. feat(api): add analyze route validation stub
+
+## Test Plan
+
+- Add a normal unit-test path to Vitest in addition to the current Storybook-
+  focused setup.
+- Parser tests:
+    - accept the 4 supported URL examples
+    - reject empty, malformed, non-GitHub, gist, owner-only, and /pull/... URLs
+- Contract tests:
+    - success response schema parses expected payload
+    - error response schema parses expected payload
+    - result payload schema covers repo summary, dimension scores, PR rows, and
+      recommendations
+- Route tests:
+    - invalid body returns typed 400
+    - invalid repository URL returns typed 400
+    - valid repository URL returns normalized repository + opaque repoId + /
+      results/{repoId}
+    - no GitHub fetch happens in this milestone
+
+## Assumptions
+
+- POST /api/analyze is the right shape for this step because the milestone is
+  about a reusable backend contract, not just a form submission mechanism.
+- repoId remains intentionally non-final until step 9 defines the deterministic
+  cache/storage key.
+- Input support stays limited to GitHub URL forms in step 6 so validation stays
+  aligned with the current hero input and does not force a broader UX rewrite yet.
+
+"
+-------------------
