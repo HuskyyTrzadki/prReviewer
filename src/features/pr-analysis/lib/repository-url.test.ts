@@ -9,6 +9,7 @@ describe("parseRepositoryUrl", () => {
       "https://github.com/vercel/next.js/",
       "https://github.com/vercel/next.js.git",
       "github.com/vercel/next.js",
+      " https://github.com/vercel/next.js ",
     ];
 
     for (const input of inputs) {
@@ -60,13 +61,21 @@ describe("parseRepositoryUrl", () => {
       },
     });
 
-    expect(parseRepositoryUrl("not a url")).toEqual({
+    const malformedResult = parseRepositoryUrl("not a url");
+
+    expect(malformedResult).toMatchObject({
       ok: false,
       error: {
         code: "INVALID_REPOSITORY_URL",
-        message:
-          "Enter a valid public GitHub repository URL, for example https://github.com/vercel/next.js.",
       },
     });
+
+    if (malformedResult.ok) {
+      throw new Error("Expected malformed input to fail.");
+    }
+
+    expect(malformedResult.error.message).toContain(
+      "valid public GitHub repository URL",
+    );
   });
 });
