@@ -1,18 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type SyntheticEvent } from "react";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
 
-export function RepoUrlHeroForm() {
+export const RepoUrlHeroForm = () => {
   const [repositoryUrl, setRepositoryUrl] = useState(DEFAULT_REPOSITORY_URL);
   const [submittedUrl, setSubmittedUrl] = useState(DEFAULT_REPOSITORY_URL);
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  const handleSubmit = (
+    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  ) => {
     event.preventDefault();
     setSubmittedUrl(repositoryUrl.trim());
-  }
-
+  };
 
   return (
     <form className="w-full" onSubmit={handleSubmit}>
@@ -55,4 +56,4 @@ export function RepoUrlHeroForm() {
       </div>
     </form>
   );
-}
+};
