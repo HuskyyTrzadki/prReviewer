@@ -61,3 +61,8 @@ I notice that actually i d like to start implementing logic soon, so i simplify 
 no need for hook form as its just one input.
 
 seems like mcp from next causes troubles, i keep on editing agents.md
+
+i like landing page already, i didnt think its going to look so good on mock try.
+
+i wonder whether we should have separate /analyze page, talking to gpt.
+
