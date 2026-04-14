@@ -1,7 +1,16 @@
-import type { Preview } from '@storybook/nextjs-vite'
+import { definePreview } from '@storybook/nextjs-vite'
+import '../src/app/globals.css'
 
-const preview: Preview = {
+const preview = definePreview({
   parameters: {
+    backgrounds: {
+      default: 'page',
+      values: [
+        { name: 'page', value: '#f3f9fb' },
+        { name: 'white', value: '#ffffff' },
+        { name: 'lavender', value: '#f9f6fe' },
+      ],
+    },
     controls: {
       matchers: {
        color: /(background|color)$/i,
@@ -16,6 +25,6 @@ const preview: Preview = {
       test: 'todo'
     }
   },
-};
+});
 
 export default preview;
