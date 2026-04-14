@@ -56,3 +56,4 @@ There is file called @BigPicturePlan.md where you can see what we are going to b
 After each item is marked done, you need to provide description with tech context, so other llm's understand codebase easier. 
 --
 Whenever you feel ready for commit,  you  suggest commit name, example of standard we use feat(landing page): added new hero section.
+use english only.
