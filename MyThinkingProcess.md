@@ -55,3 +55,17 @@ one thought i have now that i think i m just going to so super simple storybook.
 i apply tailwind-design-system skill and create a design config.
 
 Storybook created, its not perfect.. however it achieves a goal, which is to see a color patterns, font sizes, gaps.. looks correct, later on can be polished
+
+I notice that actually i d like to start implementing logic soon, so i simplify plan a bit, to just put a searchbar as a starting point.
+
+no need for hook form as its just one input.
+
+seems like mcp from next causes troubles, i keep on editing agents.md
+
+i like landing page already, i didnt think its going to look so good on mock try.
+
+i wonder whether we should have separate /analyze page, talking to gpt.
+
+small fail, i noticed i have different account thats commiting and different owner. The issue is that on vercel you cant 
+add another account to project as it requires pro plan.
+

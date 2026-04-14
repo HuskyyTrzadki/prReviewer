@@ -99,17 +99,20 @@ This should look like a coherent product, not three disconnected screens. One de
    Milestone context: `src/app/globals.css` now contains the Tailwind v4 token layer for the product palette, Inter/PT Serif font hooks, radius and shadow tokens, responsive type helpers, and shared component classes (`ds-container`, `ds-section`, `ds-button-*`, `ds-input`, `ds-card`, `ds-nav`, `ds-trust-bar`). `src/app/layout.tsx` wires the font variables into the app shell so later landing and dashboard work can consume one consistent language without re-declaring core styles.
 3. [x] Create Storybook and “recreate enough of the visual language to ship the landing and dashboard fast.
    Milestone context: Storybook is configured via `.storybook/main.ts` and `.storybook/preview.ts` to load only `src/features/design-system/stories/**` and reuse the app token layer from `src/app/globals.css`. The initial shipping-oriented story set is in place for foundations (`Colors`, `Typography`), primitives (`Button`, `Input`, `Card`), layout rhythm (`Container Section`), and reusable landing compositions (`Hero`, `Trust Strip`) so LP and dashboard sections can be assembled from validated visual blocks instead of ad hoc styling.
-4. Build the simple landing page from those reusable components, starting with the hero and repo URL input flow.
-5. Add the remaining landing sections: social proof, how-it-works, scoring dimensions, dashboard preview, and footer.
-6. Implement repository URL parsing, validation, and the transition from landing page submission to analysis.
+4. [x] Build the simple landing page from those reusable components, starting with the hero and repo URL input flow.
+   Milestone context: The marketing route at `src/app/page.tsx` now renders a real landing hero via `src/features/landing/landing-hero.tsx` instead of the earlier text stub. The hero stays intentionally narrow for this milestone: one centered editorial headline, supporting copy, subtle background shapes, and a pill row built directly from the token classes in `src/app/globals.css`. The repo entry UI lives in `src/features/repo-input/repo-url-hero-form.tsx` as a small client component with a large URL input, submit button, browser-native URL validation, and a lightweight submitted-state preview. This gives the page a usable hero/input flow without pulling step 6 URL parsing contracts or step 10 live analysis wiring forward too early.
+5. [x] Add the remaining landing sections: social proof, how-it-works, scoring dimensions, dashboard preview, and footer.
+   Milestone context: The marketing route is now a complete landing page instead of a hero-only stub. `src/features/landing/landing-sections.tsx` adds the remaining section stack as reusable page compositions: a trust/social-proof band, a 3-step how-it-works explainer, the 3 scoring-dimension cards, a dashboard preview built from static score and PR breakdown blocks, and a lightweight footer with section anchors. `src/app/page.tsx` now renders the full stack under one `main` landmark, while the hero and repo input were tightened to match the production landing language rather than the earlier step-marker prototype. Shared UI polish also moved slightly down into the token layer in `src/app/globals.css` so buttons and inputs now expose visible `focus-visible` states across the landing experience.
+6. Implement repository URL parsing and validation, and define the analysis request/response contracts shared by the landing flow and results page.
 7. Build the server analysis flow for GitHub repositories, including merged PR fetching, normalization, and clear error mapping.
 8. Add the LLM scoring pipeline with structured output validation and repository-level aggregation.
 9. Persist analysis results under a deterministic key and expose a stable results route for revisits and shareability.
-10. Build the dashboard shell with total score, dimension breakdown, repository summary, and loading/error/empty states.
-11. Implement the PR results list with sorting, filtering, score display, metadata, and external diff links.
-12. ensure performance budgets are enforced on the landing page, with minimal client JavaScript, optimized assets, and strong mobile Lighthouse results.
-13. ensure test coverage is done for URL parsing, scoring payload/schema validation, critical UI states, and at least one end-to-end happy path.
-14. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
-15. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
+10. Wire the landing page submission to the real analysis flow and transition the user to the results experience.
+11. Build the dashboard shell with total score, dimension breakdown, repository summary, and loading/error/empty states.
+12. Implement the PR results list with sorting, filtering, score display, metadata, and external diff links.
+13. ensure performance budgets are enforced on the landing page, with minimal client JavaScript, optimized assets, and strong mobile Lighthouse results.
+14. ensure test coverage is done for URL parsing, scoring payload/schema validation, critical UI states, and at least one end-to-end happy path.
+15. ensure caching is done for repeated repository analyses so rate-limit pressure, latency, and LLM cost stay under control.
+16. ensure code quality and wow-factor are done through cleanup, accessibility passes, motion polish, visual consistency, and one memorable landing detail added at the end.
 
 ## C) Milestones include only actually important for context milestones. 
