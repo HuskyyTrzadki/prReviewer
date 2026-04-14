@@ -2,7 +2,7 @@ import { RepoUrlHeroForm } from "@/features/repo-input/repo-url-hero-form";
 
 const heroPills = ["Public GitHub repos", "Impact + AI leverage + quality", "Fast first-pass review"];
 
-export function LandingHero() {
+export const LandingHero = () => {
   return (
     <section className="ds-section ds-section-muted relative overflow-hidden">
       <div className="absolute left-1/2 top-12 h-64 w-64 -translate-x-[130%] rounded-full bg-soft-indigo/70 blur-3xl" />
@@ -42,4 +42,4 @@ export function LandingHero() {
       </div>
     </section>
   );
-}
+};

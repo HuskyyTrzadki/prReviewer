@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, PT_Serif } from "next/font/google";
+import Script from "next/script";
+import type { ReactNode } from "react";
 import "./globals.css";
-import Script from "next/dist/client/script";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -22,11 +23,11 @@ export const metadata: Metadata = {
   description: "Repository pull request evaluator",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
-  children: React.ReactNode;
-}>) {
+  children: ReactNode;
+}>) => {
   return (
     <html
       lang="en"
@@ -34,14 +35,16 @@ export default function RootLayout({
     >
       <head>
         {process.env.NODE_ENV === "development" && (
-            <Script
-                src="//unpkg.com/react-grab/dist/index.global.js"
-                crossOrigin="anonymous"
-                strategy="beforeInteractive"
-            />
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
         )}
       </head>
       <body className="min-h-full bg-white text-navy">{children}</body>
     </html>
   );
-}
+};
+
+export default RootLayout;

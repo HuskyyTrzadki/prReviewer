@@ -27,6 +27,7 @@ Don’t “fix” nearby code, comments, or formatting.
 Don’t refactor unrelated parts.
 Follow the existing style, even if it’s not your preference.
 If you see unrelated dead code, mention it — don’t remove it.
+Do not reintroduce internal Next imports, `React.` namespace usage, deprecated `FormEvent`/`FormEventHandler` types, or function-declared components when an arrow component is already the local pattern, try to use patterns existing in repo, if u change pattern somewhere and its better, ask user for changing this everywhere.
 
 If your changes create leftovers:
 
