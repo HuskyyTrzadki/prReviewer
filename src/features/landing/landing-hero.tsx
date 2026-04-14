@@ -5,22 +5,28 @@ const heroPills = ["Public GitHub repos", "Impact + AI leverage + quality", "Fas
 export const LandingHero = () => {
   return (
     <section className="ds-section ds-section-muted relative overflow-hidden">
-      <div className="absolute left-1/2 top-12 h-64 w-64 -translate-x-[130%] rounded-full bg-soft-indigo/70 blur-3xl" />
-      <div className="absolute left-1/2 top-6 h-72 w-72 translate-x-[55%] rounded-full bg-lavender-mist blur-3xl" />
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-12 h-64 w-64 -translate-x-[130%] rounded-full bg-soft-indigo/70 blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="absolute left-1/2 top-6 h-72 w-72 translate-x-[55%] rounded-full bg-lavender-mist blur-3xl"
+      />
 
       <div className="ds-container relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 py-6 text-center sm:py-10 lg:py-16">
           <span className="animate-hero-entry ds-overline rounded-full border border-silver bg-white px-4 py-2 text-navy shadow-soft">
-            Step 4 · Hero entry
+            Public Repo Review
           </span>
 
           <div className="animate-hero-entry space-y-5">
-            <h1 className="ds-display-1 mx-auto max-w-[14ch]">
-              Review pull requests with a clearer signal.
+            <h1 className="ds-display-1 mx-auto max-w-[14ch] text-balance">
+              Review Pull Requests With a Clearer Signal.
             </h1>
-            <p className="ds-body-lg mx-auto max-w-[42rem]">
-              Paste a public repository URL to start a polished PR scoring flow built
-              for engineering leads evaluating impact, AI leverage, and quality.
+            <p className="ds-body-lg mx-auto max-w-[42rem] text-pretty">
+              Paste a public repository URL to score merged pull requests across
+              impact, AI leverage, and quality in one polished review flow.
             </p>
           </div>
 

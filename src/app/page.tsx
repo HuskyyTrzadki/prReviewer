@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LandingHero } from "@/features/landing/landing-hero";
+import { LandingSections } from "@/features/landing/landing-sections";
 
 export const metadata: Metadata = {
   title: "Review Pull Requests",
@@ -8,8 +9,9 @@ export const metadata: Metadata = {
 };
 
 const HomePage = () => (
-  <main>
+  <main id="main-content">
     <LandingHero />
+    <LandingSections />
   </main>
 );
 

@@ -102,19 +102,19 @@
   }
 
   .ds-button-primary {
-    @apply inline-flex h-11 items-center justify-center rounded-md bg-indigo-violet px-6 text-base font-medium text-white transition-colors duration-150 hover:bg-indigo-violet-hover active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex h-11 items-center justify-center rounded-md bg-indigo-violet px-6 text-base font-medium text-white transition-colors duration-150 hover:bg-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/30 focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
 
   .ds-button-secondary {
-    @apply inline-flex h-11 items-center justify-center rounded-md border border-silver bg-white px-6 text-base font-medium text-navy transition-colors duration-150 hover:bg-ice-blue active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex h-11 items-center justify-center rounded-md border border-silver bg-white px-6 text-base font-medium text-navy transition-colors duration-150 hover:bg-ice-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
 
   .ds-button-small {
-    @apply inline-flex h-10 items-center justify-center rounded-md bg-indigo-violet px-5 text-sm font-medium text-white transition-colors duration-150 hover:bg-indigo-violet-hover active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+    @apply inline-flex h-10 items-center justify-center rounded-md bg-indigo-violet px-5 text-sm font-medium text-white transition-colors duration-150 hover:bg-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/30 focus-visible:ring-offset-2 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
   }
 
   .ds-input {
-    @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray outline-none transition-colors duration-150 focus:border-indigo-violet focus:ring-2 focus:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray transition-colors duration-150 focus-visible:border-indigo-violet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .ds-input-error {

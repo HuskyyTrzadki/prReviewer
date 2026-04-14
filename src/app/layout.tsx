@@ -42,7 +42,15 @@ const RootLayout = ({
           />
         )}
       </head>
-      <body className="min-h-full bg-white text-navy">{children}</body>
+      <body className="min-h-full bg-white text-navy">
+        <a
+          className="sr-only absolute left-4 top-4 z-50 rounded-md bg-white px-4 py-3 text-sm font-medium text-navy shadow-soft focus:not-sr-only focus:outline-none focus:ring-2 focus:ring-indigo-violet/30"
+          href="#main-content"
+        >
+          Skip to Main Content
+        </a>
+        {children}
+      </body>
     </html>
   );
 };
