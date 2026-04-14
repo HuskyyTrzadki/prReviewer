@@ -66,3 +66,6 @@ i like landing page already, i didnt think its going to look so good on mock try
 
 i wonder whether we should have separate /analyze page, talking to gpt.
 
+small fail, i noticed i have different account thats commiting and different owner. The issue is that on vercel you cant 
+add another account to project as it requires pro plan.
+
