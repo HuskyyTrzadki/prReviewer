@@ -297,3 +297,7 @@ i stumble across this issue:  the request completed
 - DevTools lost the response preview because the page navigation happened right away
 ---
 i decide to just console log. i also get 502 error, i add debug logs. the issue was gemini model version,
+
+for loader i think super engaging are the ones that show different messages/some facts. 
+
+i was hoping to be a bit furher at this moment, so i need to cut, i was planning to do persistance of url, so u can share a link however ofc this requires supabase or vercel.. this configuration would eat up too much time so i skip it.
