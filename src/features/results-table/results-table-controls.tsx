@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 import {
   getResultsTableSizeLabel,
   minimumScoreValues,
@@ -32,7 +34,7 @@ const FilterField = ({
   children,
   label,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   label: string;
 }) => (
   <label className="space-y-2">
