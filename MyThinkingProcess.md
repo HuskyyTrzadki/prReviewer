@@ -453,3 +453,5 @@ we finally have working app, it looks ok on desktop and mobile. i dont like coup
 for design qa i inspect whole website module by module, first desktop than mobile. i ask gemini looking at this design what would you improve and paste ss's.   (ofc with design inspiration file) i use less advanced models(thinking=low) as for this kind of task thinking is actually worsening output.
 
 i focus on analysis results page first, i need to act quicker cause i m running out of time.
+
+for ui chart i d like a radar instead of just plain bars, i d use recharts for quick implemmentation, it doesnt weight much,
