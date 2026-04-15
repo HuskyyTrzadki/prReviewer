@@ -5,7 +5,7 @@ import { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepa
 import {
   createGithubApiClientMock,
   createGithubPullRequestFileRecord,
-  createGithubPullRequestRecord,
+  createNormalizedPullRequestSource,
   createGithubRequestError,
   testRepository,
 } from "@/features/pr-analysis/lib/pr-analysis.test-helpers";
@@ -16,7 +16,7 @@ const analysisSource = {
     defaultBranch: "canary",
   },
   pullRequests: Array.from({ length: 10 }, (_, index) =>
-    createGithubPullRequestRecord(index + 1),
+    createNormalizedPullRequestSource(index + 1),
   ),
   requestedPullRequestLimit: 20,
 };

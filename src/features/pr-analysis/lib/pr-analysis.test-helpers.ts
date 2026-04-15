@@ -1,4 +1,5 @@
 import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { NormalizedPullRequestSource } from "@/features/pr-analysis/contracts/analysis-source";
 import type {
   GithubApiClient,
   GithubPullRequestFileRecord,
@@ -40,6 +41,22 @@ export const createGithubPullRequestRecord = (
   number: number,
   overrides: Partial<GithubPullRequestRecord> = {},
 ): GithubPullRequestRecord => ({
+  number,
+  title: `PR ${number}`,
+  body: `Body ${number}`,
+  authorLogin: `author-${number}`,
+  htmlUrl: `https://github.com/vercel/next.js/pull/${number}`,
+  mergedAt: "2026-04-14T19:00:00.000Z",
+  additions: number * 2,
+  deletions: number,
+  changedFiles: 3,
+  ...overrides,
+});
+
+export const createNormalizedPullRequestSource = (
+  number: number,
+  overrides: Partial<NormalizedPullRequestSource> = {},
+): NormalizedPullRequestSource => ({
   number,
   title: `PR ${number}`,
   body: `Body ${number}`,
