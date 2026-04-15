@@ -40,6 +40,14 @@ export const ResultsTableSection = ({
     [result.analysis.pullRequests, tableState],
   );
 
+  const getNextSortDirection = (sort: ResultsTableSortKey) => {
+    if (tableState.sort !== sort) {
+      return getResultsTableSortDirectionForKey(sort);
+    }
+
+    return tableState.dir === "desc" ? "asc" : "desc";
+  };
+
   const updateState = (statePatch: Partial<typeof tableState>) => {
     const nextState = { ...tableState, ...statePatch };
     const queryString = createResultsTableQueryString(nextState);
@@ -59,13 +67,19 @@ export const ResultsTableSection = ({
             <h2 className="ds-heading-3 text-[1.5rem]">
               Sort, filter, and inspect the PR sample behind the score
             </h2>
+            <p className="ds-caption max-w-[36rem] text-dark-slate">
+              Use search and filters to move from a quick score overview to the
+              individual pull requests shaping it.
+            </p>
           </div>
           <p className="ds-caption text-dark-slate">
-            Showing {visiblePullRequests.length} of {result.analysis.pullRequests.length} scored pull requests
+            Showing {visiblePullRequests.length} of{" "}
+            {result.analysis.pullRequests.length} scored pull requests
           </p>
         </div>
         <p className="ds-caption text-dark-slate">
-          Sorted by {getResultsTableSortLabel(tableState.sort)}.
+          Sorted by {getResultsTableSortLabel(tableState.sort)}. Tap a column to
+          change the order.
         </p>
       </div>
 
@@ -97,12 +111,7 @@ export const ResultsTableSection = ({
               onSortChange={(sort: ResultsTableSortKey) =>
                 updateState({
                   sort,
-                  dir:
-                    tableState.sort === sort
-                      ? tableState.dir === "desc"
-                        ? "asc"
-                        : "desc"
-                      : getResultsTableSortDirectionForKey(sort),
+                  dir: getNextSortDirection(sort),
                 })
               }
               pullRequests={visiblePullRequests}
