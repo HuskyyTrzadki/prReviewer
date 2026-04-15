@@ -1,7 +1,15 @@
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { analyzeRepositoryResponseSchema } from "@/features/pr-analysis/contracts/analysis-contracts";
+
+const { prepareRepositoryAnalysisSourceMock } = vi.hoisted(() => ({
+  prepareRepositoryAnalysisSourceMock: vi.fn(),
+}));
+
+vi.mock("@/features/pr-analysis/lib/prepare-repository-analysis-source", () => ({
+  prepareRepositoryAnalysisSource: prepareRepositoryAnalysisSourceMock,
+}));
 
 import { POST } from "./route";
 
@@ -15,6 +23,10 @@ const createJsonRequest = (body: BodyInit) =>
   });
 
 describe("POST /api/analyze", () => {
+  beforeEach(() => {
+    prepareRepositoryAnalysisSourceMock.mockReset();
+  });
+
   it("returns a typed error for invalid JSON", async () => {
     const response = await POST(createJsonRequest("{"));
     const payload = analyzeRepositoryResponseSchema.parse(await response.json());
@@ -56,6 +68,21 @@ describe("POST /api/analyze", () => {
   });
 
   it("returns a typed success payload for a valid repository URL", async () => {
+    prepareRepositoryAnalysisSourceMock.mockResolvedValue({
+      ok: true,
+      value: {
+        repository: {
+          owner: "vercel",
+          repo: "next.js",
+          fullName: "vercel/next.js",
+          canonicalUrl: "https://github.com/vercel/next.js",
+          defaultBranch: "canary",
+        },
+        pullRequests: [],
+        requestedPullRequestLimit: 20,
+      },
+    });
+
     const response = await POST(
       createJsonRequest(
         JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
@@ -78,5 +105,79 @@ describe("POST /api/analyze", () => {
     });
     expect(payload.repoId).toMatch(/\S+/);
     expect(payload.redirectUrl).toBe(`/results/${payload.repoId}`);
+  });
+
+  it("returns a typed 404 when the repository is missing or private", async () => {
+    prepareRepositoryAnalysisSourceMock.mockResolvedValue({
+      ok: false,
+      error: {
+        code: "REPOSITORY_NOT_FOUND_OR_PRIVATE",
+        message:
+          "This repository was not found or is private. Use a public GitHub repository URL.",
+      },
+    });
+
+    const response = await POST(
+      createJsonRequest(
+        JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
+      ),
+    );
+    const payload = analyzeRepositoryResponseSchema.parse(await response.json());
+
+    expect(response.status).toBe(404);
+    expect(payload).toEqual({
+      status: "error",
+      code: "REPOSITORY_NOT_FOUND_OR_PRIVATE",
+      message:
+        "This repository was not found or is private. Use a public GitHub repository URL.",
+    });
+  });
+
+  it("returns a typed 429 when github rate limits the analysis", async () => {
+    prepareRepositoryAnalysisSourceMock.mockResolvedValue({
+      ok: false,
+      error: {
+        code: "GITHUB_RATE_LIMITED",
+        message: "GitHub rate limit was reached. Try again later.",
+      },
+    });
+
+    const response = await POST(
+      createJsonRequest(
+        JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
+      ),
+    );
+    const payload = analyzeRepositoryResponseSchema.parse(await response.json());
+
+    expect(response.status).toBe(429);
+    expect(payload).toEqual({
+      status: "error",
+      code: "GITHUB_RATE_LIMITED",
+      message: "GitHub rate limit was reached. Try again later.",
+    });
+  });
+
+  it("returns a typed 422 when no merged pull requests are available", async () => {
+    prepareRepositoryAnalysisSourceMock.mockResolvedValue({
+      ok: false,
+      error: {
+        code: "NO_MERGED_PULL_REQUESTS",
+        message: "No merged pull requests were found for this repository.",
+      },
+    });
+
+    const response = await POST(
+      createJsonRequest(
+        JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
+      ),
+    );
+    const payload = analyzeRepositoryResponseSchema.parse(await response.json());
+
+    expect(response.status).toBe(422);
+    expect(payload).toEqual({
+      status: "error",
+      code: "NO_MERGED_PULL_REQUESTS",
+      message: "No merged pull requests were found for this repository.",
+    });
   });
 });

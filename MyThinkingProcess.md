@@ -179,3 +179,38 @@ after few refinements for step 6 we have this plan, i make sure i understand it.
 
 "
 -------------------
+
+researching about github api.
+
+I don't know much about github api, so i research about it "how can i obtain api docs for github, research. provide examples."
+ai suggests 2 options, either via fetch public api, or using Octokit which apparently is official client from github, perfect! 
+i research about it and decide to use it.
+
+Also times comes to decide how many we fetch, after talking to gpt 20 seems fine if we try to tackle 60s, however it might change in future, 
+we will need to do it via batches/concurrency ofc, over there we need to also decide how many can we handle. 
+
+step 7 is much bigger,
+used prompts:
+
+"›
+› lets go with step 7.  this will be pretty big, so we need to split it, propose
+breakpoints, where we review changes, u write tests, and make sure we go dont overcomplicate.
+after each step tell me commit name, and explain changes to someone that is not BE
+engineer, provide reasoning, because its bigger make sure to apply "Default to Simplicity" rule.
+I chose to use Octokit for github api. 
+make sure nr of prs merged at once is flexible.
+focus on both public repos and private, when private it should be possible to pass token. to step 10 on FE lets add a note to handle case when repo is private.
+a
+gpt-5.4 high · Context [     ] · "
+
+output:
+
+
+for sure for BE development i could care more about typing and clean code, however i decide its better to not spend to much time on that, so for this branch, my review would be shorter. 
+
+i check api, for now with curl:   curl -s -X POST http://localhost:3000/api/analyze \
+-H "content-type: application/json" \
+-d '{"repositoryUrl":"https://github.com/vercel/next.js"}'
+
+
+{"status":"success","repository":{"owner":"vercel","repo":"next.js","fullName":"vercel/next.js","canonicalUrl":"https://github.com/vercel/next.js"},"repoId":"repo_dmVyY2VsL25leHQuanM","redirectUrl":"/results/repo_dmVyY2VsL25leHQuanM"}%      

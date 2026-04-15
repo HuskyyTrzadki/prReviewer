@@ -4,8 +4,10 @@ import { NextResponse } from "next/server";
 import {
   analyzeRepositoryRequestSchema,
   analyzeRepositorySuccessSchema,
+  type AnalysisApiErrorCode,
   analysisApiErrorSchema,
 } from "@/features/pr-analysis/contracts/analysis-contracts";
+import { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
 import {
   parseRepositoryUrl,
   type RepositoryUrlErrorCode,
@@ -14,8 +16,9 @@ import {
 export const runtime = "nodejs";
 
 const createErrorResponse = (
-  code: "INVALID_REQUEST_BODY" | RepositoryUrlErrorCode,
+  code: AnalysisApiErrorCode | RepositoryUrlErrorCode,
   message: string,
+  status = 400,
 ) => {
   const payload = analysisApiErrorSchema.parse({
     status: "error",
@@ -23,7 +26,7 @@ const createErrorResponse = (
     message,
   });
 
-  return NextResponse.json(payload, { status: 400 });
+  return NextResponse.json(payload, { status });
 };
 
 const createRepoId = (fullName: string) =>
@@ -34,6 +37,21 @@ const readJsonBody = async (request: NextRequest) => {
     return await request.json();
   } catch {
     return null;
+  }
+};
+
+const getErrorStatus = (code: AnalysisApiErrorCode | RepositoryUrlErrorCode) => {
+  switch (code) {
+    case "REPOSITORY_NOT_FOUND_OR_PRIVATE":
+      return 404;
+    case "NO_MERGED_PULL_REQUESTS":
+      return 422;
+    case "GITHUB_RATE_LIMITED":
+      return 429;
+    case "GITHUB_UPSTREAM_ERROR":
+      return 502;
+    default:
+      return 400;
   }
 };
 
@@ -65,10 +83,26 @@ export const POST = async (request: NextRequest) => {
     );
   }
 
-  const repoId = createRepoId(parsedRepository.value.fullName);
+  const analysisSource = await prepareRepositoryAnalysisSource(parsedRepository.value);
+
+  if (!analysisSource.ok) {
+    return createErrorResponse(
+      analysisSource.error.code,
+      analysisSource.error.message,
+      getErrorStatus(analysisSource.error.code),
+    );
+  }
+
+  const repository = {
+    owner: analysisSource.value.repository.owner,
+    repo: analysisSource.value.repository.repo,
+    fullName: analysisSource.value.repository.fullName,
+    canonicalUrl: analysisSource.value.repository.canonicalUrl,
+  };
+  const repoId = createRepoId(repository.fullName);
   const payload = analyzeRepositorySuccessSchema.parse({
     status: "success",
-    repository: parsedRepository.value,
+    repository,
     repoId,
     redirectUrl: `/results/${repoId}`,
   });
