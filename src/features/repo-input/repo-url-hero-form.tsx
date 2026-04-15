@@ -1,22 +1,66 @@
 "use client";
 
-import { useState, type SyntheticEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useState, type ComponentProps } from "react";
+
+import { submitRepositoryAnalysis } from "@/features/repo-input/submit-repository-analysis";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
+const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
+const analysisServiceUnavailableMessage =
+  "We could not reach the analysis service. Try again.";
+type FormStatusTone = "neutral" | "success" | "error";
+const statusClassNamesByTone: Record<FormStatusTone, string> = {
+  neutral: "ds-caption text-navy",
+  success: "ds-caption text-success-green",
+  error: "ds-caption text-error-red",
+};
 
 export const RepoUrlHeroForm = () => {
+  const router = useRouter();
   const [repositoryUrl, setRepositoryUrl] = useState(DEFAULT_REPOSITORY_URL);
-  const [submittedUrl, setSubmittedUrl] = useState(DEFAULT_REPOSITORY_URL);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState(defaultStatusMessage);
+  const [statusTone, setStatusTone] = useState<FormStatusTone>("neutral");
 
-  const handleSubmit = (
-    event: SyntheticEvent<HTMLFormElement, SubmitEvent>,
+  const handleSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = async (
+    event,
   ) => {
     event.preventDefault();
-    setSubmittedUrl(repositoryUrl.trim());
+
+    const trimmedRepositoryUrl = repositoryUrl.trim();
+
+    setRepositoryUrl(trimmedRepositoryUrl);
+    setIsSubmitting(true);
+    setStatusTone("neutral");
+    setStatusMessage("Checking repository access and merged pull requests...");
+
+    try {
+      const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
+
+      if (response.status === "error") {
+        setStatusTone("error");
+        setStatusMessage(response.message);
+        return;
+      }
+
+      setStatusTone("success");
+      setStatusMessage(
+        `Repository found. Opening results for ${response.repository.fullName}...`,
+      );
+      router.push(response.redirectUrl);
+    } catch {
+      setStatusTone("error");
+      setStatusMessage(analysisServiceUnavailableMessage);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
+  const statusClassName = statusClassNamesByTone[statusTone];
+
   return (
-    <form className="w-full" onSubmit={handleSubmit}>
+    <form aria-busy={isSubmitting} className="w-full" onSubmit={handleSubmit}>
       <label className="sr-only" htmlFor="repository-url">
         Public GitHub Repository URL
       </label>
@@ -25,8 +69,12 @@ export const RepoUrlHeroForm = () => {
         <div className="flex flex-col gap-3 sm:flex-row">
           <input
             aria-describedby="repository-url-note repository-url-status"
+            aria-invalid={statusTone === "error"}
             autoComplete="url"
-            className="ds-input h-14 flex-1 text-base sm:text-lg"
+            className={`ds-input h-14 flex-1 text-base sm:text-lg ${
+              statusTone === "error" ? "ds-input-error" : ""
+            }`}
+            disabled={isSubmitting}
             id="repository-url"
             inputMode="url"
             name="repositoryUrl"
@@ -40,9 +88,10 @@ export const RepoUrlHeroForm = () => {
 
           <button
             className="ds-button-primary h-14 px-8 text-base sm:min-w-56 sm:text-lg"
+            disabled={isSubmitting}
             type="submit"
           >
-            Analyze Repository
+            {isSubmitting ? "Analyzing..." : "Analyze Repository"}
           </button>
         </div>
 
@@ -52,11 +101,11 @@ export const RepoUrlHeroForm = () => {
           </p>
           <p
             aria-live="polite"
-            className="ds-caption text-navy"
+            className={statusClassName}
             id="repository-url-status"
+            role={statusTone === "error" ? "alert" : "status"}
           >
-            Ready to analyze:{" "}
-            <span className="font-medium break-all">{submittedUrl}</span>
+            {statusMessage}
           </p>
         </div>
       </div>
