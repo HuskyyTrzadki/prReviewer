@@ -117,6 +117,10 @@
     @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray transition-colors duration-150 focus-visible:border-indigo-violet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
+  .ds-select {
+    @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy transition-colors duration-150 focus-visible:border-indigo-violet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
   .ds-input-error {
     @apply border-error-red focus:border-error-red focus:ring-error-red/10;
   }

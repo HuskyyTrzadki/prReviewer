@@ -4,4 +4,5 @@ export const githubPullRequestPageSize = 100;
 export const scoringDimensionWeight = 1 / 3;
 export const scoringPromptFileLimit = 8;
 export const scoringPromptPatchCharacterLimit = 1_500;
-export const geminiPullRequestScoringModel = "gemini-2.5-flash";
+export const geminiPullRequestBatchSize = 3;
+export const geminiPullRequestScoringModel = "gemini-3-flash-preview";

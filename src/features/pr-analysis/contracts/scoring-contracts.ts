@@ -17,6 +17,14 @@ export const llmPullRequestScoreSchema = z.object({
   quality: llmScoreDimensionSchema,
 });
 
+export const llmPullRequestBatchItemSchema = llmPullRequestScoreSchema.extend({
+  number: z.number().int().positive(),
+});
+
+export const llmPullRequestBatchScoreSchema = z.object({
+  pullRequests: z.array(llmPullRequestBatchItemSchema),
+});
+
 export const skippedPullRequestReasonSchema = z.enum([
   "LLM_INVALID_OUTPUT",
   "LLM_REQUEST_FAILED",
@@ -64,6 +72,9 @@ export const scoredRepositoryAnalysisSchema = z.object({
 });
 
 export type LlmPullRequestScore = z.infer<typeof llmPullRequestScoreSchema>;
+export type LlmPullRequestBatchItem = z.infer<
+  typeof llmPullRequestBatchItemSchema
+>;
 export type ScoredPullRequest = z.infer<typeof scoredPullRequestSchema>;
 export type SkippedPullRequestReason = z.infer<
   typeof skippedPullRequestReasonSchema

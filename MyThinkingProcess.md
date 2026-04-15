@@ -301,3 +301,151 @@ i decide to just console log. i also get 502 error, i add debug logs. the issue 
 for loader i think super engaging are the ones that show different messages/some facts. 
 
 i was hoping to be a bit furher at this moment, so i need to cut, i was planning to do persistance of url, so u can share a link however ofc this requires supabase or vercel.. this configuration would eat up too much time so i skip it.
+
+plan for step 13.
+# Step 13: PR Results List With Sorting, Filtering, Metadata & Diff Links
+
+## Summary
+
+Extend the existing results dashboard with a real PR list section that is dense on
+desktop, readable on mobile, and still fully within the current design system. Use a
+semantic table on desktop and stacked cards on mobile, keep all list state client-side
+but reflected in URL query params, and leave the current session-backed results
+restoration unchanged.
+
+## Implementation Changes
+
+- Add a dedicated results-table feature for the interactive list layer, separate from
+  the current summary shell.
+- Keep results-dashboard-success.tsx summary-first, then append a new full PR list
+  section below the top-preview area rather than replacing the existing score hero.
+- Use a desktop table + mobile cards layout:
+  - desktop: semantic <table> with sortable headers
+  - mobile: stacked PR cards with the same visible metadata and actions
+- Add URL-backed list state with query params for:
+  - q for text search
+  - author
+  - size
+  - impactMin
+  - aiMin
+  - qualityMin
+  - overallMin
+  - sort
+  - dir
+- Use native controls only, no shadcn:
+  - search input for title/summary text
+  - author select
+  - size bucket select
+  - four compact minimum-score selects for Impact / AI Leverage / Quality / Overall
+  - clear-filters action
+- Sorting should cover all visible sortable fields:
+  - author
+  - size
+  - impact
+  - aiLeverage
+  - quality
+  - overall
+  - merged date
+- Filtering should cover the required visible fields:
+  - author via exact select
+  - size via bucketed change-size filter
+  - each score via minimum-threshold select
+  - title/summary via search for practical scanning
+- Show metadata directly in the list:
+  - PR number
+  - title
+  - short summary
+  - author
+  - merged date
+  - changed files
+  - additions/deletions
+  - four scores
+- Add two external actions per PR:
+  - Open PR -> htmlUrl
+  - View Diff -> ${htmlUrl}/files
+- Add a compact list summary row above the table/cards:
+  - visible result count
+  - active sort label
+  - filtered vs total PR count
+- Keep visual language consistent with the landing/results shell:
+  - white and ice-blue surfaces
+  - no shadows
+  - serif only for section-level headings
+  - Inter for all table/card UI
+  - 8px radii
+  - Indigo Violet only for actions/highlights
+- Do not introduce chart/table libraries, data-grid packages, or shadcn/Radix for this
+  step.
+
+## Breakpoints
+
+1. Add pure list-state and list-data helpers.
+  - Parse/serialize query params
+  - filter/sort helpers
+  - unit tests for data behavior
+2. Add the PR list UI.
+  - controls bar
+  - desktop table
+  - mobile cards
+  - empty-filtered-results state
+3. Wire the new section into the existing results page and update the milestone plan
+   entry.
+  - add the section under the current summary shell
+  - verify responsive behavior and query-param sync
+  - mark step 13 done in BigPicturePlan.md with context
+
+## Public Interfaces / Behavior
+
+- No backend contract changes.
+- New client-visible URL params on /results/[repoId]:
+  - q, author, size, impactMin, aiMin, qualityMin, overallMin, sort, dir
+- Existing session-backed result restore stays as-is:
+  - if there is no restored analysis payload, the current empty/error states still
+    win before the list renders
+- The list should default to:
+  - no filters
+  - sort by overall descending
+
+## Test Plan
+
+- Unit tests for list helpers:
+  - default sort order
+  - author filtering
+  - size bucket filtering
+  - each minimum-score filter
+  - combined filters
+  - query param parse/serialize round-trip
+- Component tests:
+  - filtered-empty state renders correctly
+  - sorting changes rendered order
+  - active filters update result count
+  - external links point to PR and /files
+- Browser smoke checks:
+  - desktop table is readable and sortable
+  - mobile cards keep all key metadata and actions
+  - query params update when filters/sort change
+  - refreshing still loses the stored analysis payload, but not because of list-
+    state bugs
+
+## Assumptions & Defaults
+
+- No shadcn for this step; the existing custom design system is the right boundary.
+- URL sync is worth doing now even though persistence is omitted, because it improves
+  results-state UX and aligns with interface guidelines.
+- “Size” will be implemented as a bucketed filter derived from PR churn (additions +
+  deletions) and displayed alongside changed-file count.
+- The current top-3 preview can stay if it still feels useful, but the full PR list
+  becomes the primary actionable section below the summary.
+- Step 12 remains omitted; this step does not attempt refresh-safe or shareable server
+  persistence.
+
+--
+
+
+damn it i got error":{"code":429,"message":"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to... "" thats an issue.
+
+the issue is that limit for this model is just super small, nr request per day.. so i decide to a) switch model, b) provide llms multiple prs instead of just 1.
+
+i decided to do 3 in same request just because i dont want to hit quota. 3 should be now that big. i fix issue with exceeded quota by importing google cloud project in gemini studio.
+
+we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it.

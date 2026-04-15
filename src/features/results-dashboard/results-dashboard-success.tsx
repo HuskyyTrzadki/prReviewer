@@ -1,6 +1,7 @@
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
 import { ResultsPrPreviewCard } from "@/features/results-dashboard/results-pr-preview-card";
 import { ResultsScoreBar } from "@/features/results-dashboard/results-score-bar";
+import { ResultsTableSection } from "@/features/results-table/results-table-section";
 
 type ResultsDashboardSuccessProps = {
   result: AnalyzeRepositorySuccess;
@@ -124,9 +125,7 @@ export const ResultsDashboardSuccess = ({
                   A quick read on what drove the repository score
                 </h2>
               </div>
-              <p className="ds-caption text-dark-slate">
-                Full sorting and filtering arrives in the next dashboard step.
-              </p>
+              <p className="ds-caption text-dark-slate">Then continue with the full PR list below.</p>
             </div>
 
             <div className="mt-6 space-y-4">
@@ -138,6 +137,8 @@ export const ResultsDashboardSuccess = ({
               ))}
             </div>
           </article>
+
+          <ResultsTableSection result={result} />
         </div>
       </div>
     </section>
