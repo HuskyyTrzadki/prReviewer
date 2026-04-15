@@ -448,4 +448,8 @@ the issue is that limit for this model is just super small, nr request per day..
 
 i decided to do 3 in same request just because i dont want to hit quota. 3 should be now that big. i fix issue with exceeded quota by importing google cloud project in gemini studio.
 
-we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it.
+we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it, it does look good that why i ll do in seperate global design qa. 
+
+for design qa i inspect whole website module by module, first desktop than mobile. i ask gemini looking at this design what would you improve and paste ss's.   (ofc with design inspiration file) i use less advanced models(thinking=low) as for this kind of task thinking is actually worsening output.
+
+i focus on analysis results page first, i need to act quicker cause i m running out of time.
