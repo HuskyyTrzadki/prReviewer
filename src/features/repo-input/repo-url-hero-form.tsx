@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type ComponentProps } from "react";
+import { useEffect, useState, type ComponentProps } from "react";
 
+import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
 import { submitRepositoryAnalysis } from "@/features/repo-input/submit-repository-analysis";
 import { storeAnalysisResult } from "@/features/results-dashboard/results-session";
 
@@ -21,8 +22,24 @@ export const RepoUrlHeroForm = () => {
   const router = useRouter();
   const [repositoryUrl, setRepositoryUrl] = useState(DEFAULT_REPOSITORY_URL);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingTick, setLoadingTick] = useState(0);
   const [statusMessage, setStatusMessage] = useState(defaultStatusMessage);
   const [statusTone, setStatusTone] = useState<FormStatusTone>("neutral");
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      setLoadingTick(0);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setLoadingTick((currentTick) => currentTick + 1);
+    }, 2400);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [isSubmitting]);
 
   const handleSubmit: NonNullable<ComponentProps<"form">["onSubmit"]> = async (
     event,
@@ -34,7 +51,7 @@ export const RepoUrlHeroForm = () => {
     setRepositoryUrl(trimmedRepositoryUrl);
     setIsSubmitting(true);
     setStatusTone("neutral");
-    setStatusMessage("Checking repository access and merged pull requests...");
+    setStatusMessage("Starting repository analysis...");
 
     try {
       const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
@@ -110,6 +127,8 @@ export const RepoUrlHeroForm = () => {
             {statusMessage}
           </p>
         </div>
+
+        {isSubmitting ? <AnalysisLoadingPanel tick={loadingTick} /> : null}
       </div>
     </form>
   );
