@@ -446,4 +446,6 @@ damn it i got error":{"code":429,"message":"You exceeded your current quota, ple
 
 the issue is that limit for this model is just super small, nr request per day.. so i decide to a) switch model, b) provide llms multiple prs instead of just 1.
 
-i decided to do 3 in same request just because i dont want to hit quota. 3 should be now that big.
+i decided to do 3 in same request just because i dont want to hit quota. 3 should be now that big. i fix issue with exceeded quota by importing google cloud project in gemini studio.
+
+we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it.
