@@ -14,7 +14,7 @@ import {
   parseRepositoryUrl,
 } from "@/features/pr-analysis/lib/repository-url";
 import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
-import { scorePullRequestStub } from "@/features/pr-analysis/lib/score-pull-request-stub";
+import { scorePullRequestWithGemini } from "@/features/pr-analysis/lib/score-pull-request-with-gemini";
 
 export const runtime = "nodejs";
 
@@ -75,7 +75,7 @@ export const POST = async (request: Request) => {
 
   const scoredAnalysis = await runRepositoryScoring(
     scoringSource.value,
-    scorePullRequestStub,
+    scorePullRequestWithGemini,
   );
 
   if (!scoredAnalysis.ok) {

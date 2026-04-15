@@ -281,4 +281,7 @@ curl -s http://localhost:3000/api/analyze \
 .........
 
 ofc some of the values are fake, like aiLeverageScore and so on...i ll change it so its more obvious.
-  
+ 
+for llm connection i m going to use  @google/genai. i did it before so should be easy. however i provide this to llm https://googleapis.github.io/js-genai/release_docs/index.html
+
+for now i will start with gemini flash. 3.0 

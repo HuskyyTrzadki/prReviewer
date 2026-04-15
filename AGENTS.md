@@ -73,3 +73,9 @@ After each item is marked done, you need to provide description with tech contex
 Whenever you feel ready for commit,  you  suggest commit name, example of standard we use feat(landing page): added new hero section.
 use english only.
 Whenever user asks to understand something, explain it using examples.
+
+one thing i d like ai to do is to have in /analyze endpoint  a 'forced json structure' enforced on llm directly, i now that llms sometimes likes to ignore simple 'output json' and they will do 'of course i will do that here it is {} ' which breaks endpoint.
+
+also on vercel i need to provide env key.
+
+i get an error from github 'resource exhausted' its only 60 /hour ..  i need to provide token. i ll make sure to handle this error.
