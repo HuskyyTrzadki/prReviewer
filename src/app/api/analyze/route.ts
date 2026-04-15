@@ -9,9 +9,12 @@ import {
   invalidAnalyzeRequestBodyMessage,
 } from "@/features/pr-analysis/lib/analysis-api-errors";
 import { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
+import { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepare-repository-scoring-source";
 import {
   parseRepositoryUrl,
 } from "@/features/pr-analysis/lib/repository-url";
+import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
+import { scorePullRequestStub } from "@/features/pr-analysis/lib/score-pull-request-stub";
 
 export const runtime = "nodejs";
 
@@ -64,11 +67,26 @@ export const POST = async (request: Request) => {
     return createErrorResponse(analysisSource.error.code, analysisSource.error.message);
   }
 
+  const scoringSource = await prepareRepositoryScoringSource(analysisSource.value);
+
+  if (!scoringSource.ok) {
+    return createErrorResponse(scoringSource.error.code, scoringSource.error.message);
+  }
+
+  const scoredAnalysis = await runRepositoryScoring(
+    scoringSource.value,
+    scorePullRequestStub,
+  );
+
+  if (!scoredAnalysis.ok) {
+    return createErrorResponse(scoredAnalysis.error.code, scoredAnalysis.error.message);
+  }
+
   const repository = {
-    owner: analysisSource.value.repository.owner,
-    repo: analysisSource.value.repository.repo,
-    fullName: analysisSource.value.repository.fullName,
-    canonicalUrl: analysisSource.value.repository.canonicalUrl,
+    owner: scoredAnalysis.value.repository.owner,
+    repo: scoredAnalysis.value.repository.repo,
+    fullName: scoredAnalysis.value.repository.fullName,
+    canonicalUrl: scoredAnalysis.value.repository.canonicalUrl,
   };
   const repoId = createRepoId(repository.fullName);
   const payload = analyzeRepositorySuccessSchema.parse({
@@ -76,6 +94,11 @@ export const POST = async (request: Request) => {
     repository,
     repoId,
     redirectUrl: `/results/${repoId}`,
+    analysis: {
+      summary: scoredAnalysis.value.summary,
+      pullRequests: scoredAnalysis.value.pullRequests,
+      skippedPullRequests: scoredAnalysis.value.skippedPullRequests,
+    },
   });
 
   return Response.json(payload, { status: 200 });

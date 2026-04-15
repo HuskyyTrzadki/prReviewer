@@ -3,19 +3,36 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { analyzeRepositoryResponseSchema } from "@/features/pr-analysis/contracts/analysis-contracts";
 import type { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
+import type { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepare-repository-scoring-source";
+import type { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import {
+  analysisFailedMessage,
   githubRateLimitedMessage,
   invalidAnalyzeRequestBodyMessage,
   noMergedPullRequestsMessage,
   repositoryNotFoundOrPrivateMessage,
 } from "@/features/pr-analysis/lib/analysis-api-errors";
 
-const { prepareRepositoryAnalysisSourceMock } = vi.hoisted(() => ({
+const {
+  prepareRepositoryAnalysisSourceMock,
+  prepareRepositoryScoringSourceMock,
+  runRepositoryScoringMock,
+} = vi.hoisted(() => ({
   prepareRepositoryAnalysisSourceMock: vi.fn<typeof prepareRepositoryAnalysisSource>(),
+  prepareRepositoryScoringSourceMock: vi.fn<typeof prepareRepositoryScoringSource>(),
+  runRepositoryScoringMock: vi.fn<typeof runRepositoryScoring>(),
 }));
 
 vi.mock("@/features/pr-analysis/lib/prepare-repository-analysis-source", () => ({
   prepareRepositoryAnalysisSource: prepareRepositoryAnalysisSourceMock,
+}));
+
+vi.mock("@/features/pr-analysis/lib/prepare-repository-scoring-source", () => ({
+  prepareRepositoryScoringSource: prepareRepositoryScoringSourceMock,
+}));
+
+vi.mock("@/features/pr-analysis/lib/run-repository-scoring", () => ({
+  runRepositoryScoring: runRepositoryScoringMock,
 }));
 
 import { POST } from "./route";
@@ -32,6 +49,8 @@ const createJsonRequest = (body: BodyInit) =>
 describe("POST /api/analyze", () => {
   beforeEach(() => {
     prepareRepositoryAnalysisSourceMock.mockReset();
+    prepareRepositoryScoringSourceMock.mockReset();
+    runRepositoryScoringMock.mockReset();
   });
 
   it("returns a typed error for invalid JSON", async () => {
@@ -89,6 +108,61 @@ describe("POST /api/analyze", () => {
         requestedPullRequestLimit: 20,
       },
     });
+    prepareRepositoryScoringSourceMock.mockResolvedValue({
+      ok: true,
+      value: {
+        repository: {
+          owner: "vercel",
+          repo: "next.js",
+          fullName: "vercel/next.js",
+          canonicalUrl: "https://github.com/vercel/next.js",
+          defaultBranch: "canary",
+        },
+        pullRequests: [],
+        requestedPullRequestLimit: 8,
+      },
+    });
+    runRepositoryScoringMock.mockResolvedValue({
+      ok: true,
+      value: {
+        repository: {
+          owner: "vercel",
+          repo: "next.js",
+          fullName: "vercel/next.js",
+          canonicalUrl: "https://github.com/vercel/next.js",
+        },
+        summary: {
+          impactScore: 80,
+          aiLeverageScore: 58,
+          qualityScore: 85,
+          overallScore: 74,
+          scoredPullRequestCount: 1,
+          skippedPullRequestCount: 0,
+        },
+        pullRequests: [
+          {
+            number: 11,
+            title: "Improve cache hints",
+            body: "Refines cache usage.",
+            authorLogin: "leerob",
+            htmlUrl: "https://github.com/vercel/next.js/pull/11",
+            mergedAt: "2026-04-14T19:00:00.000Z",
+            additions: 10,
+            deletions: 2,
+            changedFiles: 1,
+            summary: "Temporary local score.",
+            impactScore: 80,
+            impactRationale: "Temporary local estimate.",
+            aiLeverageScore: 58,
+            aiLeverageRationale: "Temporary local estimate.",
+            qualityScore: 85,
+            qualityRationale: "Temporary local estimate.",
+            overallScore: 74,
+          },
+        ],
+        skippedPullRequests: [],
+      },
+    });
 
     const response = await POST(
       createJsonRequest(
@@ -112,6 +186,38 @@ describe("POST /api/analyze", () => {
     });
     expect(payload.repoId).toMatch(/\S+/);
     expect(payload.redirectUrl).toBe(`/results/${payload.repoId}`);
+    expect(payload.analysis).toEqual({
+      summary: {
+        impactScore: 80,
+        aiLeverageScore: 58,
+        qualityScore: 85,
+        overallScore: 74,
+        scoredPullRequestCount: 1,
+        skippedPullRequestCount: 0,
+      },
+      pullRequests: [
+        {
+          number: 11,
+          title: "Improve cache hints",
+          body: "Refines cache usage.",
+          authorLogin: "leerob",
+          htmlUrl: "https://github.com/vercel/next.js/pull/11",
+          mergedAt: "2026-04-14T19:00:00.000Z",
+          additions: 10,
+          deletions: 2,
+          changedFiles: 1,
+          summary: "Temporary local score.",
+          impactScore: 80,
+          impactRationale: "Temporary local estimate.",
+          aiLeverageScore: 58,
+          aiLeverageRationale: "Temporary local estimate.",
+          qualityScore: 85,
+          qualityRationale: "Temporary local estimate.",
+          overallScore: 74,
+        },
+      ],
+      skippedPullRequests: [],
+    });
   });
 
   it("returns a typed 404 when the repository is missing or private", async () => {
@@ -183,6 +289,58 @@ describe("POST /api/analyze", () => {
       status: "error",
       code: "NO_MERGED_PULL_REQUESTS",
       message: noMergedPullRequestsMessage,
+    });
+  });
+
+  it("returns a typed 502 when scoring cannot produce any scored pull requests", async () => {
+    prepareRepositoryAnalysisSourceMock.mockResolvedValue({
+      ok: true,
+      value: {
+        repository: {
+          owner: "vercel",
+          repo: "next.js",
+          fullName: "vercel/next.js",
+          canonicalUrl: "https://github.com/vercel/next.js",
+          defaultBranch: "canary",
+        },
+        pullRequests: [],
+        requestedPullRequestLimit: 20,
+      },
+    });
+    prepareRepositoryScoringSourceMock.mockResolvedValue({
+      ok: true,
+      value: {
+        repository: {
+          owner: "vercel",
+          repo: "next.js",
+          fullName: "vercel/next.js",
+          canonicalUrl: "https://github.com/vercel/next.js",
+          defaultBranch: "canary",
+        },
+        pullRequests: [],
+        requestedPullRequestLimit: 8,
+      },
+    });
+    runRepositoryScoringMock.mockResolvedValue({
+      ok: false,
+      error: {
+        code: "ANALYSIS_FAILED",
+        message: analysisFailedMessage,
+      },
+    });
+
+    const response = await POST(
+      createJsonRequest(
+        JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
+      ),
+    );
+    const payload = analyzeRepositoryResponseSchema.parse(await response.json());
+
+    expect(response.status).toBe(502);
+    expect(payload).toEqual({
+      status: "error",
+      code: "ANALYSIS_FAILED",
+      message: analysisFailedMessage,
     });
   });
 });

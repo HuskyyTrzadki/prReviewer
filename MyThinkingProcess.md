@@ -236,3 +236,49 @@ i see lib is starting to be hard to navigate folder wise, probably would need to
 super heavy be work now, looks good but i dont spend as much time on reviews.
 
 im fully aware loop is not the best solution for calls to api, however i want to make it better later on, not now. now i want working product, now i do validation.
+
+"This last slice touches shared schemas again, so I’m explicitly using the zod skill here
+too." cool i see it actually works with zod skill.
+
+i test the api/analyze endpoint/. via curl for now.
+curl -s http://localhost:3000/api/analyze \
+-H 'content-type: application/json' \
+-d '{"repositoryUrl":"https://github.com/vercel/next.js"}' | jq i get exactly what i wanted "
+"status": "success",
+"repository": {
+"owner": "vercel",
+"repo": "next.js",
+"fullName": "vercel/next.js",
+"canonicalUrl": "https://github.com/vercel/next.js"
+},
+"repoId": "repo_dmVyY2VsL25leHQuanM",
+"redirectUrl": "/results/repo_dmVyY2VsL25leHQuanM",
+"analysis": {
+"summary": {
+"impactScore": 52,
+"aiLeverageScore": 51,
+"qualityScore": 68,
+"overallScore": 57,
+"scoredPullRequestCount": 8,
+"skippedPullRequestCount": 0
+},
+"pullRequests": [
+{
+"number": 92814,
+"title": "Turbopack: shorter error for ChunkGroupInfo::get_index_of",
+"body": "This error can occur quite often in production due to eventual consistency. Don't create incredibly long error strings for that reason",
+"authorLogin": "mischnic",
+"htmlUrl": "https://github.com/vercel/next.js/pull/92814",
+"mergedAt": "2026-04-15T12:33:30Z",
+"additions": 14,
+"deletions": 10,
+"changedFiles": 1,
+"summary": "Temporary local score for vercel/next.js PR #92814.",
+"impactScore": 41,
+"impactRationale": "Temporary local estimate based on change size and file spread.",
+"aiLeverageScore": 33,"
+"
+.........
+
+ofc some of the values are fake, like aiLeverageScore and so on...i ll change it so its more obvious.
+  

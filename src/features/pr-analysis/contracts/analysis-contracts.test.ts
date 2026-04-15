@@ -20,6 +20,18 @@ describe("analysis contracts", () => {
       },
       repoId: "repo_demo",
       redirectUrl: "/results/repo_demo",
+      analysis: {
+        summary: {
+          impactScore: 80,
+          aiLeverageScore: 58,
+          qualityScore: 85,
+          overallScore: 74,
+          scoredPullRequestCount: 1,
+          skippedPullRequestCount: 0,
+        },
+        pullRequests: [],
+        skippedPullRequests: [],
+      },
     };
 
     expect(analyzeRepositorySuccessSchema.parse(payload)).toEqual(payload);

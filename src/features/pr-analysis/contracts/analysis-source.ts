@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/analysis-contracts";
+import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/repository-contracts";
 
 export const githubRepositoryDetailsSchema = normalizedRepositorySchema.extend({
   defaultBranch: z.string().trim().min(1),

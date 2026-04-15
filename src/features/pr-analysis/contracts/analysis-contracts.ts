@@ -1,6 +1,15 @@
 import { z } from "zod";
 
+import {
+  normalizedRepositorySchema,
+  type NormalizedRepository,
+} from "@/features/pr-analysis/contracts/repository-contracts";
 import { repositoryUrlErrorCodes } from "@/features/pr-analysis/lib/repository-url";
+import {
+  repositoryScoreSummarySchema,
+  scoredPullRequestSchema,
+  skippedPullRequestSchema,
+} from "@/features/pr-analysis/contracts/scoring-contracts";
 
 export const repoIdSchema = z.string().trim().min(1);
 export const analysisApiErrorCodes = [
@@ -12,13 +21,6 @@ export const analysisApiErrorCodes = [
   "ANALYSIS_FAILED",
   ...repositoryUrlErrorCodes,
 ] as const;
-
-export const normalizedRepositorySchema = z.object({
-  owner: z.string().trim().min(1),
-  repo: z.string().trim().min(1),
-  fullName: z.string().trim().min(1),
-  canonicalUrl: z.url(),
-});
 
 export const analyzeRepositoryRequestSchema = z.object({
   repositoryUrl: z.string().trim().min(1),
@@ -37,6 +39,11 @@ export const analyzeRepositorySuccessSchema = z.object({
   repository: normalizedRepositorySchema,
   repoId: repoIdSchema,
   redirectUrl: z.string().regex(/^\/results\/[^/]+$/),
+  analysis: z.object({
+    summary: repositoryScoreSummarySchema,
+    pullRequests: z.array(scoredPullRequestSchema),
+    skippedPullRequests: z.array(skippedPullRequestSchema),
+  }),
 });
 
 export const analyzeRepositoryResponseSchema = z.discriminatedUnion("status", [
@@ -57,7 +64,6 @@ export const analysisResultSchema = z.object({
 });
 
 export type RepoId = z.infer<typeof repoIdSchema>;
-export type NormalizedRepository = z.infer<typeof normalizedRepositorySchema>;
 export type AnalyzeRepositoryRequest = z.infer<
   typeof analyzeRepositoryRequestSchema
 >;
@@ -71,3 +77,4 @@ export type AnalyzeRepositoryResponse = z.infer<
 >;
 export type AnalysisResultStatus = z.infer<typeof analysisResultStatusSchema>;
 export type AnalysisResult = z.infer<typeof analysisResultSchema>;
+export { normalizedRepositorySchema, type NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";

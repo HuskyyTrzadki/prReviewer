@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/analysis-contracts";
+import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/repository-contracts";
 
 const boundedScoreSchema = z.number().min(0).max(100);
 const scoreRationaleSchema = z.string().trim().min(1);
