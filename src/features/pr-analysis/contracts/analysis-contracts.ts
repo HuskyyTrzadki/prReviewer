@@ -2,7 +2,6 @@ import { z } from "zod";
 
 import {
   normalizedRepositorySchema,
-  type NormalizedRepository,
 } from "@/features/pr-analysis/contracts/repository-contracts";
 import { repositoryUrlErrorCodes } from "@/features/pr-analysis/lib/repository-url";
 import {
