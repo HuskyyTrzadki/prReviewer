@@ -3,6 +3,14 @@ import { z } from "zod";
 import { repositoryUrlErrorCodes } from "@/features/pr-analysis/lib/repository-url";
 
 export const repoIdSchema = z.string().trim().min(1);
+export const analysisApiErrorCodes = [
+  "INVALID_REQUEST_BODY",
+  ...repositoryUrlErrorCodes,
+  "REPOSITORY_NOT_FOUND_OR_PRIVATE",
+  "NO_MERGED_PULL_REQUESTS",
+  "GITHUB_RATE_LIMITED",
+  "GITHUB_UPSTREAM_ERROR",
+] as const;
 
 export const normalizedRepositorySchema = z.object({
   owner: z.string().trim().min(1),
@@ -15,10 +23,7 @@ export const analyzeRepositoryRequestSchema = z.object({
   repositoryUrl: z.string().trim().min(1),
 });
 
-export const analysisApiErrorCodeSchema = z.enum([
-  "INVALID_REQUEST_BODY",
-  ...repositoryUrlErrorCodes,
-]);
+export const analysisApiErrorCodeSchema = z.enum(analysisApiErrorCodes);
 
 export const analysisApiErrorSchema = z.object({
   status: z.literal("error"),
