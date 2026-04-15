@@ -2,9 +2,16 @@ import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { analyzeRepositoryResponseSchema } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
+import {
+  githubRateLimitedMessage,
+  invalidAnalyzeRequestBodyMessage,
+  noMergedPullRequestsMessage,
+  repositoryNotFoundOrPrivateMessage,
+} from "@/features/pr-analysis/lib/analysis-api-errors";
 
 const { prepareRepositoryAnalysisSourceMock } = vi.hoisted(() => ({
-  prepareRepositoryAnalysisSourceMock: vi.fn(),
+  prepareRepositoryAnalysisSourceMock: vi.fn<typeof prepareRepositoryAnalysisSource>(),
 }));
 
 vi.mock("@/features/pr-analysis/lib/prepare-repository-analysis-source", () => ({
@@ -35,7 +42,7 @@ describe("POST /api/analyze", () => {
     expect(payload).toEqual({
       status: "error",
       code: "INVALID_REQUEST_BODY",
-      message: "Request body must be valid JSON with a repositoryUrl field.",
+      message: invalidAnalyzeRequestBodyMessage,
     });
   });
 
@@ -47,7 +54,7 @@ describe("POST /api/analyze", () => {
     expect(payload).toEqual({
       status: "error",
       code: "INVALID_REQUEST_BODY",
-      message: "Request body must be valid JSON with a repositoryUrl field.",
+      message: invalidAnalyzeRequestBodyMessage,
     });
   });
 
@@ -112,8 +119,7 @@ describe("POST /api/analyze", () => {
       ok: false,
       error: {
         code: "REPOSITORY_NOT_FOUND_OR_PRIVATE",
-        message:
-          "This repository was not found or is private. Use a public GitHub repository URL.",
+        message: repositoryNotFoundOrPrivateMessage,
       },
     });
 
@@ -128,8 +134,7 @@ describe("POST /api/analyze", () => {
     expect(payload).toEqual({
       status: "error",
       code: "REPOSITORY_NOT_FOUND_OR_PRIVATE",
-      message:
-        "This repository was not found or is private. Use a public GitHub repository URL.",
+      message: repositoryNotFoundOrPrivateMessage,
     });
   });
 
@@ -138,7 +143,7 @@ describe("POST /api/analyze", () => {
       ok: false,
       error: {
         code: "GITHUB_RATE_LIMITED",
-        message: "GitHub rate limit was reached. Try again later.",
+        message: githubRateLimitedMessage,
       },
     });
 
@@ -153,7 +158,7 @@ describe("POST /api/analyze", () => {
     expect(payload).toEqual({
       status: "error",
       code: "GITHUB_RATE_LIMITED",
-      message: "GitHub rate limit was reached. Try again later.",
+      message: githubRateLimitedMessage,
     });
   });
 
@@ -162,7 +167,7 @@ describe("POST /api/analyze", () => {
       ok: false,
       error: {
         code: "NO_MERGED_PULL_REQUESTS",
-        message: "No merged pull requests were found for this repository.",
+        message: noMergedPullRequestsMessage,
       },
     });
 
@@ -177,7 +182,7 @@ describe("POST /api/analyze", () => {
     expect(payload).toEqual({
       status: "error",
       code: "NO_MERGED_PULL_REQUESTS",
-      message: "No merged pull requests were found for this repository.",
+      message: noMergedPullRequestsMessage,
     });
   });
 });

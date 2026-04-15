@@ -4,6 +4,7 @@ import {
 } from "@/features/pr-analysis/contracts/analysis-source";
 import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
 import {
+  createGithubUpstreamError,
   createNoMergedPullRequestsError,
   type GithubAnalysisResult,
   mapGithubRequestError,
@@ -71,12 +72,23 @@ export const loadMergedPullRequests = async (
         client.getPullRequest(repository.owner, repository.repo, pullNumber),
       ),
     );
+    const hasUnexpectedUnmergedPullRequest = pullRequests.some(
+      (pullRequest) => !pullRequest.mergedAt,
+    );
+
+    if (hasUnexpectedUnmergedPullRequest) {
+      return createGithubUpstreamError();
+    }
 
     return {
       ok: true,
-      value: pullRequests.map((pullRequest) =>
-        normalizedPullRequestSourceSchema.parse(pullRequest),
-      ),
+      value: pullRequests.map((pullRequest) => {
+        if (!pullRequest.mergedAt) {
+          throw new Error("Expected merged pull request.");
+        }
+
+        return normalizedPullRequestSourceSchema.parse(pullRequest);
+      }),
     };
   } catch (error) {
     return mapGithubRequestError(error);

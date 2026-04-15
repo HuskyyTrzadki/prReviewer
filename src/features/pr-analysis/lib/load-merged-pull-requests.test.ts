@@ -1,52 +1,20 @@
 import { describe, expect, it } from "vitest";
 
+import {
+  githubRateLimitedMessage,
+  githubUpstreamErrorMessage,
+  noMergedPullRequestsMessage,
+} from "@/features/pr-analysis/lib/analysis-api-errors";
 import type {
-  GithubApiClient,
   GithubClosedPullRequestListItem,
-  GithubPullRequestRecord,
 } from "@/features/pr-analysis/lib/github-api-client";
 import { loadMergedPullRequests } from "@/features/pr-analysis/lib/load-merged-pull-requests";
-
-const repository = {
-  owner: "vercel",
-  repo: "next.js",
-  fullName: "vercel/next.js",
-  canonicalUrl: "https://github.com/vercel/next.js",
-} as const;
-
-const createClient = ({
-  getPullRequest,
-  listClosedPullRequests,
-}: {
-  getPullRequest: GithubApiClient["getPullRequest"];
-  listClosedPullRequests: GithubApiClient["listClosedPullRequests"];
-}): GithubApiClient => ({
-  getRepository: async () => ({
-    defaultBranch: "main",
-    fullName: "vercel/next.js",
-    isPrivate: false,
-    ownerLogin: "vercel",
-    repoName: "next.js",
-  }),
-  getPullRequest,
-  listClosedPullRequests,
-});
-
-const createPullRequestRecord = (
-  number: number,
-  overrides: Partial<GithubPullRequestRecord> = {},
-): GithubPullRequestRecord => ({
-  number,
-  title: `PR ${number}`,
-  body: `Body ${number}`,
-  authorLogin: `author-${number}`,
-  htmlUrl: `https://github.com/vercel/next.js/pull/${number}`,
-  mergedAt: "2026-04-14T19:00:00.000Z",
-  additions: number * 2,
-  deletions: number,
-  changedFiles: 3,
-  ...overrides,
-});
+import {
+  createGithubApiClientMock,
+  createGithubPullRequestRecord,
+  createGithubRequestError,
+  testRepository,
+} from "@/features/pr-analysis/lib/pr-analysis.test-helpers";
 
 describe("loadMergedPullRequests", () => {
   it("collects merged pull requests across pages until the limit is reached", async () => {
@@ -54,8 +22,8 @@ describe("loadMergedPullRequests", () => {
     const detailCalls: number[] = [];
 
     const result = await loadMergedPullRequests(
-      repository,
-      createClient({
+      testRepository,
+      createGithubApiClientMock({
         listClosedPullRequests: async (_owner, _repo, page) => {
           listCalls.push(page);
 
@@ -74,7 +42,7 @@ describe("loadMergedPullRequests", () => {
         },
         getPullRequest: async (_owner, _repo, pullNumber) => {
           detailCalls.push(pullNumber);
-          return createPullRequestRecord(pullNumber);
+          return createGithubPullRequestRecord(pullNumber);
         },
       }),
       3,
@@ -85,21 +53,19 @@ describe("loadMergedPullRequests", () => {
     expect(result).toEqual({
       ok: true,
       value: [
-        createPullRequestRecord(1),
-        createPullRequestRecord(3),
-        createPullRequestRecord(4),
+        createGithubPullRequestRecord(1),
+        createGithubPullRequestRecord(3),
+        createGithubPullRequestRecord(4),
       ],
     });
   });
 
   it("returns a typed error when no merged pull requests exist", async () => {
     const result = await loadMergedPullRequests(
-      repository,
-      createClient({
+      testRepository,
+      createGithubApiClientMock({
         listClosedPullRequests: async (_owner, _repo, page) =>
           page === 1 ? [{ number: 1, mergedAt: null }] : [],
-        getPullRequest: async (owner, repo, pullNumber) =>
-          createPullRequestRecord(pullNumber),
       }),
     );
 
@@ -107,20 +73,20 @@ describe("loadMergedPullRequests", () => {
       ok: false,
       error: {
         code: "NO_MERGED_PULL_REQUESTS",
-        message: "No merged pull requests were found for this repository.",
+        message: noMergedPullRequestsMessage,
       },
     });
   });
 
   it("normalizes null authors and empty bodies from github", async () => {
     const result = await loadMergedPullRequests(
-      repository,
-      createClient({
+      testRepository,
+      createGithubApiClientMock({
         listClosedPullRequests: async () => [
           { number: 7, mergedAt: "2026-04-14T19:00:00.000Z" },
         ],
         getPullRequest: async () =>
-          createPullRequestRecord(7, {
+          createGithubPullRequestRecord(7, {
             authorLogin: null,
             body: "",
           }),
@@ -131,7 +97,7 @@ describe("loadMergedPullRequests", () => {
     expect(result).toEqual({
       ok: true,
       value: [
-        createPullRequestRecord(7, {
+        createGithubPullRequestRecord(7, {
           authorLogin: null,
           body: "",
         }),
@@ -139,25 +105,44 @@ describe("loadMergedPullRequests", () => {
     });
   });
 
+  it("returns an upstream error when github returns an unmerged pull request detail", async () => {
+    const result = await loadMergedPullRequests(
+      testRepository,
+      createGithubApiClientMock({
+        listClosedPullRequests: async () => [
+          { number: 7, mergedAt: "2026-04-14T19:00:00.000Z" },
+        ],
+        getPullRequest: async () =>
+          createGithubPullRequestRecord(7, {
+            mergedAt: null,
+          }),
+      }),
+      1,
+    );
+
+    expect(result).toEqual({
+      ok: false,
+      error: {
+        code: "GITHUB_UPSTREAM_ERROR",
+        message: githubUpstreamErrorMessage,
+      },
+    });
+  });
+
   it("maps github api failures to typed errors", async () => {
     const result = await loadMergedPullRequests(
-      repository,
-      createClient({
+      testRepository,
+      createGithubApiClientMock({
         listClosedPullRequests: async () => {
-          const error = new Error("Rate limited") as Error & {
-            response: { headers: Record<string, string> };
-            status: number;
-          };
-          error.status = 403;
-          error.response = {
-            headers: {
-              "x-ratelimit-remaining": "0",
+          throw createGithubRequestError("Rate limited", {
+            status: 403,
+            response: {
+              headers: {
+                "x-ratelimit-remaining": "0",
+              },
             },
-          };
-          throw error;
+          });
         },
-        getPullRequest: async (owner, repo, pullNumber) =>
-          createPullRequestRecord(pullNumber),
       }),
     );
 
@@ -165,7 +150,7 @@ describe("loadMergedPullRequests", () => {
       ok: false,
       error: {
         code: "GITHUB_RATE_LIMITED",
-        message: "GitHub rate limit was reached. Try again later.",
+        message: githubRateLimitedMessage,
       },
     });
   });

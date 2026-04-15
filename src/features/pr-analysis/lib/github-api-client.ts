@@ -20,7 +20,7 @@ export type GithubPullRequestRecord = {
   changedFiles: number;
   deletions: number;
   htmlUrl: string;
-  mergedAt: string;
+  mergedAt: string | null;
   number: number;
   title: string;
 };
@@ -96,7 +96,7 @@ export const createGithubApiClient = (): GithubApiClient => {
         body: response.data.body ?? "",
         authorLogin: response.data.user?.login ?? null,
         htmlUrl: response.data.html_url,
-        mergedAt: response.data.merged_at ?? "",
+        mergedAt: response.data.merged_at,
         additions: response.data.additions,
         deletions: response.data.deletions,
         changedFiles: response.data.changed_files,
