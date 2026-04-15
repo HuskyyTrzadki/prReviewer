@@ -131,7 +131,7 @@ export const ResultsDashboardSuccess = ({
                   </div>
                 </div>
 
-                <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(15rem,1.05fr)] lg:items-center">
+                <div className="grid gap-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(17rem,1.05fr)] lg:items-stretch">
                   <ResultsScoreBreakdownList
                     items={scoreLabels.map((scoreLabel) => ({
                       description: scoreLabel.description,
@@ -140,7 +140,7 @@ export const ResultsDashboardSuccess = ({
                     }))}
                   />
 
-                  <div className="rounded-md border border-silver bg-ice-blue/60 px-4 py-4 sm:px-5">
+                  <div className="flex h-full rounded-md border border-silver bg-ice-blue/60 px-4 py-4 sm:px-5">
                     <ResultsScoreRadarChart
                       aiLeverageScore={result.analysis.summary.aiLeverageScore}
                       impactScore={result.analysis.summary.impactScore}

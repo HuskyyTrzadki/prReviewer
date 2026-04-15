@@ -14,11 +14,47 @@ type ResultsScoreRadarChartProps = {
   qualityScore: number;
 };
 
-const labelStyle = {
-  fill: "#1d243a",
-  fontFamily: "Inter, sans-serif",
-  fontSize: 12,
-  fontWeight: 600,
+const axisLabelByDimension = {
+  "AI Leverage": ["AI", "Leverage"],
+  Impact: ["Impact"],
+  Quality: ["Quality"],
+} as const;
+
+const RadarAxisTick = ({
+  payload,
+  x,
+  y,
+}: {
+  payload?: { value?: string };
+  x?: number;
+  y?: number;
+}) => {
+  if (typeof x !== "number" || typeof y !== "number" || !payload?.value) {
+    return null;
+  }
+
+  const lines =
+    axisLabelByDimension[payload.value as keyof typeof axisLabelByDimension] ?? [
+      payload.value,
+    ];
+
+  return (
+    <text
+      fill="#1d243a"
+      fontFamily="Inter, sans-serif"
+      fontSize="12"
+      fontWeight="600"
+      textAnchor="middle"
+      x={x}
+      y={y}
+    >
+      {lines.map((line, index) => (
+        <tspan dy={index === 0 ? 0 : 14} key={line} x={x}>
+          {line}
+        </tspan>
+      ))}
+    </text>
+  );
 };
 
 export const ResultsScoreRadarChart = ({
@@ -42,11 +78,11 @@ export const ResultsScoreRadarChart = ({
   ];
 
   return (
-    <div className="h-[13.5rem] w-full min-w-0">
+    <div className="h-full min-h-[18rem] w-full min-w-0">
       <ResponsiveContainer height="100%" width="100%">
-        <RadarChart cx="50%" cy="50%" data={data} outerRadius="64%">
+        <RadarChart cx="50%" cy="51%" data={data} outerRadius="74%">
           <PolarGrid gridType="polygon" stroke="#d7defd" />
-          <PolarAngleAxis dataKey="dimension" tick={labelStyle} />
+          <PolarAngleAxis dataKey="dimension" tick={<RadarAxisTick />} />
           <Radar
             dataKey="score"
             fill="#4d42e0"
