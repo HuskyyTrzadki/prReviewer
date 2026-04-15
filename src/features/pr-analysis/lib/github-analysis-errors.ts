@@ -47,6 +47,9 @@ const createGithubAnalysisError = (
 const isGithubRequestFailure = (error: unknown): error is GithubRequestFailure =>
   error instanceof Error;
 
+const isGithubRateLimitMessage = (message: string) =>
+  /quota exhausted|rate limit exceeded|secondary rate limit/i.test(message);
+
 const getHeaderValue = (
   error: GithubRequestFailure,
   headerName: string,
@@ -69,7 +72,11 @@ export const mapGithubRequestError = (error: unknown) => {
 
   const rateLimitRemaining = getHeaderValue(error, "x-ratelimit-remaining");
 
-  if (error.status === 429 || (error.status === 403 && rateLimitRemaining === "0")) {
+  if (
+    error.status === 429 ||
+    (error.status === 403 && rateLimitRemaining === "0") ||
+    isGithubRateLimitMessage(error.message)
+  ) {
     return createGithubAnalysisError("GITHUB_RATE_LIMITED", githubRateLimitedMessage);
   }
 

@@ -103,6 +103,28 @@ describe("loadGithubRepository", () => {
     });
   });
 
+  it("maps quota exhausted github messages to a typed error", async () => {
+    const result = await loadGithubRepository(
+      testRepository,
+      createGithubApiClientMock({
+        getRepository: async () => {
+          throw createGithubRequestError(
+            "Request quota exhausted for request GET /repos/{owner}/{repo}",
+            { status: 403 },
+          );
+        },
+      }),
+    );
+
+    expect(result).toEqual({
+      ok: false,
+      error: {
+        code: "GITHUB_RATE_LIMITED",
+        message: githubRateLimitedMessage,
+      },
+    });
+  });
+
   it("maps unknown github failures to an upstream error", async () => {
     const result = await loadGithubRepository(
       testRepository,
