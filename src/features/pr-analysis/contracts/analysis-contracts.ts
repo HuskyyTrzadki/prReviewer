@@ -9,6 +9,7 @@ export const analysisApiErrorCodes = [
   "NO_MERGED_PULL_REQUESTS",
   "GITHUB_RATE_LIMITED",
   "GITHUB_UPSTREAM_ERROR",
+  "ANALYSIS_FAILED",
   ...repositoryUrlErrorCodes,
 ] as const;
 

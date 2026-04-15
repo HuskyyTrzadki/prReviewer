@@ -40,13 +40,14 @@ describe("analysis contracts", () => {
   it("includes step 7 github analysis error codes", () => {
     expect(analysisApiErrorCodes).toEqual([
       "INVALID_REQUEST_BODY",
-      "INVALID_REPOSITORY_URL",
-      "UNSUPPORTED_REPOSITORY_HOST",
-      "UNSUPPORTED_REPOSITORY_RESOURCE",
       "REPOSITORY_NOT_FOUND_OR_PRIVATE",
       "NO_MERGED_PULL_REQUESTS",
       "GITHUB_RATE_LIMITED",
       "GITHUB_UPSTREAM_ERROR",
+      "ANALYSIS_FAILED",
+      "INVALID_REPOSITORY_URL",
+      "UNSUPPORTED_REPOSITORY_HOST",
+      "UNSUPPORTED_REPOSITORY_RESOURCE",
     ]);
   });
 

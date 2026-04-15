@@ -229,4 +229,10 @@ i noticed agent has troubles with zod typings, codex searches for them, • Runn
 
 • Ran npx skills find typescript best practices
 └======== 
-and he found this pproenca/dot-skills@zod
+and he found this pproenca/dot-skills@zod, he will use it from now on as well when working on zod.
+
+i see lib is starting to be hard to navigate folder wise, probably would need to split it into folders later on.
+
+super heavy be work now, looks good but i dont spend as much time on reviews.
+
+im fully aware loop is not the best solution for calls to api, however i want to make it better later on, not now. now i want working product, now i do validation.
