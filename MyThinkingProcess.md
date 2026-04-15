@@ -297,3 +297,6 @@ i stumble across this issue:  the request completed
 - DevTools lost the response preview because the page navigation happened right away
 ---
 i decide to just console log. i also get 502 error, i add debug logs. the issue was gemini model version,
+
+for loader i think super engaging are the ones that show different messages/some facts. 
+

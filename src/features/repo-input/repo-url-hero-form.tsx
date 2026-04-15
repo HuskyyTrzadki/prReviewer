@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState, type ComponentProps } from "react";
 
 import { submitRepositoryAnalysis } from "@/features/repo-input/submit-repository-analysis";
+import { storeAnalysisResult } from "@/features/results-dashboard/results-session";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
 const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
@@ -48,6 +49,7 @@ export const RepoUrlHeroForm = () => {
       setStatusMessage(
         `Repository found. Opening results for ${response.repository.fullName}...`,
       );
+      storeAnalysisResult(response);
       router.push(response.redirectUrl);
     } catch {
       setStatusTone("error");
