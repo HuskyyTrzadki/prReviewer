@@ -1,3 +1,5 @@
+import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
+
 type ResultsScoreBreakdownItem = {
   description: string;
   label: string;
@@ -22,9 +24,7 @@ export const ResultsScoreBreakdownList = ({
             <p className="text-sm font-semibold text-navy">{item.label}</p>
             <p className="mt-1 ds-caption text-dark-slate">{item.description}</p>
           </div>
-          <p className="text-2xl font-semibold tabular-nums text-navy">
-            {item.value}
-          </p>
+          <ResultsScoreCircle showDenominator={false} size="sm" value={item.value} />
         </div>
       </div>
     ))}

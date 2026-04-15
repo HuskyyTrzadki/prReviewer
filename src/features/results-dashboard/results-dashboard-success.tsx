@@ -1,6 +1,7 @@
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
 import { ResultsPrPreviewCard } from "@/features/results-dashboard/results-pr-preview-card";
 import { ResultsScoreBreakdownList } from "@/features/results-dashboard/results-score-breakdown-list";
+import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
 import { ResultsScoreRadarChart } from "@/features/results-dashboard/results-score-radar-chart";
 import { ResultsTableSection } from "@/features/results-table/results-table-section";
 
@@ -50,14 +51,11 @@ export const ResultsDashboardSuccess = ({
                     <div className="space-y-3">
                       <p className="ds-overline text-navy">Repository Score</p>
                       <div className="flex justify-center">
-                        <div className="flex size-[14.5rem] flex-col items-center justify-center rounded-full border-[12px] border-soft-indigo bg-ice-blue/70 text-center">
-                        <span className="font-serif text-[4.6rem] leading-none tracking-[-0.05em] text-navy tabular-nums">
-                          {result.analysis.summary.overallScore}
-                        </span>
-                        <span className="mt-2 text-lg font-medium text-dark-slate">
-                          / 100
-                        </span>
-                        </div>
+                        <ResultsScoreCircle
+                          className="animate-score-circle-pop"
+                          size="lg"
+                          value={result.analysis.summary.overallScore}
+                        />
                       </div>
                     </div>
                     <p className="mx-auto max-w-[31rem] ds-body-secondary">
@@ -84,7 +82,7 @@ export const ResultsDashboardSuccess = ({
                     </p>
                   </div>
                   <a
-                    className="ds-button-secondary"
+                    className="ds-button-primary"
                     href={result.repository.canonicalUrl}
                     rel="noreferrer"
                     target="_blank"

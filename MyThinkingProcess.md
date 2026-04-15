@@ -457,3 +457,5 @@ i focus on analysis results page first, i need to act quicker cause i m running 
 for ui chart i d like a radar instead of just plain bars, i d use recharts for quick implemmentation, it doesnt weight much, 
 
 typical qa with ai, we just keep on improving designs, some of the stuff i like initially some we need to redesign slighy for example search bar in results should be in seperate row .. and so on.
+
+i d like to reuse "repository score" circle. in quick read section, and Score Breakdown i ll make it reusable, also animation on that would be great. 
