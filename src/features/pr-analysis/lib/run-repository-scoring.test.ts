@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 
+import type { RepositoryScoringSource } from "@/features/pr-analysis/contracts/analysis-source";
 import { analysisFailedMessage } from "@/features/pr-analysis/lib/analysis-api-errors";
 import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import {
@@ -8,7 +9,7 @@ import {
   testRepository,
 } from "@/features/pr-analysis/lib/pr-analysis.test-helpers";
 
-const repositoryScoringSource = {
+const repositoryScoringSource: RepositoryScoringSource = {
   repository: {
     ...testRepository,
     defaultBranch: "canary",
@@ -19,7 +20,7 @@ const repositoryScoringSource = {
     createPullRequestScoringSource(3),
   ],
   requestedPullRequestLimit: 8,
-} as const;
+};
 
 describe("runRepositoryScoring", () => {
   it("returns scored and skipped pull requests from one repository scoring run", async () => {
