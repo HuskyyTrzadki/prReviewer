@@ -76,6 +76,11 @@ export const runRepositoryScoring = async (
       const parsedScore = parsePullRequestScore(rawScore);
 
       if (!parsedScore.ok) {
+        console.error("Pull request scoring returned invalid output", {
+          repository: source.repository.fullName,
+          pullRequestNumber: pullRequest.number,
+          rawScore,
+        });
         skippedPullRequests.push(
           createSkippedPullRequest(pullRequest.number, "LLM_INVALID_OUTPUT"),
         );
@@ -86,6 +91,10 @@ export const runRepositoryScoring = async (
         createScoredPullRequest(pullRequest, parsedScore.value),
       );
     } catch {
+      console.error("Pull request scoring request failed", {
+        repository: source.repository.fullName,
+        pullRequestNumber: pullRequest.number,
+      });
       skippedPullRequests.push(
         createSkippedPullRequest(pullRequest.number, "LLM_REQUEST_FAILED"),
       );

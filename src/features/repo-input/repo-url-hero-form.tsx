@@ -44,6 +44,7 @@ export const RepoUrlHeroForm = () => {
         return;
       }
 
+      console.log("Analyze repository success response", response);
       setStatusTone("success");
       setStatusMessage(
         `Repository found. Opening results for ${response.repository.fullName}...`,

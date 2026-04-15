@@ -285,3 +285,15 @@ ofc some of the values are fake, like aiLeverageScore and so on...i ll change it
 for llm connection i m going to use  @google/genai. i did it before so should be easy. however i provide this to llm https://googleapis.github.io/js-genai/release_docs/index.html
 
 for now i will start with gemini flash. 3.0 
+
+one thing i d like ai to do is to have in /analyze endpoint  a 'forced json structure' enforced on llm directly, i now that llms sometimes likes to ignore simple 'output json' and they will do 'of course i will do that here it is {} ' which breaks endpoint.
+
+also on vercel i need to provide env key.
+
+i get an error from github 'resource exhausted' its only 60 /hour ..  i need to provide token. i ll make sure to handle this error.
+
+i stumble across this issue:  the request completed
+- the form immediately did router.push(...)
+- DevTools lost the response preview because the page navigation happened right away
+---
+i decide to just console log. i also get 502 error, i add debug logs. the issue was gemini model version,
