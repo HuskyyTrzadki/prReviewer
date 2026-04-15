@@ -10,6 +10,8 @@ export const githubRateLimitedMessage =
   "GitHub rate limit was reached. Try again later.";
 export const githubUpstreamErrorMessage =
   "GitHub could not be reached right now. Try again in a moment.";
+export const analysisFailedMessage =
+  "Repository analysis could not produce any scored pull requests. Try again in a moment.";
 
 const analysisApiErrorStatusByCode: Record<AnalysisApiErrorCode, number> = {
   INVALID_REQUEST_BODY: 400,
@@ -20,6 +22,7 @@ const analysisApiErrorStatusByCode: Record<AnalysisApiErrorCode, number> = {
   NO_MERGED_PULL_REQUESTS: 422,
   GITHUB_RATE_LIMITED: 429,
   GITHUB_UPSTREAM_ERROR: 502,
+  ANALYSIS_FAILED: 502,
 };
 
 export const getAnalysisApiErrorStatus = (code: AnalysisApiErrorCode) =>

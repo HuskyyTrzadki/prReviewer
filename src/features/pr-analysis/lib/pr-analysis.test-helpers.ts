@@ -1,6 +1,12 @@
 import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
 import type {
+  NormalizedPullRequestSource,
+  PullRequestScoringSource,
+} from "@/features/pr-analysis/contracts/analysis-source";
+import type { LlmPullRequestScore } from "@/features/pr-analysis/contracts/scoring-contracts";
+import type {
   GithubApiClient,
+  GithubPullRequestFileRecord,
   GithubPullRequestRecord,
   GithubRepositoryRecord,
 } from "@/features/pr-analysis/lib/github-api-client";
@@ -51,6 +57,62 @@ export const createGithubPullRequestRecord = (
   ...overrides,
 });
 
+export const createNormalizedPullRequestSource = (
+  number: number,
+  overrides: Partial<NormalizedPullRequestSource> = {},
+): NormalizedPullRequestSource => ({
+  number,
+  title: `PR ${number}`,
+  body: `Body ${number}`,
+  authorLogin: `author-${number}`,
+  htmlUrl: `https://github.com/vercel/next.js/pull/${number}`,
+  mergedAt: "2026-04-14T19:00:00.000Z",
+  additions: number * 2,
+  deletions: number,
+  changedFiles: 3,
+  ...overrides,
+});
+
+export const createGithubPullRequestFileRecord = (
+  filename: string,
+  overrides: Partial<GithubPullRequestFileRecord> = {},
+): GithubPullRequestFileRecord => ({
+  filename,
+  status: "modified",
+  additions: 5,
+  deletions: 2,
+  patch: "@@ -1 +1 @@\n-old\n+new",
+  ...overrides,
+});
+
+export const createPullRequestScoringSource = (
+  number: number,
+  overrides: Partial<PullRequestScoringSource> = {},
+): PullRequestScoringSource => ({
+  ...createNormalizedPullRequestSource(number),
+  files: [createGithubPullRequestFileRecord(`src/pr-${number}.ts`)],
+  ...overrides,
+});
+
+export const createLlmPullRequestScore = (
+  overrides: Partial<LlmPullRequestScore> = {},
+): LlmPullRequestScore => ({
+  summary: "Solid improvement with clear engineering value.",
+  impact: {
+    score: 78,
+    rationale: "Improves an important contributor workflow.",
+  },
+  aiLeverage: {
+    score: 52,
+    rationale: "Some repetitive drafting patterns suggest assisted generation.",
+  },
+  quality: {
+    score: 84,
+    rationale: "The change is cohesive and implementation details are clean.",
+  },
+  ...overrides,
+});
+
 export const createGithubApiClientMock = (
   overrides: Partial<GithubApiClient>,
 ): GithubApiClient => ({
@@ -62,6 +124,9 @@ export const createGithubApiClientMock = (
   },
   listClosedPullRequests: async () => {
     throw createUnexpectedClientMethodError("listClosedPullRequests");
+  },
+  listPullRequestFiles: async () => {
+    throw createUnexpectedClientMethodError("listPullRequestFiles");
   },
   ...overrides,
 });

@@ -28,6 +28,7 @@ Don’t refactor unrelated parts.
 Follow the existing style, even if it’s not your preference.
 If you see unrelated dead code, mention it — don’t remove it.
 Do not reintroduce internal Next imports, `React.` namespace usage, deprecated `FormEvent`/`FormEventHandler` types, or function-declared components when an arrow component is already the local pattern, try to use patterns existing in repo, if u change pattern somewhere and its better, ask user for changing this everywhere.
+Avoid nested ternary expressions. Prefer explicit conditionals or a typed mapping object for readability.
 Prefer precise types over `unknown` when the value shape can be expressed clearly, and prefer `const` over `let` unless mutation is genuinely needed.
 no file can be larger than 200 lines, if u find file like this refactor.
 

@@ -20,6 +20,18 @@ describe("analysis contracts", () => {
       },
       repoId: "repo_demo",
       redirectUrl: "/results/repo_demo",
+      analysis: {
+        summary: {
+          impactScore: 80,
+          aiLeverageScore: 58,
+          qualityScore: 85,
+          overallScore: 74,
+          scoredPullRequestCount: 1,
+          skippedPullRequestCount: 0,
+        },
+        pullRequests: [],
+        skippedPullRequests: [],
+      },
     };
 
     expect(analyzeRepositorySuccessSchema.parse(payload)).toEqual(payload);
@@ -40,13 +52,14 @@ describe("analysis contracts", () => {
   it("includes step 7 github analysis error codes", () => {
     expect(analysisApiErrorCodes).toEqual([
       "INVALID_REQUEST_BODY",
-      "INVALID_REPOSITORY_URL",
-      "UNSUPPORTED_REPOSITORY_HOST",
-      "UNSUPPORTED_REPOSITORY_RESOURCE",
       "REPOSITORY_NOT_FOUND_OR_PRIVATE",
       "NO_MERGED_PULL_REQUESTS",
       "GITHUB_RATE_LIMITED",
       "GITHUB_UPSTREAM_ERROR",
+      "ANALYSIS_FAILED",
+      "INVALID_REPOSITORY_URL",
+      "UNSUPPORTED_REPOSITORY_HOST",
+      "UNSUPPORTED_REPOSITORY_RESOURCE",
     ]);
   });
 
