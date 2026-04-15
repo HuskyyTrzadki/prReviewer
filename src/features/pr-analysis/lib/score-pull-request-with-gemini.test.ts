@@ -18,62 +18,104 @@ vi.mock("@google/genai", () => ({
 }));
 
 import { missingGoogleApiKeyMessage } from "@/features/pr-analysis/lib/gemini-client";
-import { scorePullRequestWithGemini } from "@/features/pr-analysis/lib/score-pull-request-with-gemini";
+import { scorePullRequestsWithGemini } from "@/features/pr-analysis/lib/score-pull-request-with-gemini";
 
-describe("scorePullRequestWithGemini", () => {
+describe("scorePullRequestsWithGemini", () => {
   beforeEach(() => {
     process.env.GOOGLE_API_KEY = "test-key";
     generateContentMock.mockReset();
   });
 
-  it("requests schema-enforced JSON from Gemini", async () => {
+  it("requests schema-enforced JSON from Gemini for one pull request batch", async () => {
     generateContentMock.mockResolvedValue({
       text: JSON.stringify({
-        summary: "Strong fix with contained scope.",
-        impact: {
-          score: 74,
-          rationale: "Touches a meaningful runtime path.",
-        },
-        aiLeverage: {
-          score: 32,
-          rationale: "Little direct AI evidence appears in the PR.",
-        },
-        quality: {
-          score: 81,
-          rationale: "The implementation is focused and coherent.",
-        },
+        pullRequests: [
+          {
+            number: 42,
+            summary: "Strong fix with contained scope.",
+            impact: {
+              score: 74,
+              rationale: "Touches a meaningful runtime path.",
+            },
+            aiLeverage: {
+              score: 32,
+              rationale: "Little direct AI evidence appears in the PR.",
+            },
+            quality: {
+              score: 81,
+              rationale: "The implementation is focused and coherent.",
+            },
+          },
+          {
+            number: 43,
+            summary: "Useful follow-up with broader code motion.",
+            impact: {
+              score: 68,
+              rationale: "Improves behavior in a broader module.",
+            },
+            aiLeverage: {
+              score: 54,
+              rationale: "There are some AI-assisted drafting signals.",
+            },
+            quality: {
+              score: 77,
+              rationale: "The work remains cohesive.",
+            },
+          },
+        ],
       }),
     });
 
-    const result = await scorePullRequestWithGemini(
-      createPullRequestScoringSource(42),
+    const result = await scorePullRequestsWithGemini(
+      [createPullRequestScoringSource(42), createPullRequestScoringSource(43)],
       testRepository,
     );
 
     expect(result).toEqual({
-      summary: "Strong fix with contained scope.",
-      impact: {
-        score: 74,
-        rationale: "Touches a meaningful runtime path.",
-      },
-      aiLeverage: {
-        score: 32,
-        rationale: "Little direct AI evidence appears in the PR.",
-      },
-      quality: {
-        score: 81,
-        rationale: "The implementation is focused and coherent.",
-      },
+      pullRequests: [
+        {
+          number: 42,
+          summary: "Strong fix with contained scope.",
+          impact: {
+            score: 74,
+            rationale: "Touches a meaningful runtime path.",
+          },
+          aiLeverage: {
+            score: 32,
+            rationale: "Little direct AI evidence appears in the PR.",
+          },
+          quality: {
+            score: 81,
+            rationale: "The implementation is focused and coherent.",
+          },
+        },
+        {
+          number: 43,
+          summary: "Useful follow-up with broader code motion.",
+          impact: {
+            score: 68,
+            rationale: "Improves behavior in a broader module.",
+          },
+          aiLeverage: {
+            score: 54,
+            rationale: "There are some AI-assisted drafting signals.",
+          },
+          quality: {
+            score: 77,
+            rationale: "The work remains cohesive.",
+          },
+        },
+      ],
     });
     expect(generateContentMock).toHaveBeenCalledTimes(1);
     expect(generateContentMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         config: expect.objectContaining({
           responseMimeType: "application/json",
           responseJsonSchema: expect.objectContaining({
             type: "object",
-            required: ["summary", "impact", "aiLeverage", "quality"],
+            required: ["pullRequests"],
             additionalProperties: false,
           }),
         }),
@@ -83,22 +125,22 @@ describe("scorePullRequestWithGemini", () => {
 
   it("returns raw text when Gemini still responds with invalid JSON", async () => {
     generateContentMock.mockResolvedValue({
-      text: 'Of course. Here is the JSON: {"summary":"bad"}',
+      text: 'Of course. Here is the JSON: {"pullRequests":[]}',
     });
 
-    const result = await scorePullRequestWithGemini(
-      createPullRequestScoringSource(7),
+    const result = await scorePullRequestsWithGemini(
+      [createPullRequestScoringSource(7)],
       testRepository,
     );
 
-    expect(result).toBe('Of course. Here is the JSON: {"summary":"bad"}');
+    expect(result).toBe('Of course. Here is the JSON: {"pullRequests":[]}');
   });
 
   it("throws when GOOGLE_API_KEY is missing", async () => {
     delete process.env.GOOGLE_API_KEY;
 
     await expect(
-      scorePullRequestWithGemini(createPullRequestScoringSource(3), testRepository),
+      scorePullRequestsWithGemini([createPullRequestScoringSource(3)], testRepository),
     ).rejects.toThrow(missingGoogleApiKeyMessage);
   });
 });

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 import type { RepositoryScoringSource } from "@/features/pr-analysis/contracts/analysis-source";
 import { analysisFailedMessage } from "@/features/pr-analysis/lib/analysis-api-errors";
@@ -18,39 +18,68 @@ const repositoryScoringSource: RepositoryScoringSource = {
     createPullRequestScoringSource(1),
     createPullRequestScoringSource(2),
     createPullRequestScoringSource(3),
+    createPullRequestScoringSource(4),
   ],
   requestedPullRequestLimit: 8,
 };
 
 describe("runRepositoryScoring", () => {
-  it("returns scored and skipped pull requests from one repository scoring run", async () => {
+  it("returns scored and skipped pull requests from batched repository scoring", async () => {
+    const scorePullRequests = vi.fn(async (pullRequestBatch) => {
+      if (pullRequestBatch.some((pullRequest) => pullRequest.number === 4)) {
+        throw new Error("provider timeout");
+      }
+
+      return {
+        pullRequests: [
+          {
+            number: 1,
+            ...createLlmPullRequestScore(),
+          },
+          {
+            number: 3,
+            ...createLlmPullRequestScore({
+              summary: "Useful change with valid but separate scoring.",
+              impact: {
+                score: 60,
+                rationale: "Moderate product impact.",
+              },
+              aiLeverage: {
+                score: 70,
+                rationale: "Clear AI-assisted drafting patterns.",
+              },
+              quality: {
+                score: 80,
+                rationale: "Well-structured implementation details.",
+              },
+            }),
+          },
+        ],
+      };
+    });
+
     const result = await runRepositoryScoring(
       repositoryScoringSource,
-      async (pullRequest) => {
-        if (pullRequest.number === 2) {
-          return {
-            summary: "Missing dimensions on purpose.",
-          };
-        }
-
-        if (pullRequest.number === 3) {
-          throw new Error("provider timeout");
-        }
-
-        return createLlmPullRequestScore();
-      },
+      scorePullRequests,
     );
 
+    expect(scorePullRequests).toHaveBeenCalledTimes(2);
+    expect(scorePullRequests.mock.calls[0]?.[0].map(({ number }) => number)).toEqual([
+      1, 2, 3,
+    ]);
+    expect(scorePullRequests.mock.calls[1]?.[0].map(({ number }) => number)).toEqual([
+      4,
+    ]);
     expect(result).toEqual({
       ok: true,
       value: {
         repository: testRepository,
         summary: {
-          impactScore: 78,
-          aiLeverageScore: 52,
-          qualityScore: 84,
+          impactScore: 69,
+          aiLeverageScore: 61,
+          qualityScore: 82,
           overallScore: 71,
-          scoredPullRequestCount: 1,
+          scoredPullRequestCount: 2,
           skippedPullRequestCount: 2,
         },
         pullRequests: [
@@ -75,6 +104,25 @@ describe("runRepositoryScoring", () => {
               "The change is cohesive and implementation details are clean.",
             overallScore: 71,
           },
+          {
+            number: 3,
+            title: "PR 3",
+            body: "Body 3",
+            authorLogin: "author-3",
+            htmlUrl: "https://github.com/vercel/next.js/pull/3",
+            mergedAt: "2026-04-14T19:00:00.000Z",
+            additions: 6,
+            deletions: 3,
+            changedFiles: 3,
+            summary: "Useful change with valid but separate scoring.",
+            impactScore: 60,
+            impactRationale: "Moderate product impact.",
+            aiLeverageScore: 70,
+            aiLeverageRationale: "Clear AI-assisted drafting patterns.",
+            qualityScore: 80,
+            qualityRationale: "Well-structured implementation details.",
+            overallScore: 70,
+          },
         ],
         skippedPullRequests: [
           {
@@ -82,7 +130,7 @@ describe("runRepositoryScoring", () => {
             reason: "LLM_INVALID_OUTPUT",
           },
           {
-            number: 3,
+            number: 4,
             reason: "LLM_REQUEST_FAILED",
           },
         ],
@@ -90,7 +138,7 @@ describe("runRepositoryScoring", () => {
     });
   });
 
-  it("returns a typed failure when every pull request is skipped", async () => {
+  it("returns a typed failure when every pull request batch is skipped", async () => {
     const result = await runRepositoryScoring(
       repositoryScoringSource,
       async () => {
