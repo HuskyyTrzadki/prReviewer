@@ -1,5 +1,9 @@
 import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
-import type { NormalizedPullRequestSource } from "@/features/pr-analysis/contracts/analysis-source";
+import type {
+  NormalizedPullRequestSource,
+  PullRequestScoringSource,
+} from "@/features/pr-analysis/contracts/analysis-source";
+import type { LlmPullRequestScore } from "@/features/pr-analysis/contracts/scoring-contracts";
 import type {
   GithubApiClient,
   GithubPullRequestFileRecord,
@@ -78,6 +82,34 @@ export const createGithubPullRequestFileRecord = (
   additions: 5,
   deletions: 2,
   patch: "@@ -1 +1 @@\n-old\n+new",
+  ...overrides,
+});
+
+export const createPullRequestScoringSource = (
+  number: number,
+  overrides: Partial<PullRequestScoringSource> = {},
+): PullRequestScoringSource => ({
+  ...createNormalizedPullRequestSource(number),
+  files: [createGithubPullRequestFileRecord(`src/pr-${number}.ts`)],
+  ...overrides,
+});
+
+export const createLlmPullRequestScore = (
+  overrides: Partial<LlmPullRequestScore> = {},
+): LlmPullRequestScore => ({
+  summary: "Solid improvement with clear engineering value.",
+  impact: {
+    score: 78,
+    rationale: "Improves an important contributor workflow.",
+  },
+  aiLeverage: {
+    score: 52,
+    rationale: "Some repetitive drafting patterns suggest assisted generation.",
+  },
+  quality: {
+    score: 84,
+    rationale: "The change is cohesive and implementation details are clean.",
+  },
   ...overrides,
 });
 
