@@ -42,21 +42,25 @@ export const ResultsDashboardSuccess = ({
           <div className="grid gap-6 lg:grid-cols-[0.84fr_1.16fr]">
             <article className="rounded-md border border-silver bg-white p-8">
               <div className="flex h-full flex-col justify-center gap-8 py-2">
-                <div className="space-y-5">
-                  <p className="ds-overline text-navy">Repository Score</p>
-                  <div className="flex items-end gap-3">
-                    <span className="font-serif text-[4.5rem] leading-none tracking-[-0.04em] text-navy tabular-nums">
-                      {result.analysis.summary.overallScore}
-                    </span>
-                    <span className="pb-2 text-base font-medium text-dark-slate">
-                      / 100
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    <h1 className="ds-display-2 text-left text-balance">
+                <div className="space-y-6 text-center">
+                  <div className="space-y-4">
+                    <h1 className="ds-display-2 text-balance">
                       {result.repository.fullName}
                     </h1>
-                    <p className="ds-body-secondary max-w-[31rem]">
+                    <div className="space-y-3">
+                      <p className="ds-overline text-navy">Repository Score</p>
+                      <div className="flex justify-center">
+                        <div className="flex size-[14.5rem] flex-col items-center justify-center rounded-full border-[12px] border-soft-indigo bg-ice-blue/70 text-center">
+                        <span className="font-serif text-[4.6rem] leading-none tracking-[-0.05em] text-navy tabular-nums">
+                          {result.analysis.summary.overallScore}
+                        </span>
+                        <span className="mt-2 text-lg font-medium text-dark-slate">
+                          / 100
+                        </span>
+                        </div>
+                      </div>
+                    </div>
+                    <p className="mx-auto max-w-[31rem] ds-body-secondary">
                       A compact scorecard built from the latest merged PR sample,
                       weighing how meaningful the work is, how much AI seems to
                       accelerate it, and how cleanly it lands.
