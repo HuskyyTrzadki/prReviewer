@@ -1,6 +1,7 @@
 import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
 import type {
   GithubApiClient,
+  GithubPullRequestFileRecord,
   GithubPullRequestRecord,
   GithubRepositoryRecord,
 } from "@/features/pr-analysis/lib/github-api-client";
@@ -51,6 +52,18 @@ export const createGithubPullRequestRecord = (
   ...overrides,
 });
 
+export const createGithubPullRequestFileRecord = (
+  filename: string,
+  overrides: Partial<GithubPullRequestFileRecord> = {},
+): GithubPullRequestFileRecord => ({
+  filename,
+  status: "modified",
+  additions: 5,
+  deletions: 2,
+  patch: "@@ -1 +1 @@\n-old\n+new",
+  ...overrides,
+});
+
 export const createGithubApiClientMock = (
   overrides: Partial<GithubApiClient>,
 ): GithubApiClient => ({
@@ -62,6 +75,9 @@ export const createGithubApiClientMock = (
   },
   listClosedPullRequests: async () => {
     throw createUnexpectedClientMethodError("listClosedPullRequests");
+  },
+  listPullRequestFiles: async () => {
+    throw createUnexpectedClientMethodError("listPullRequestFiles");
   },
   ...overrides,
 });

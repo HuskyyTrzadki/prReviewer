@@ -25,6 +25,14 @@ export type GithubPullRequestRecord = {
   title: string;
 };
 
+export type GithubPullRequestFileRecord = {
+  additions: number;
+  deletions: number;
+  filename: string;
+  patch: string | null;
+  status: string;
+};
+
 export type GithubApiClient = {
   getRepository: (
     owner: string,
@@ -41,6 +49,11 @@ export type GithubApiClient = {
     page: number,
     perPage: number,
   ) => Promise<GithubClosedPullRequestListItem[]>;
+  listPullRequestFiles: (
+    owner: string,
+    repo: string,
+    pullNumber: number,
+  ) => Promise<GithubPullRequestFileRecord[]>;
 };
 
 export const getGithubAuthToken = (rawToken = process.env.GITHUB_TOKEN) => {
@@ -81,6 +94,22 @@ export const createGithubApiClient = (): GithubApiClient => {
       return response.data.map((pullRequest) => ({
         mergedAt: pullRequest.merged_at,
         number: pullRequest.number,
+      }));
+    },
+    listPullRequestFiles: async (owner, repo, pullNumber) => {
+      const response = await octokit.paginate(octokit.rest.pulls.listFiles, {
+        owner,
+        repo,
+        pull_number: pullNumber,
+        per_page: 100,
+      });
+
+      return response.map((file) => ({
+        filename: file.filename,
+        status: file.status,
+        additions: file.additions,
+        deletions: file.deletions,
+        patch: file.patch ?? null,
       }));
     },
     getPullRequest: async (owner, repo, pullNumber) => {

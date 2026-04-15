@@ -18,6 +18,18 @@ export const normalizedPullRequestSourceSchema = z.object({
   changedFiles: z.number().int().nonnegative(),
 });
 
+export const normalizedPullRequestFileSourceSchema = z.object({
+  filename: z.string().trim().min(1),
+  status: z.string().trim().min(1),
+  additions: z.number().int().nonnegative(),
+  deletions: z.number().int().nonnegative(),
+  patch: z.string().nullable(),
+});
+
+export const pullRequestScoringSourceSchema = normalizedPullRequestSourceSchema.extend({
+  files: z.array(normalizedPullRequestFileSourceSchema),
+});
+
 export const repositoryAnalysisSourceSchema = z.object({
   repository: githubRepositoryDetailsSchema,
   pullRequests: z.array(normalizedPullRequestSourceSchema),
@@ -27,6 +39,12 @@ export const repositoryAnalysisSourceSchema = z.object({
 export type GithubRepositoryDetails = z.infer<typeof githubRepositoryDetailsSchema>;
 export type NormalizedPullRequestSource = z.infer<
   typeof normalizedPullRequestSourceSchema
+>;
+export type NormalizedPullRequestFileSource = z.infer<
+  typeof normalizedPullRequestFileSourceSchema
+>;
+export type PullRequestScoringSource = z.infer<
+  typeof pullRequestScoringSourceSchema
 >;
 export type RepositoryAnalysisSource = z.infer<
   typeof repositoryAnalysisSourceSchema
