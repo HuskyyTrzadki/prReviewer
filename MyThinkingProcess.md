@@ -454,4 +454,4 @@ for design qa i inspect whole website module by module, first desktop than mobil
 
 i focus on analysis results page first, i need to act quicker cause i m running out of time.
 
-for ui chart i d like a radar instead of just plain bars, i d use recharts for quick implemmentation, it doesnt weight much,
+for ui chart i d like a radar instead of just plain bars, i d use recharts for quick implemmentation, it doesnt weight much, i dont like 2 boxes layout, i propose to do 

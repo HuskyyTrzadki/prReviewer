@@ -39,10 +39,10 @@ export const ResultsDashboardSuccess = ({
     <section className="ds-section bg-ice-blue">
       <div className="ds-container">
         <div className="space-y-8">
-          <div className="grid gap-6 lg:grid-cols-[0.92fr_1.08fr]">
+          <div className="grid gap-6 lg:grid-cols-[0.84fr_1.16fr]">
             <article className="rounded-md border border-silver bg-white p-8">
-              <div className="flex h-full flex-col justify-between gap-8">
-                <div className="space-y-4">
+              <div className="flex h-full flex-col justify-center gap-8 py-2">
+                <div className="space-y-5">
                   <p className="ds-overline text-navy">Repository Score</p>
                   <div className="flex items-end gap-3">
                     <span className="font-serif text-[4.5rem] leading-none tracking-[-0.04em] text-navy tabular-nums">
@@ -57,30 +57,9 @@ export const ResultsDashboardSuccess = ({
                       {result.repository.fullName}
                     </h1>
                     <p className="ds-body-secondary max-w-[31rem]">
-                      A readable roll-up of the most recent merged PR sample,
-                      balancing repository impact, AI leverage, and engineering
-                      quality.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <div className="rounded-md border border-silver bg-ice-blue px-4 py-4">
-                    <p className="ds-caption text-dark-slate">Repository score</p>
-                    <p className="mt-2 text-2xl font-semibold tabular-nums text-navy">
-                      {result.analysis.summary.overallScore}
-                    </p>
-                  </div>
-                  <div className="rounded-md border border-silver bg-ice-blue px-4 py-4">
-                    <p className="ds-caption text-dark-slate">Sample window</p>
-                    <p className="mt-2 text-2xl font-semibold tabular-nums text-navy">
-                      {sampleSize} PRs
-                    </p>
-                  </div>
-                  <div className="rounded-md border border-silver bg-ice-blue px-4 py-4">
-                    <p className="ds-caption text-dark-slate">Live source</p>
-                    <p className="mt-2 text-sm font-semibold text-navy">
-                      GitHub merged pull requests
+                      A compact scorecard built from the latest merged PR sample,
+                      weighing how meaningful the work is, how much AI seems to
+                      accelerate it, and how cleanly it lands.
                     </p>
                   </div>
                 </div>
