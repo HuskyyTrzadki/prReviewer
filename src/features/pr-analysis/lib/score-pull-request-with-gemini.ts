@@ -52,32 +52,15 @@ export const scorePullRequestWithGemini = async (
   repository: NormalizedRepository,
 ) => {
   const geminiClient = createGeminiClient();
+  const response = await geminiClient.models.generateContent({
+    model: geminiPullRequestScoringModel,
+    contents: buildPullRequestScoringPrompt(pullRequest, repository),
+    config: {
+      temperature: 0.2,
+      responseMimeType: "application/json",
+      responseJsonSchema: llmPullRequestScoreJsonSchema,
+    },
+  });
 
-  try {
-    const response = await geminiClient.models.generateContent({
-      model: geminiPullRequestScoringModel,
-      contents: buildPullRequestScoringPrompt(pullRequest, repository),
-      config: {
-        temperature: 0.2,
-        responseMimeType: "application/json",
-        responseJsonSchema: llmPullRequestScoreJsonSchema,
-      },
-    });
-
-    console.log("Gemini pull request scoring raw response", {
-      repository: repository.fullName,
-      pullRequestNumber: pullRequest.number,
-      text: response.text,
-    });
-
-    return parseGeminiStructuredResponse(response.text);
-  } catch (error) {
-    console.error("Gemini pull request scoring request failed", {
-      repository: repository.fullName,
-      pullRequestNumber: pullRequest.number,
-      message: error instanceof Error ? error.message : String(error),
-      error,
-    });
-    throw error;
-  }
+  return parseGeminiStructuredResponse(response.text);
 };
