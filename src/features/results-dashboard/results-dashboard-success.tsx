@@ -1,4 +1,6 @@
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
+import { ResultsPrPreviewCard } from "@/features/results-dashboard/results-pr-preview-card";
+import { ResultsScoreBar } from "@/features/results-dashboard/results-score-bar";
 
 type ResultsDashboardSuccessProps = {
   result: AnalyzeRepositorySuccess;
@@ -23,6 +25,7 @@ export const ResultsDashboardSuccess = ({
   result,
 }: ResultsDashboardSuccessProps) => {
   const topPullRequests = result.analysis.pullRequests.slice(0, 3);
+  const skippedCount = result.analysis.skippedPullRequests.length;
 
   return (
     <section className="ds-section bg-ice-blue">
@@ -45,7 +48,8 @@ export const ResultsDashboardSuccess = ({
                     {result.repository.fullName}
                   </h1>
                   <p className="ds-body-secondary">
-                    Real analysis from the latest sample of merged pull requests.
+                    Real analysis from the latest sample of merged pull requests,
+                    rolled up into one readable repository score.
                   </p>
                 </div>
               </div>
@@ -86,33 +90,28 @@ export const ResultsDashboardSuccess = ({
                   <div className="rounded-md border border-silver bg-ice-blue px-4 py-4">
                     <p className="ds-caption text-dark-slate">Sample size</p>
                     <p className="mt-2 text-3xl font-semibold tabular-nums text-navy">
-                      {result.analysis.pullRequests.length}
+                      {result.analysis.summary.scoredPullRequestCount + skippedCount}
                     </p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   {scoreLabels.map((scoreLabel) => (
-                    <div key={scoreLabel.key}>
-                      <div className="mb-2 flex items-center justify-between gap-4">
-                        <span className="text-sm font-medium text-navy">
-                          {scoreLabel.label}
-                        </span>
-                        <span className="text-sm font-semibold tabular-nums text-navy">
-                          {result.analysis.summary[scoreLabel.key]}
-                        </span>
-                      </div>
-                      <div className="h-3 rounded-full bg-soft-indigo">
-                        <div
-                          className="h-full rounded-full bg-indigo-violet"
-                          style={{
-                            width: `${result.analysis.summary[scoreLabel.key]}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
+                    <ResultsScoreBar
+                      key={scoreLabel.key}
+                      label={scoreLabel.label}
+                      value={result.analysis.summary[scoreLabel.key]}
+                    />
                   ))}
                 </div>
+
+                {skippedCount > 0 ? (
+                  <p className="ds-caption text-dark-slate">
+                    {skippedCount} pull request
+                    {skippedCount === 1 ? "" : "s"} skipped during scoring. The
+                    repository score only uses successfully scored pull requests.
+                  </p>
+                ) : null}
               </div>
             </article>
           </div>
@@ -132,28 +131,10 @@ export const ResultsDashboardSuccess = ({
 
             <div className="mt-6 space-y-4">
               {topPullRequests.map((pullRequest) => (
-                <article
-                  className="rounded-md border border-silver bg-ice-blue px-5 py-5"
+                <ResultsPrPreviewCard
                   key={pullRequest.number}
-                >
-                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                    <div className="min-w-0 flex-1 space-y-2">
-                      <p className="ds-caption text-dark-slate">
-                        PR #{pullRequest.number} · {pullRequest.authorLogin ?? "Unknown author"}
-                      </p>
-                      <h3 className="text-lg font-semibold leading-7 text-navy">
-                        {pullRequest.title}
-                      </h3>
-                      <p className="ds-body-secondary">{pullRequest.summary}</p>
-                    </div>
-                    <div className="shrink-0 rounded-md border border-silver bg-white px-4 py-3 text-right">
-                      <p className="ds-caption text-dark-slate">Overall</p>
-                      <p className="mt-1 text-3xl font-semibold tabular-nums text-navy">
-                        {pullRequest.overallScore}
-                      </p>
-                    </div>
-                  </div>
-                </article>
+                  pullRequest={pullRequest}
+                />
               ))}
             </div>
           </article>
