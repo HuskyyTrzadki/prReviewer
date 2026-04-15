@@ -36,6 +36,12 @@ export const repositoryAnalysisSourceSchema = z.object({
   requestedPullRequestLimit: z.number().int().positive(),
 });
 
+export const repositoryScoringSourceSchema = z.object({
+  repository: githubRepositoryDetailsSchema,
+  pullRequests: z.array(pullRequestScoringSourceSchema),
+  requestedPullRequestLimit: z.number().int().positive(),
+});
+
 export type GithubRepositoryDetails = z.infer<typeof githubRepositoryDetailsSchema>;
 export type NormalizedPullRequestSource = z.infer<
   typeof normalizedPullRequestSourceSchema
@@ -48,4 +54,7 @@ export type PullRequestScoringSource = z.infer<
 >;
 export type RepositoryAnalysisSource = z.infer<
   typeof repositoryAnalysisSourceSchema
+>;
+export type RepositoryScoringSource = z.infer<
+  typeof repositoryScoringSourceSchema
 >;
