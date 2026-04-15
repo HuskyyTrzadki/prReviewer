@@ -23,6 +23,23 @@ const sortColumns = [
   { key: "overall", label: "Overall" },
 ] as const;
 
+const scoreCellClassName =
+  "inline-flex min-w-[3rem] items-center justify-center rounded-full border border-silver bg-ice-blue px-3 py-2 text-sm font-semibold tabular-nums text-navy";
+
+const getSortIndicator = ({
+  isActive,
+  sortDirection,
+}: {
+  isActive: boolean;
+  sortDirection: ResultsTableSortDirection;
+}) => {
+  if (!isActive) {
+    return "↕";
+  }
+
+  return sortDirection === "desc" ? "↓" : "↑";
+};
+
 const SortHeaderButton = ({
   isActive,
   label,
@@ -41,7 +58,7 @@ const SortHeaderButton = ({
   >
     <span>{label}</span>
     <span aria-hidden="true" className="text-cool-gray">
-      {isActive ? (sortDirection === "desc" ? "↓" : "↑") : "↕"}
+      {getSortIndicator({ isActive, sortDirection })}
     </span>
   </button>
 );
@@ -56,12 +73,12 @@ export const ResultsTableDesktop = ({
     <table className="w-full border-collapse">
       <caption className="sr-only">Analyzed pull requests with sortable score columns.</caption>
       <thead>
-        <tr className="border-b border-silver bg-ice-blue">
-          <th className="px-4 py-3 text-left text-sm font-semibold text-navy" scope="col">
+        <tr className="border-b border-silver bg-ice-blue/70">
+          <th className="px-5 py-4 text-left text-sm font-semibold text-navy" scope="col">
             Pull Request
           </th>
           {sortColumns.map((sortColumn) => (
-            <th className="px-4 py-3 text-left" key={sortColumn.key} scope="col">
+            <th className="px-4 py-4 text-left" key={sortColumn.key} scope="col">
               <SortHeaderButton
                 isActive={sort === sortColumn.key}
                 label={sortColumn.label}
@@ -70,7 +87,7 @@ export const ResultsTableDesktop = ({
               />
             </th>
           ))}
-          <th className="px-4 py-3 text-left text-sm font-semibold text-navy" scope="col">
+          <th className="px-5 py-4 text-left text-sm font-semibold text-navy" scope="col">
             Actions
           </th>
         </tr>
@@ -78,51 +95,69 @@ export const ResultsTableDesktop = ({
 
       <tbody>
         {pullRequests.map((pullRequest) => (
-          <tr className="border-b border-silver last:border-b-0" key={pullRequest.number}>
-            <td className="min-w-0 px-4 py-4 align-top">
-              <div className="min-w-0 space-y-2">
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          <tr
+            className="border-b border-silver transition-colors duration-150 hover:bg-ice-blue/40 last:border-b-0"
+            key={pullRequest.number}
+          >
+            <td className="min-w-0 px-5 py-5 align-top">
+              <div className="min-w-0 space-y-3">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <span className="text-sm font-semibold text-navy">
                     PR #{pullRequest.number}
                   </span>
                   <span className="ds-caption text-dark-slate">
-                    {pullRequest.changedFiles} files · +{pullRequest.additions}/-
-                    {pullRequest.deletions}
+                    {pullRequest.changedFiles}{" "}
+                    {pullRequest.changedFiles === 1 ? "file" : "files"}
+                  </span>
+                  <span className="text-sm font-medium tabular-nums text-success-green">
+                    +{pullRequest.additions}
+                  </span>
+                  <span className="text-sm font-medium tabular-nums text-error-red">
+                    -{pullRequest.deletions}
                   </span>
                 </div>
-                <p className="line-clamp-2 text-base font-semibold leading-6 text-navy">
+                <p className="line-clamp-2 text-[1.05rem] font-semibold leading-7 text-navy">
                   {pullRequest.title}
                 </p>
-                <p className="line-clamp-2 text-sm leading-6 text-dark-slate">
+                <p className="line-clamp-2 max-w-[27rem] text-sm leading-6 text-dark-slate">
                   {pullRequest.summary}
                 </p>
               </div>
             </td>
-            <td className="px-4 py-4 align-top text-sm text-dark-slate">
+            <td className="px-4 py-5 align-top text-sm text-dark-slate">
               {formatPullRequestMergedDate(pullRequest.mergedAt)}
             </td>
-            <td className="px-4 py-4 align-top text-sm text-dark-slate">
+            <td className="px-4 py-5 align-top text-sm text-dark-slate">
               {pullRequest.authorLogin ?? "Unknown author"}
             </td>
-            <td className="px-4 py-4 align-top text-sm tabular-nums text-dark-slate">
-              {pullRequest.additions + pullRequest.deletions}
+            <td className="px-4 py-5 align-top">
+              <div className="space-y-1">
+                <p className="text-sm font-semibold tabular-nums text-navy">
+                  {pullRequest.additions + pullRequest.deletions}
+                </p>
+                <p className="ds-caption text-dark-slate">
+                  {pullRequest.changedFiles} files changed
+                </p>
+              </div>
             </td>
-            <td className="px-4 py-4 align-top text-sm font-semibold tabular-nums text-navy">
-              {pullRequest.impactScore}
+            <td className="px-4 py-5 align-top">
+              <span className={scoreCellClassName}>{pullRequest.impactScore}</span>
             </td>
-            <td className="px-4 py-4 align-top text-sm font-semibold tabular-nums text-navy">
-              {pullRequest.aiLeverageScore}
+            <td className="px-4 py-5 align-top">
+              <span className={scoreCellClassName}>{pullRequest.aiLeverageScore}</span>
             </td>
-            <td className="px-4 py-4 align-top text-sm font-semibold tabular-nums text-navy">
-              {pullRequest.qualityScore}
+            <td className="px-4 py-5 align-top">
+              <span className={scoreCellClassName}>{pullRequest.qualityScore}</span>
             </td>
-            <td className="px-4 py-4 align-top text-sm font-semibold tabular-nums text-navy">
-              {pullRequest.overallScore}
+            <td className="px-4 py-5 align-top">
+              <span className="inline-flex min-w-[3.25rem] items-center justify-center rounded-full border border-soft-indigo bg-soft-indigo px-3 py-2 text-sm font-semibold tabular-nums text-navy">
+                {pullRequest.overallScore}
+              </span>
             </td>
-            <td className="px-4 py-4 align-top">
-              <div className="flex flex-col items-start gap-2">
+            <td className="px-5 py-5 align-top">
+              <div className="flex flex-col items-start gap-3">
                 <a
-                  className="text-sm font-medium text-indigo-violet transition-colors duration-150 hover:text-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2"
+                  className="ds-button-secondary h-10 px-4 text-sm"
                   href={pullRequest.htmlUrl}
                   rel="noreferrer"
                   target="_blank"

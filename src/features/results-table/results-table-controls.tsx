@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 import {
   getResultsTableSizeLabel,
   minimumScoreValues,
@@ -8,6 +6,10 @@ import {
   type ResultsTableSizeFilter,
   type ResultsTableState,
 } from "@/features/results-table/results-table-state";
+import {
+  ResultsTableField,
+  ResultsTableSelectField,
+} from "@/features/results-table/results-table-field";
 
 type ResultsTableControlsProps = {
   authorOptions: ResultsTableAuthorOption[];
@@ -30,19 +32,6 @@ const scoreFilterGroups = [
   { field: "overallMin", label: "Overall" },
 ] as const;
 
-const FilterField = ({
-  children,
-  label,
-}: {
-  children: ReactNode;
-  label: string;
-}) => (
-  <label className="space-y-2">
-    <span className="ds-caption text-dark-slate">{label}</span>
-    {children}
-  </label>
-);
-
 export const ResultsTableControls = ({
   authorOptions,
   isPending,
@@ -61,11 +50,49 @@ export const ResultsTableControls = ({
     state.aiMin ||
     state.qualityMin ||
     state.overallMin;
+  const activeFilterCount = [
+    Boolean(state.q),
+    Boolean(state.author),
+    state.size !== "all",
+    Boolean(state.impactMin),
+    Boolean(state.aiMin),
+    Boolean(state.qualityMin),
+    Boolean(state.overallMin),
+  ].filter(Boolean).length;
 
   return (
-    <div className="rounded-md border border-silver bg-ice-blue p-4 sm:p-5">
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.4fr)_repeat(6,minmax(0,1fr))]">
-        <FilterField label="Search Pull Requests">
+    <div className="rounded-md border border-silver bg-ice-blue/80 p-4 sm:p-5">
+      <div className="flex flex-wrap items-start justify-between gap-4 border-b border-silver pb-4">
+        <div className="space-y-1">
+          <p className="ds-overline text-navy">Filters</p>
+          <h3 className="text-base font-semibold text-navy">
+            Refine the scored PR sample
+          </h3>
+          <p className="ds-caption text-dark-slate">
+            Search by title or summary, then narrow by author, size, and score thresholds.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <p className="ds-caption text-dark-slate">
+            {hasActiveFilters ? `${activeFilterCount} active filters` : "No filters applied"}
+          </p>
+          <button
+            className="ds-button-secondary h-10 px-4 text-sm"
+            disabled={!hasActiveFilters}
+            onClick={onClear}
+            type="button"
+          >
+            Clear Filters
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-4 space-y-8">
+        <ResultsTableField
+          className="max-w-[30rem]"
+          label="Search Pull Requests"
+        >
           <input
             autoComplete="off"
             className="ds-input"
@@ -76,78 +103,79 @@ export const ResultsTableControls = ({
             type="search"
             value={state.q}
           />
-        </FilterField>
+        </ResultsTableField>
 
-        <FilterField label="Author">
-          <select
-            className="ds-select"
-            name="authorFilter"
-            onChange={(event) => onAuthorChange(event.target.value)}
-            value={state.author}
-          >
-            <option value="">All Authors</option>
-            {authorOptions.map((authorOption) => (
-              <option key={authorOption.value} value={authorOption.value}>
-                {authorOption.label}
-              </option>
-            ))}
-          </select>
-        </FilterField>
-
-        <FilterField label="PR Size">
-          <select
-            className="ds-select"
-            name="sizeFilter"
-            onChange={(event) =>
-              onSizeChange(event.target.value as ResultsTableSizeFilter)
-            }
-            value={state.size}
-          >
-            {sizeFilters.map((sizeFilter) => (
-              <option key={sizeFilter} value={sizeFilter}>
-                {getResultsTableSizeLabel(sizeFilter)}
-              </option>
-            ))}
-          </select>
-        </FilterField>
-
-        {scoreFilterGroups.map((scoreFilterGroup) => (
-          <FilterField key={scoreFilterGroup.field} label={scoreFilterGroup.label}>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+        <ResultsTableField label="Author">
+          <ResultsTableSelectField>
             <select
-              className="ds-select"
-              name={scoreFilterGroup.field}
-              onChange={(event) =>
-                onMinimumScoreChange(
-                  scoreFilterGroup.field,
-                  event.target.value ? Number(event.target.value) : null,
-                )
-              }
-              value={state[scoreFilterGroup.field] ?? ""}
+              className="ds-select appearance-none pr-11"
+              name="authorFilter"
+              onChange={(event) => onAuthorChange(event.target.value)}
+              value={state.author}
             >
-              <option value="">Any Score</option>
-              {minimumScoreValues.map((minimumScoreValue) => (
-                <option key={minimumScoreValue} value={minimumScoreValue}>
-                  {minimumScoreValue}+
+              <option value="">All Authors</option>
+              {authorOptions.map((authorOption) => (
+                <option key={authorOption.value} value={authorOption.value}>
+                  {authorOption.label}
                 </option>
               ))}
             </select>
-          </FilterField>
+          </ResultsTableSelectField>
+        </ResultsTableField>
+
+        <ResultsTableField label="PR Size">
+          <ResultsTableSelectField>
+            <select
+              className="ds-select appearance-none pr-11"
+              name="sizeFilter"
+              onChange={(event) =>
+                onSizeChange(event.target.value as ResultsTableSizeFilter)
+              }
+              value={state.size}
+            >
+              {sizeFilters.map((sizeFilter) => (
+                <option key={sizeFilter} value={sizeFilter}>
+                  {getResultsTableSizeLabel(sizeFilter)}
+                </option>
+              ))}
+            </select>
+          </ResultsTableSelectField>
+        </ResultsTableField>
+
+        {scoreFilterGroups.map((scoreFilterGroup) => (
+          <ResultsTableField key={scoreFilterGroup.field} label={scoreFilterGroup.label}>
+            <ResultsTableSelectField>
+              <select
+                className="ds-select appearance-none pr-11"
+                name={scoreFilterGroup.field}
+                onChange={(event) =>
+                  onMinimumScoreChange(
+                    scoreFilterGroup.field,
+                    event.target.value ? Number(event.target.value) : null,
+                  )
+                }
+                value={state[scoreFilterGroup.field] ?? ""}
+              >
+                <option value="">Any Score</option>
+                {minimumScoreValues.map((minimumScoreValue) => (
+                  <option key={minimumScoreValue} value={minimumScoreValue}>
+                    {minimumScoreValue}+
+                  </option>
+                ))}
+              </select>
+            </ResultsTableSelectField>
+          </ResultsTableField>
         ))}
+        </div>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
         <p aria-live="polite" className="ds-caption text-dark-slate">
-          {isPending ? "Updating the PR list…" : "Use filters to narrow the sample."}
+          {isPending
+            ? "Updating the PR list…"
+            : "Tip: start with Overall or Quality if you want a cleaner shortlist first."}
         </p>
-
-        <button
-          className="ds-button-secondary h-10 px-4 text-sm"
-          disabled={!hasActiveFilters}
-          onClick={onClear}
-          type="button"
-        >
-          Clear Filters
-        </button>
       </div>
     </div>
   );
