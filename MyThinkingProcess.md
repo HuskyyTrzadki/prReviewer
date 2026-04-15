@@ -216,3 +216,17 @@ i check api, for now with curl:   curl -s -X POST http://localhost:3000/api/anal
 {"status":"success","repository":{"owner":"vercel","repo":"next.js","fullName":"vercel/next.js","canonicalUrl":"https://github.com/vercel/next.js"},"repoId":"repo_dmVyY2VsL25leHQuanM","redirectUrl":"/results/repo_dmVyY2VsL25leHQuanM"}%      
 
 I decided to modify plan a bit so i can actually test input validation/responses in ui instead of just BE curls/tests. i added button connetctinon.
+
+i noticed agent has troubles with zod typings, codex searches for them, • Running npx skills find typescript schema
+
+• Running npx skills find zod
+
+✔ You approved codex to run npx skills find typescript schema this time
+
+✔ You approved codex to run npx skills find typescript best practices this time
+
+✔ You approved codex to run npx skills find zod this time
+
+• Ran npx skills find typescript best practices
+└======== 
+and he found this pproenca/dot-skills@zod

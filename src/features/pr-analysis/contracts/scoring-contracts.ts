@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/analysis-contracts";
 
-const boundedScoreSchema = z.number().finite().min(0).max(100);
+const boundedScoreSchema = z.number().min(0).max(100);
 const scoreRationaleSchema = z.string().trim().min(1);
 
 export const llmScoreDimensionSchema = z.object({
@@ -32,8 +32,8 @@ export const scoredPullRequestSchema = z.object({
   title: z.string().trim().min(1),
   body: z.string(),
   authorLogin: z.string().trim().min(1).nullable(),
-  htmlUrl: z.string().url(),
-  mergedAt: z.string().datetime({ offset: true }),
+  htmlUrl: z.url(),
+  mergedAt: z.iso.datetime({ offset: true }),
   additions: z.number().int().nonnegative(),
   deletions: z.number().int().nonnegative(),
   changedFiles: z.number().int().nonnegative(),
