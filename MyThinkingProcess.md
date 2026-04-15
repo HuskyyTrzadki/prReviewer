@@ -214,3 +214,5 @@ i check api, for now with curl:   curl -s -X POST http://localhost:3000/api/anal
 
 
 {"status":"success","repository":{"owner":"vercel","repo":"next.js","fullName":"vercel/next.js","canonicalUrl":"https://github.com/vercel/next.js"},"repoId":"repo_dmVyY2VsL25leHQuanM","redirectUrl":"/results/repo_dmVyY2VsL25leHQuanM"}%      
+
+I decided to modify plan a bit so i can actually test input validation/responses in ui instead of just BE curls/tests. i added button connetctinon.
