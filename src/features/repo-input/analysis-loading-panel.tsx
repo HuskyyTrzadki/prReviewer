@@ -8,6 +8,13 @@ export const AnalysisLoadingPanel = ({
   tick,
 }: AnalysisLoadingPanelProps) => {
   const { currentPhase, insight, phases } = getAnalysisLoadingSnapshot(tick);
+  const highlightedInsight = insight.split("? ");
+  const insightLead =
+    highlightedInsight.length > 1 ? `${highlightedInsight[0]}?` : "Review note";
+  const insightBody =
+    highlightedInsight.length > 1
+      ? highlightedInsight.slice(1).join("? ")
+      : insight;
 
   return (
     <div
@@ -58,11 +65,32 @@ export const AnalysisLoadingPanel = ({
           </div>
         </div>
 
-        <div className="rounded-md border border-silver bg-white p-4">
-          <p className="ds-overline text-navy">While You Wait</p>
-          <p className="mt-3 text-sm leading-6 text-dark-slate sm:text-base">
-            {insight}
-          </p>
+        <div className="rounded-md border border-silver bg-white p-4 sm:p-5">
+          <div className="flex items-start gap-4">
+            <span
+              aria-hidden="true"
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-soft-indigo text-lg text-indigo-violet"
+            >
+              ✦
+            </span>
+
+            <div className="min-w-0 space-y-3">
+              <div className="space-y-1">
+                <p className="ds-overline text-navy">While You Wait</p>
+                <h4 className="text-base font-semibold text-navy sm:text-lg">
+                  {insightLead}
+                </h4>
+              </div>
+
+              <p className="rounded-xl bg-ice-blue px-4 py-3 text-sm leading-6 text-dark-slate sm:text-base">
+                {insightBody}
+              </p>
+
+              <p className="text-xs font-medium uppercase tracking-[0.12em] text-cool-gray">
+                Real repository reads are in progress.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

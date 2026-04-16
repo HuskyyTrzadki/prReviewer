@@ -39,12 +39,18 @@ const analysisLoadingInsights = [
   "This step is doing real repository reads, not a local demo animation.",
 ] as const;
 
-export const getAnalysisLoadingSnapshot = (tick: number) => ({
-  currentPhase:
-    analysisLoadingPhases[Math.min(tick, analysisLoadingPhases.length - 1)],
-  insight:
-    analysisLoadingInsights[tick % analysisLoadingInsights.length],
-  phases: analysisLoadingPhases,
-});
+const loadingInsightTickDivisor = 2;
+
+export const getAnalysisLoadingSnapshot = (tick: number) => {
+  const phaseIndex = Math.min(tick, analysisLoadingPhases.length - 1);
+  const insightIndex =
+    Math.floor(tick / loadingInsightTickDivisor) % analysisLoadingInsights.length;
+
+  return {
+    currentPhase: analysisLoadingPhases[phaseIndex],
+    insight: analysisLoadingInsights[insightIndex],
+    phases: analysisLoadingPhases,
+  };
+};
 
 export { analysisLoadingInsights, analysisLoadingPhases };

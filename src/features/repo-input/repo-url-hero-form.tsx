@@ -6,6 +6,7 @@ import { useEffect, useState, type ComponentProps } from "react";
 import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
+const loadingTickIntervalMs = 3200;
 const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
 const analysisServiceUnavailableMessage =
   "We could not reach the analysis service. Try again.";
@@ -32,7 +33,7 @@ export const RepoUrlHeroForm = () => {
 
     const intervalId = window.setInterval(() => {
       setLoadingTick((currentTick) => currentTick + 1);
-    }, 2400);
+    }, loadingTickIntervalMs);
 
     return () => {
       window.clearInterval(intervalId);
