@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PR Reviewer AI
 
-## Getting Started
+Simple tool to analyze GitHub pull requests and score them across:
+- Impact
+- AI leverage
+- Code quality
 
-First, run the development server:
+Live demo: [link]  
+Video: [link]
+
+## Project
+
+`PR Reviewer AI` is a Next.js 16 app that analyzes merged pull requests from a public GitHub repository and generates repository-level and PR-level scoring with Gemini.
+
+The current stack includes:
+- Next.js App Router
+- TypeScript
+- Tailwind CSS v4
+- Storybook
+- Vitest
+- Knip for unused files, exports, and dependencies checks
+
+## How To Run It
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create `.env.local` in the project root with these keys:
+
+```bash
+GOOGLE_API_KEY=your_gemini_api_key
+GITHUB_TOKEN=your_optional_github_token
+```
+
+3. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Useful commands:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm test
+npm run storybook
+npm run knip
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+- `GOOGLE_API_KEY` is required. The server throws `Missing GOOGLE_API_KEY for Gemini pull request scoring.` when Gemini scoring is used without it.
+- `GITHUB_TOKEN` is optional. If present, GitHub requests use authenticated access and get better rate-limit headroom. If missing, the app falls back to anonymous GitHub access for public repositories.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Decisions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## What I Would Improve
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Notes
