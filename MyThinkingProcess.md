@@ -469,3 +469,7 @@ i need to omit step 17 as well, sadly no time.
 for lanidng page i notice we dont have arrow to scroll up and header  should be more similar to photo online, no navbar as well., i wouldnt use image for preview, instead do it via styles.
 
 during styling i like to do much more via actually coding, its much simpler sometimes to change paddings/gaps/and so on via hand than paste ss's to ai.
+
+i decide to omit 18.  [omitted] ensure test coverage is done for URL parsing. because we already have good test coverage i dont want to spend more time on tests.
+
+i look for quick wins now i notice that ideally ai would provide some reasoning of score, 1 sentance or so, this would give us much more insight.

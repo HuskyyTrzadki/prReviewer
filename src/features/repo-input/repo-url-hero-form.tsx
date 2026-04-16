@@ -110,11 +110,11 @@ export const RepoUrlHeroForm = () => {
           />
 
           <button
-            className="ds-button-primary h-16 px-8 text-lg sm:h-14 sm:min-w-56 sm:text-lg"
+            className="ds-button-primary h-16 px-8 text-lg sm:h-14 sm:text-lg"
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting ? "Analyzing..." : "Analyze Repository"}
+            {isSubmitting ? "Analyzing..." : "Analyze "}
           </button>
         </div>
 

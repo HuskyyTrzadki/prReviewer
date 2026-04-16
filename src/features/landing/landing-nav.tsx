@@ -43,7 +43,7 @@ export const LandingNav = () => {
         </nav>
 
         <a className="ds-button-small shrink-0" href="#analyze-repo">
-          Analyze repo
+          Analyze
         </a>
       </div>
     </header>
