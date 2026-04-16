@@ -86,9 +86,6 @@ export const AnalysisLoadingPanel = ({
                 {insightBody}
               </p>
 
-              <p className="text-xs font-medium uppercase tracking-[0.12em] text-cool-gray">
-                Real repository reads are in progress.
-              </p>
             </div>
           </div>
         </div>
