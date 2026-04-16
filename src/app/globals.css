@@ -129,7 +129,23 @@
   }
 
   .ds-input {
-    @apply h-12 w-full rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray transition-colors duration-150 focus-visible:border-indigo-violet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply h-12 w-full appearance-none rounded-md border border-silver bg-white px-4 text-base text-navy placeholder:text-cool-gray transition-colors duration-150 focus-visible:border-indigo-violet focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/10 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .ds-input-hero {
+    height: 4rem;
+    min-height: 4rem;
+    padding-inline: 1.25rem;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  @media (min-width: 40rem) {
+    .ds-input-hero {
+      height: 3.5rem;
+      min-height: 3.5rem;
+      padding-inline: 1rem;
+    }
   }
 
   .ds-select {

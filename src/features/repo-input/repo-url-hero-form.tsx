@@ -94,7 +94,7 @@ export const RepoUrlHeroForm = () => {
             aria-describedby="repository-url-note repository-url-status"
             aria-invalid={statusTone === "error"}
             autoComplete="url"
-            className={`ds-input h-16 flex-1 px-5 text-lg sm:h-14 sm:px-4 sm:text-lg ${
+            className={`ds-input ds-input-hero flex-1 ${
               statusTone === "error" ? "ds-input-error" : ""
             }`}
             disabled={isSubmitting}
