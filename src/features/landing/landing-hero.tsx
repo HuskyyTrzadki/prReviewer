@@ -56,7 +56,7 @@ export const LandingHero = () => {
                 </p>
               </div>
 
-              <div className="w-full" id="analyze-repo">
+              <div className="w-full scroll-mt-24" id="analyze-repo">
                 <RepoUrlHeroForm />
               </div>
 
