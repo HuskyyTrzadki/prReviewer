@@ -24,12 +24,16 @@ export const DashboardPreviewSection = () => {
           <div aria-hidden="true" className="absolute inset-x-8 top-0 h-px bg-soft-indigo" />
 
           <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
-            <aside className="border-b border-silver bg-ice-blue px-6 py-8 sm:px-8 lg:border-b-0 lg:border-r">
+            <aside className="border-b border-silver bg-ice-blue px-6 py-8 text-center sm:px-8 lg:border-b-0 lg:border-r lg:text-left">
               <div className="space-y-8">
                 <div className="space-y-4">
                   <p className="ds-overline text-navy">Repository Score</p>
-                  <ResultsScoreCircle size="lg" value={87} />
-                  <p className="ds-body-secondary max-w-sm">
+                  <ResultsScoreCircle
+                    className="mx-auto lg:mx-0"
+                    size="lg"
+                    value={87}
+                  />
+                  <p className="ds-body-secondary mx-auto max-w-sm lg:mx-0">
                     vercel/next.js would surface as a high-signal repository with
                     strong impact and consistently solid execution.
                   </p>
