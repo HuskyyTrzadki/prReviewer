@@ -5,7 +5,7 @@ import { useEffect, useState, type ComponentProps } from "react";
 
 import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
 
-const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
+const DEFAULT_REPOSITORY_URL = "";
 const loadingTickIntervalMs = 3200;
 const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
 const analysisServiceUnavailableMessage =
