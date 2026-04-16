@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { BackToTopButton } from "@/features/landing/back-to-top-button";
 import { LandingHero } from "@/features/landing/landing-hero";
+import { LandingNav } from "@/features/landing/landing-nav";
 import { LandingSections } from "@/features/landing/landing-sections";
 
 export const metadata: Metadata = {
@@ -9,10 +11,14 @@ export const metadata: Metadata = {
 };
 
 const HomePage = () => (
-  <main id="main-content">
-    <LandingHero />
-    <LandingSections />
-  </main>
+  <>
+    <LandingNav />
+    <main id="main-content">
+      <LandingHero />
+      <LandingSections />
+    </main>
+    <BackToTopButton />
+  </>
 );
 
 export default HomePage;

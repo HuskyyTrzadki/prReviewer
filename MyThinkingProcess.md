@@ -448,4 +448,28 @@ the issue is that limit for this model is just super small, nr request per day..
 
 i decided to do 3 in same request just because i dont want to hit quota. 3 should be now that big. i fix issue with exceeded quota by importing google cloud project in gemini studio.
 
-we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it.
+we finally have working app, it looks ok on desktop and mobile. i dont like couple of stuff, i feel like loader could have some animation, table doesnt look correcly to me and so on.. i ll do qa on it, it does look good that why i ll do in seperate global design qa. 
+
+for design qa i inspect whole website module by module, first desktop than mobile. i ask gemini looking at this design what would you improve and paste ss's.   (ofc with design inspiration file) i use less advanced models(thinking=low) as for this kind of task thinking is actually worsening output.
+
+i focus on analysis results page first, i need to act quicker cause i m running out of time.
+
+for ui chart i d like a radar instead of just plain bars, i d use recharts for quick implemmentation, it doesnt weight much, 
+
+typical qa with ai, we just keep on improving designs, some of the stuff i like initially some we need to redesign slighy for example search bar in results should be in seperate row .. and so on.
+
+i d like to reuse "repository score" circle. in quick read section, and Score Breakdown i ll make it reusable, also animation on that would be great.
+
+sadly lighthouse cli connected on github didnt end up useful, at first i thought it would be great so see a lighthouse job on pr's however i stumbled across few issues there, and i didnt want to spend more time. 
+
+at the current moment performance is just 50. fcp is good but  lcp 7.2s is bad, i knew about this issue before as it was a warning in github pr, just decided to postpone it, the issue was simple "animate-hero-entry"
+
+i need to omit step 17 as well, sadly no time.
+
+for lanidng page i notice we dont have arrow to scroll up and header  should be more similar to photo online, no navbar as well., i wouldnt use image for preview, instead do it via styles.
+
+during styling i like to do much more via actually coding, its much simpler sometimes to change paddings/gaps/and so on via hand than paste ss's to ai.
+
+i decide to omit 18.  [omitted] ensure test coverage is done for URL parsing. because we already have good test coverage i dont want to spend more time on tests.
+
+i look for quick wins now i notice that ideally ai would provide some reasoning of score, 1 sentance or so, this would give us much more insight.

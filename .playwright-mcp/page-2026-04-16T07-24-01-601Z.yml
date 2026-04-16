@@ -1,0 +1,256 @@
+- generic [active] [ref=e1]:
+  - link "Skip to Main Content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "AI-first review PR Reviewer Photo Aid" [ref=e5] [cursor=pointer]:
+        - /url: "#main-content"
+        - generic [ref=e9]:
+          - generic [ref=e10]: AI-first review
+          - generic [ref=e11]: PR Reviewer Photo Aid
+      - link "Analyze repo" [ref=e12] [cursor=pointer]:
+        - /url: "#analyze-repo"
+  - main [ref=e13]:
+    - generic [ref=e17]:
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: Public Repo Review
+          - generic [ref=e21]:
+            - heading "See What Public Repositories Actually Ship." [level=1] [ref=e22]
+            - paragraph [ref=e23]: Paste a repository URL to turn merged pull requests into one readable view of impact, AI leverage, and engineering quality.
+          - generic [ref=e25]:
+            - generic [ref=e26]: Public GitHub Repository URL
+            - generic [ref=e28]:
+              - textbox "Public GitHub Repository URL" [ref=e29]:
+                - /placeholder: https://github.com/owner/repository…
+                - text: https://github.com/vercel/next.js
+              - button "Analyze Repository" [ref=e30]
+            - generic [ref=e31]:
+              - paragraph [ref=e32]: Public repositories only.
+              - status [ref=e33]: "Ready to analyze: https://github.com/vercel/next.js"
+        - generic [ref=e37]:
+          - article [ref=e38]:
+            - generic [ref=e40]:
+              - generic [ref=e41]:
+                - generic [ref=e42]:
+                  - paragraph [ref=e43]: Repository review snapshot
+                  - heading "vercel/next.js" [level=2] [ref=e44]
+                  - paragraph [ref=e45]: Repository Score
+                - generic [ref=e46]:
+                  - img [ref=e47]
+                  - generic [ref=e50]:
+                    - generic [ref=e51]: "87"
+                    - generic [ref=e54]: "100"
+              - generic [ref=e55]:
+                - generic [ref=e56]:
+                  - paragraph [ref=e57]: Impact
+                  - paragraph [ref=e58]: "87"
+                - generic [ref=e59]:
+                  - paragraph [ref=e60]: AI leverage
+                  - paragraph [ref=e61]: "82"
+                - generic [ref=e62]:
+                  - paragraph [ref=e63]: Quality
+                  - paragraph [ref=e64]: "90"
+              - generic [ref=e65]:
+                - generic [ref=e67]:
+                  - generic [ref=e68]:
+                    - paragraph [ref=e69]: Impact
+                    - paragraph [ref=e70]: Refactor caching boundaries
+                  - generic [ref=e71]: "91"
+                - generic [ref=e73]:
+                  - generic [ref=e74]:
+                    - paragraph [ref=e75]: Quality
+                    - paragraph [ref=e76]: Stabilize flaky smoke coverage
+                  - generic [ref=e77]: "84"
+          - generic [ref=e78]:
+            - paragraph [ref=e79]: AI reviewed
+            - paragraph [ref=e80]: Fast first-pass signal
+      - generic [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e83]:
+            - generic [ref=e84]: ★
+            - generic [ref=e85]: ★
+            - generic [ref=e86]: ★
+            - generic [ref=e87]: ★
+            - generic [ref=e88]: ★
+          - paragraph [ref=e89]: Excellent|1 000 reviews on Trustpilot
+        - list [ref=e90]:
+          - listitem [ref=e91]: Public GitHub repos
+          - listitem [ref=e92]: Impact + AI leverage + quality
+          - listitem [ref=e93]: Fast first-pass review
+        - list [ref=e94]:
+          - listitem [ref=e95]:
+            - generic [ref=e97]: Engineering hiring loops
+          - listitem [ref=e98]:
+            - generic [ref=e100]: AI adoption reviews
+          - listitem [ref=e101]:
+            - generic [ref=e103]: Repository due diligence
+    - region "Built for Fast Reviews Before the Deeper Technical Read." [ref=e104]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - paragraph [ref=e108]: Social Proof
+          - heading "Built for Fast Reviews Before the Deeper Technical Read." [level=2] [ref=e109]
+          - paragraph [ref=e110]: The landing flow is designed for the moments when engineering teams need quick signal on public repository output before they invest in a full pull request-by-pull request audit.
+        - list [ref=e111]:
+          - listitem [ref=e112]: Engineering Due Diligence
+          - listitem [ref=e113]: Hiring Loop Calibration
+          - listitem [ref=e114]: AI Adoption Reviews
+          - listitem [ref=e115]: Weekly PR Retrospectives
+    - region "One Input, Three Signals, and a Review-Ready Dashboard." [ref=e116]:
+      - generic:
+        - generic [ref=e117]:
+          - paragraph [ref=e118]: How It Works
+          - heading "One Input, Three Signals, and a Review-Ready Dashboard." [level=2] [ref=e119]
+          - paragraph [ref=e120]: "The product stays intentionally narrow: point it at a public repository, score merged pull requests, and surface the output in a dashboard that is easy to scan with a team."
+        - list [ref=e121]:
+          - listitem [ref=e122]:
+            - generic [ref=e123]: "01"
+            - generic [ref=e124]:
+              - heading "Paste a Public Repository" [level=3] [ref=e125]
+              - paragraph [ref=e126]: Start with a GitHub URL and point the analysis at merged pull requests instead of repo vanity metrics.
+          - listitem [ref=e127]:
+            - generic [ref=e128]: "02"
+            - generic [ref=e129]:
+              - heading "Score What Matters" [level=3] [ref=e130]
+              - paragraph [ref=e131]: Each pull request is evaluated across impact, AI leverage, and quality so the output stays legible to technical reviewers.
+          - listitem [ref=e132]:
+            - generic [ref=e133]: "03"
+            - generic [ref=e134]:
+              - heading "Review the Dashboard" [level=3] [ref=e135]
+              - paragraph [ref=e136]: Get a repo-level score, dimension breakdown, and a sortable pull request view for deeper follow-up.
+    - region "The Score Stays Legible Because It Only Measures Three Things." [ref=e137]:
+      - generic:
+        - generic [ref=e138]:
+          - paragraph [ref=e139]: Scoring Dimensions
+          - heading "The Score Stays Legible Because It Only Measures Three Things." [level=2] [ref=e140]
+          - paragraph [ref=e141]: Each dimension is opinionated enough to be useful in review conversations and simple enough that the reasoning remains obvious at a glance.
+        - generic [ref=e142]:
+          - article [ref=e143]:
+            - generic [ref=e144]:
+              - heading "Impact" [level=3] [ref=e145]
+              - paragraph [ref=e146]: How much meaningful product, platform, or team value the pull request appears to create.
+            - list [ref=e147]:
+              - listitem [ref=e148]:
+                - generic [ref=e150]: Separates real delivery from cosmetic churn
+              - listitem [ref=e151]:
+                - generic [ref=e153]: Rewards scope that moves the product forward
+              - listitem [ref=e154]:
+                - generic [ref=e156]: Highlights outsized pull requests worth reviewing
+          - article [ref=e157]:
+            - generic [ref=e158]:
+              - heading "AI Leverage" [level=3] [ref=e159]
+              - paragraph [ref=e160]: How effectively the work appears to use AI to accelerate execution without hiding weak engineering judgment.
+            - list [ref=e161]:
+              - listitem [ref=e162]:
+                - generic [ref=e164]: Looks for speed with strong intent
+              - listitem [ref=e165]:
+                - generic [ref=e167]: Flags low-signal automation patterns
+              - listitem [ref=e168]:
+                - generic [ref=e170]: Balances acceleration against originality
+          - article [ref=e171]:
+            - generic [ref=e172]:
+              - heading "Quality" [level=3] [ref=e173]
+              - paragraph [ref=e174]: How cleanly the change is shaped, described, and likely to hold up in a real engineering workflow.
+            - list [ref=e175]:
+              - listitem [ref=e176]:
+                - generic [ref=e178]: Accounts for PR clarity and hygiene
+              - listitem [ref=e179]:
+                - generic [ref=e181]: Surfaces risky implementation shortcuts
+              - listitem [ref=e182]:
+                - generic [ref=e184]: Keeps maintainability in the scoring model
+    - region "A Results View That Feels Closer to a Review Tool Than a Marketing Mock." [ref=e185]:
+      - generic:
+        - generic [ref=e186]:
+          - paragraph [ref=e187]: Dashboard Preview
+          - heading "A Results View That Feels Closer to a Review Tool Than a Marketing Mock." [level=2] [ref=e188]
+          - paragraph [ref=e189]: Repository-level signal sits next to pull request detail so the score stays explainable when someone asks what actually drove it.
+        - generic [ref=e192]:
+          - complementary [ref=e193]:
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - paragraph [ref=e196]: Repository Score
+                - generic [ref=e197]:
+                  - img [ref=e198]
+                  - generic [ref=e201]:
+                    - generic [ref=e202]: "87"
+                    - generic [ref=e205]: "100"
+                - paragraph [ref=e206]: vercel/next.js would surface as a high-signal repository with strong impact and consistently solid execution.
+              - generic [ref=e207]:
+                - generic [ref=e208]:
+                  - paragraph [ref=e209]: Impact
+                  - paragraph [ref=e210]: "91"
+                - generic [ref=e211]:
+                  - paragraph [ref=e212]: AI Leverage
+                  - paragraph [ref=e213]: "84"
+                - generic [ref=e214]:
+                  - paragraph [ref=e215]: Quality
+                  - paragraph [ref=e216]: "87"
+          - generic [ref=e217]:
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - paragraph [ref=e220]: Pull Request Breakdown
+                - heading "Recent Merged Pull Requests Ranked by Composite Score" [level=3] [ref=e221]
+              - generic [ref=e222]: "Sample: 24 merged PRs"
+            - generic [ref=e223]:
+              - article [ref=e224]:
+                - generic [ref=e225]:
+                  - generic [ref=e226]:
+                    - paragraph [ref=e227]: "#18462 · +12 files"
+                    - heading "Refactor caching boundaries for partial prerendering" [level=4] [ref=e228]
+                    - paragraph [ref=e229]: High Impact
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: Score
+                    - generic [ref=e232]: "92"
+              - article [ref=e233]:
+                - generic [ref=e234]:
+                  - generic [ref=e235]:
+                    - paragraph [ref=e236]: "#18417 · +8 files"
+                    - heading "Ship repo onboarding flow with better prompt scaffolding" [level=4] [ref=e237]
+                    - paragraph [ref=e238]: Strong AI Leverage
+                  - generic [ref=e239]:
+                    - generic [ref=e240]: Score
+                    - generic [ref=e241]: "88"
+              - article [ref=e242]:
+                - generic [ref=e243]:
+                  - generic [ref=e244]:
+                    - paragraph [ref=e245]: "#18381 · +5 files"
+                    - heading "Tighten diff summaries and eliminate flaky smoke assertions" [level=4] [ref=e246]
+                    - paragraph [ref=e247]: High Quality
+                  - generic [ref=e248]:
+                    - generic [ref=e249]: Score
+                    - generic [ref=e250]: "81"
+    - navigation "Footer" [ref=e254]:
+      - link "Social Proof" [ref=e255] [cursor=pointer]:
+        - /url: "#social-proof"
+      - link "How It Works" [ref=e256] [cursor=pointer]:
+        - /url: "#how-it-works"
+      - link "Scoring Dimensions" [ref=e257] [cursor=pointer]:
+        - /url: "#scoring-dimensions"
+      - link "Dashboard Preview" [ref=e258] [cursor=pointer]:
+        - /url: "#dashboard-preview"
+  - button "Scroll back to top":
+    - generic: ↑
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - button "Select element":
+                      - img
+                - generic:
+                  - generic:
+                    - button "Open comments":
+                      - generic:
+                        - img
+                - generic:
+                  - generic:
+                    - button "Copy all comments":
+                      - img
+              - generic:
+                - button "Disable React Grab" [pressed]
+          - button "Collapse toolbar":
+            - img

@@ -4,7 +4,7 @@ export const HowItWorksSection = () => {
   return (
     <section
       aria-labelledby="how-it-works-title"
-      className="ds-section bg-white scroll-mt-24"
+      className="ds-deferred-section ds-section bg-white scroll-mt-24"
       id="how-it-works"
     >
       <div className="ds-container">

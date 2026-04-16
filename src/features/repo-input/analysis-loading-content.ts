@@ -7,10 +7,10 @@ const analysisLoadingPhases = [
   {
     title: "Loading merged pull requests",
     description:
-      "The analysis sample is built from recent merged pull requests, not vanity repository stats.",
+      "Recent merged pull requests are loaded so the review stays grounded in shipped work.",
   },
   {
-    title: "Preparing file and diff context",
+    title: "Preparing review context",
     description:
       "Each pull request is reduced into lightweight evidence so the score has something concrete to read.",
   },
@@ -39,12 +39,16 @@ const analysisLoadingInsights = [
   "This step is doing real repository reads, not a local demo animation.",
 ] as const;
 
-export const getAnalysisLoadingSnapshot = (tick: number) => ({
-  currentPhase:
-    analysisLoadingPhases[Math.min(tick, analysisLoadingPhases.length - 1)],
-  insight:
-    analysisLoadingInsights[tick % analysisLoadingInsights.length],
-  phases: analysisLoadingPhases,
-});
+const loadingInsightTickDivisor = 2;
+
+export const getAnalysisLoadingSnapshot = (tick: number) => {
+  const insightIndex =
+    Math.floor(tick / loadingInsightTickDivisor) % analysisLoadingInsights.length;
+
+  return {
+    insight: analysisLoadingInsights[insightIndex],
+    phases: analysisLoadingPhases,
+  };
+};
 
 export { analysisLoadingInsights, analysisLoadingPhases };

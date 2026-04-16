@@ -4,10 +4,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 
 import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
-import { submitRepositoryAnalysis } from "@/features/repo-input/submit-repository-analysis";
-import { storeAnalysisResult } from "@/features/results-dashboard/results-session";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
+const loadingTickIntervalMs = 3200;
 const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
 const analysisServiceUnavailableMessage =
   "We could not reach the analysis service. Try again.";
@@ -34,7 +33,7 @@ export const RepoUrlHeroForm = () => {
 
     const intervalId = window.setInterval(() => {
       setLoadingTick((currentTick) => currentTick + 1);
-    }, 2400);
+    }, loadingTickIntervalMs);
 
     return () => {
       window.clearInterval(intervalId);
@@ -54,6 +53,11 @@ export const RepoUrlHeroForm = () => {
     setStatusMessage("Starting repository analysis...");
 
     try {
+      const [{ submitRepositoryAnalysis }, { storeAnalysisResult }] =
+        await Promise.all([
+          import("@/features/repo-input/submit-repository-analysis"),
+          import("@/features/results-dashboard/results-session"),
+        ]);
       const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
 
       if (response.status === "error") {
@@ -90,7 +94,7 @@ export const RepoUrlHeroForm = () => {
             aria-describedby="repository-url-note repository-url-status"
             aria-invalid={statusTone === "error"}
             autoComplete="url"
-            className={`ds-input h-14 flex-1 text-base sm:text-lg ${
+            className={`ds-input ds-input-hero flex-1 ${
               statusTone === "error" ? "ds-input-error" : ""
             }`}
             disabled={isSubmitting}
@@ -106,29 +110,29 @@ export const RepoUrlHeroForm = () => {
           />
 
           <button
-            className="ds-button-primary h-14 px-8 text-base sm:min-w-56 sm:text-lg"
+            className="ds-button-primary h-16 px-8 text-lg sm:h-14 sm:text-lg"
             disabled={isSubmitting}
             type="submit"
           >
-            {isSubmitting ? "Analyzing..." : "Analyze Repository"}
+            {isSubmitting ? "Analyzing..." : "Analyze "}
           </button>
         </div>
 
-        <div className="mt-3 flex flex-col gap-2 text-left">
-          <p className="ds-caption" id="repository-url-note">
-            Public repositories only.
-          </p>
-          <p
-            aria-live="polite"
-            className={statusClassName}
-            id="repository-url-status"
-            role={statusTone === "error" ? "alert" : "status"}
-          >
-            {statusMessage}
-          </p>
-        </div>
-
         {isSubmitting ? <AnalysisLoadingPanel tick={loadingTick} /> : null}
+      </div>
+
+      <div className="mt-3 flex flex-col gap-2 px-1 text-left">
+        <p className="ds-caption" id="repository-url-note">
+          Public repositories only.
+        </p>
+        <p
+          aria-live="polite"
+          className={statusClassName}
+          id="repository-url-status"
+          role={statusTone === "error" ? "alert" : "status"}
+        >
+          {statusMessage}
+        </p>
       </div>
     </form>
   );

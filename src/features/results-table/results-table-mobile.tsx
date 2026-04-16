@@ -22,20 +22,46 @@ export const ResultsTableMobile = ({
         className="rounded-md border border-silver bg-white p-5"
         key={pullRequest.number}
       >
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <span className="text-sm font-semibold text-navy">
-                PR #{pullRequest.number}
-              </span>
-              <span className="ds-caption text-dark-slate">
-                {formatPullRequestMergedDate(pullRequest.mergedAt)}
-              </span>
+        <div className="space-y-5">
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0 space-y-3">
+              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="text-sm font-semibold text-navy">
+                  PR #{pullRequest.number}
+                </span>
+                <span className="ds-caption text-dark-slate">
+                  {formatPullRequestMergedDate(pullRequest.mergedAt)}
+                </span>
+              </div>
+              <h3 className="text-base font-semibold leading-6 text-navy">
+                {pullRequest.title}
+              </h3>
             </div>
-            <h3 className="text-base font-semibold leading-6 text-navy">
-              {pullRequest.title}
-            </h3>
-            <p className="ds-body-secondary">{pullRequest.summary}</p>
+
+            <div className="shrink-0 rounded-md border border-soft-indigo bg-soft-indigo px-4 py-3 text-center">
+              <p className="ds-caption text-dark-slate">Overall</p>
+              <p className="mt-1 text-2xl font-semibold leading-none tabular-nums text-navy">
+                {pullRequest.overallScore}
+              </p>
+            </div>
+          </div>
+
+          <p className="ds-body-secondary">{pullRequest.summary}</p>
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="ds-caption text-dark-slate">
+              {pullRequest.authorLogin ?? "Unknown author"}
+            </span>
+            <span className="ds-caption text-dark-slate">
+              {pullRequest.changedFiles}{" "}
+              {pullRequest.changedFiles === 1 ? "file" : "files"}
+            </span>
+            <span className="text-sm font-medium tabular-nums text-success-green">
+              +{pullRequest.additions}
+            </span>
+            <span className="text-sm font-medium tabular-nums text-error-red">
+              -{pullRequest.deletions}
+            </span>
           </div>
 
           <dl className="grid gap-3 sm:grid-cols-2">
@@ -46,15 +72,18 @@ export const ResultsTableMobile = ({
               </dd>
             </div>
             <div className="rounded-md border border-silver bg-ice-blue px-4 py-3">
-              <dt className="ds-caption text-dark-slate">Size</dt>
+              <dt className="ds-caption text-dark-slate">PR Size</dt>
               <dd className="mt-1 text-sm font-semibold tabular-nums text-navy">
-                {pullRequest.changedFiles} files · {pullRequest.additions + pullRequest.deletions} lines
+                {pullRequest.additions + pullRequest.deletions} lines across{" "}
+                {pullRequest.changedFiles}{" "}
+                {pullRequest.changedFiles === 1 ? "file" : "files"}
               </dd>
             </div>
             <div className="rounded-md border border-silver bg-ice-blue px-4 py-3">
               <dt className="ds-caption text-dark-slate">Diff Stats</dt>
-              <dd className="mt-1 text-sm font-semibold tabular-nums text-navy">
-                +{pullRequest.additions} / -{pullRequest.deletions}
+              <dd className="mt-1 flex items-center gap-3 text-sm font-semibold tabular-nums">
+                <span className="text-success-green">+{pullRequest.additions}</span>
+                <span className="text-error-red">-{pullRequest.deletions}</span>
               </dd>
             </div>
             <div className="rounded-md border border-silver bg-ice-blue px-4 py-3">
@@ -65,7 +94,7 @@ export const ResultsTableMobile = ({
             </div>
           </dl>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {scoreGroups(pullRequest).map((scoreGroup) => (
               <ResultsTableScorePill
                 key={scoreGroup.label}
@@ -75,9 +104,9 @@ export const ResultsTableMobile = ({
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <a
-              className="text-sm font-medium text-indigo-violet transition-colors duration-150 hover:text-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2"
+              className="ds-button-primary h-10 px-4 text-sm"
               href={pullRequest.htmlUrl}
               rel="noreferrer"
               target="_blank"
@@ -85,12 +114,12 @@ export const ResultsTableMobile = ({
               Open PR
             </a>
             <a
-              className="text-sm font-medium text-indigo-violet transition-colors duration-150 hover:text-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2"
+              className="ds-button-secondary h-10 px-4 text-sm"
               href={`${pullRequest.htmlUrl}/files`}
               rel="noreferrer"
               target="_blank"
             >
-              View Diff
+              View diff
             </a>
           </div>
         </div>

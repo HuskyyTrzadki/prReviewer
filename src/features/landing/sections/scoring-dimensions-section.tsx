@@ -4,7 +4,7 @@ export const ScoringDimensionsSection = () => {
   return (
     <section
       aria-labelledby="scoring-dimensions-title"
-      className="ds-section ds-section-brand scroll-mt-24"
+      className="ds-deferred-section ds-section ds-section-brand scroll-mt-24"
       id="scoring-dimensions"
     >
       <div className="ds-container">

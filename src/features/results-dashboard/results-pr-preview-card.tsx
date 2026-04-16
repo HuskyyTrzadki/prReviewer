@@ -1,4 +1,5 @@
 import type { ScoredPullRequest } from "@/features/pr-analysis/contracts/scoring-contracts";
+import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
 
 type ResultsPrPreviewCardProps = {
   pullRequest: ScoredPullRequest;
@@ -23,49 +24,78 @@ export const ResultsPrPreviewCard = ({
   pullRequest,
 }: ResultsPrPreviewCardProps) => {
   return (
-    <article className="rounded-md border border-silver bg-ice-blue px-5 py-5">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0 flex-1 space-y-3">
+    <article className="rounded-md border border-silver bg-ice-blue px-5 py-5 sm:px-6">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-stretch sm:justify-between">
+        <div className="min-w-0 flex-1 space-y-4">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <span className="text-sm font-semibold text-navy">
+              PR #{pullRequest.number}
+            </span>
+            <span className="ds-caption text-dark-slate">
+              {pullRequest.authorLogin ?? "Unknown author"}
+            </span>
+            <span className="ds-caption text-dark-slate">
+              {pullRequest.changedFiles}{" "}
+              {pullRequest.changedFiles === 1 ? "file" : "files"}
+            </span>
+            <span className="text-sm font-medium tabular-nums text-success-green">
+              +{pullRequest.additions}
+            </span>
+            <span className="text-sm font-medium tabular-nums text-error-red">
+              -{pullRequest.deletions}
+            </span>
+          </div>
+
           <div className="space-y-2">
-            <p className="ds-caption text-dark-slate">
-              PR #{pullRequest.number} · {pullRequest.authorLogin ?? "Unknown author"} ·{" "}
-              {pullRequest.changedFiles} files · +{pullRequest.additions}/-
-              {pullRequest.deletions}
-            </p>
             <h3 className="text-lg font-semibold leading-7 text-navy">
               {pullRequest.title}
             </h3>
-            <p className="ds-body-secondary">{pullRequest.summary}</p>
+            <p className="max-w-[48rem] ds-body-secondary">{pullRequest.summary}</p>
           </div>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {scorePills(pullRequest).map((scorePill) => (
-              <span
-                className="rounded-full border border-silver bg-white px-3 py-2 text-sm font-medium text-dark-slate"
+              <div
+                className="rounded-full border border-silver bg-white px-3 py-2"
                 key={scorePill.label}
               >
-                {scorePill.label}:{" "}
-                <span className="font-semibold text-navy">
+                <span className="text-sm font-medium text-dark-slate">
+                  {scorePill.label}:{" "}
+                </span>
+                <span className="text-sm font-semibold tabular-nums text-navy">
                   {scorePill.value}
                 </span>
-              </span>
+              </div>
             ))}
           </div>
 
-          <a
-            className="inline-flex text-sm font-medium text-indigo-violet transition-colors hover:text-indigo-violet-hover"
-            href={pullRequest.htmlUrl}
-            rel="noreferrer"
-            target="_blank"
-          >
-            Open pull request
-          </a>
+          <div className="flex flex-wrap items-center gap-3 pt-1">
+            <a
+              className="ds-button-secondary h-10 px-4 text-sm"
+              href={pullRequest.htmlUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              Open PR
+            </a>
+            <a
+              className="inline-flex text-sm font-medium text-indigo-violet transition-colors hover:text-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2"
+              href={`${pullRequest.htmlUrl}/files`}
+              rel="noreferrer"
+              target="_blank"
+            >
+              View Diff
+            </a>
+          </div>
         </div>
 
-        <div className="shrink-0 rounded-md border border-silver bg-white px-4 py-3 text-right">
-          <p className="ds-caption text-dark-slate">Overall</p>
-          <p className="mt-1 text-3xl font-semibold tabular-nums text-navy">
-            {pullRequest.overallScore}
+        <div className="shrink-0 rounded-md border border-silver bg-white px-5 py-4 sm:min-w-[9.5rem] sm:self-start sm:text-center">
+          <p className="ds-caption text-dark-slate">Overall score</p>
+          <div className="mt-3 flex justify-center">
+            <ResultsScoreCircle showDenominator={false} size="md" value={pullRequest.overallScore} />
+          </div>
+          <p className="mt-2 ds-caption text-dark-slate">
+            From impact, AI leverage, and quality.
           </p>
         </div>
       </div>
