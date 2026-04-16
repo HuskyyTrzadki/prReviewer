@@ -1,5 +1,5 @@
-import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
 import { previewMetrics, previewPullRequests } from "./landing-sections.data";
+import { ScoreCircle } from "@/shared/ui/score-circle";
 
 export const DashboardPreviewSection = () => {
   return (
@@ -28,7 +28,7 @@ export const DashboardPreviewSection = () => {
               <div className="space-y-8">
                 <div className="space-y-4">
                   <p className="ds-overline text-navy">Repository Score</p>
-                  <ResultsScoreCircle
+                  <ScoreCircle
                     className="mx-auto lg:mx-0"
                     size="lg"
                     value={87}

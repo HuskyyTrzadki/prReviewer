@@ -1,13 +1,13 @@
 import type { CSSProperties } from "react";
 
-import { maxScoreValue } from "@/features/results-dashboard/results-score-constants";
+import { maxScoreValue } from "@/shared/config/scoring";
 
-type ResultsScoreCircleSize = "lg" | "md" | "sm";
+type ScoreCircleSize = "lg" | "md" | "sm";
 
-type ResultsScoreCircleProps = {
+type ScoreCircleProps = {
   className?: string;
   showDenominator?: boolean;
-  size?: ResultsScoreCircleSize;
+  size?: ScoreCircleSize;
   value: number;
 };
 
@@ -41,12 +41,12 @@ const sizeByVariant = {
 const clampScore = (value: number) =>
   Math.max(0, Math.min(maxScoreValue, value));
 
-export const ResultsScoreCircle = ({
+export const ScoreCircle = ({
   className,
   showDenominator = true,
   size = "md",
   value,
-}: ResultsScoreCircleProps) => {
+}: ScoreCircleProps) => {
   const clampedValue = clampScore(value);
   const preset = sizeByVariant[size];
   const radius = (preset.svg - preset.ring) / 2;

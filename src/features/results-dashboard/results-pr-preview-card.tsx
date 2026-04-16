@@ -1,5 +1,5 @@
 import type { ScoredPullRequest } from "@/features/pr-analysis/contracts/scoring-contracts";
-import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
+import { ScoreCircle } from "@/shared/ui/score-circle";
 
 type ResultsPrPreviewCardProps = {
   pullRequest: ScoredPullRequest;
@@ -92,7 +92,7 @@ export const ResultsPrPreviewCard = ({
         <div className="shrink-0 rounded-md border border-silver bg-white px-5 py-4 sm:min-w-[9.5rem] sm:self-start sm:text-center">
           <p className="ds-caption text-dark-slate">Overall score</p>
           <div className="mt-3 flex justify-center">
-            <ResultsScoreCircle showDenominator={false} size="md" value={pullRequest.overallScore} />
+            <ScoreCircle showDenominator={false} size="md" value={pullRequest.overallScore} />
           </div>
           <p className="mt-2 ds-caption text-dark-slate">
             From impact, AI leverage, and quality.

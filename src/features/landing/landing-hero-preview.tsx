@@ -1,4 +1,4 @@
-import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
+import { ScoreCircle } from "@/shared/ui/score-circle";
 
 const previewPullRequests = [
   { label: "Impact", title: "Refactor caching boundaries", value: "91" },
@@ -49,7 +49,7 @@ export const LandingHeroPreview = () => {
                 <p className="text-sm font-medium text-dark-slate">Repository Score</p>
               </div>
 
-              <ResultsScoreCircle
+              <ScoreCircle
                 className="transition-transform duration-300 group-hover/preview:scale-[1.03] group-focus-within/hero:scale-[1.06] motion-reduce:transition-none"
                 size="md"
                 value={87}

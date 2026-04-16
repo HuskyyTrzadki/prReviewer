@@ -1,4 +1,4 @@
-import { maxScoreValue } from "@/features/results-dashboard/results-score-constants";
+import { maxScoreValue } from "@/shared/config/scoring";
 
 type ResultsScoreBreakdownItem = {
   description: string;

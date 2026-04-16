@@ -74,3 +74,15 @@ Whenever you feel ready for commit,  you  suggest commit name, example of standa
 use english only.
 Whenever user asks to understand something, explain it using examples.
 
+6. Shared Folder Policy
+   Keep `src/shared/*`, but only for code reused by 2+ features and not clearly owned by one feature.
+
+Rules:
+
+- Default to feature-local code.
+- Move code to `src/shared/*` only after the second real feature consumer appears.
+- `src/shared/ui` is for reusable presentational components and must not import from `features/*`.
+- `src/shared/lib` is for generic helpers reused by 2+ features and must not contain feature/domain logic.
+- `src/shared/types` is for cross-feature types that are not owned by one feature domain.
+- `src/shared/config` is for truly app-wide constants/config, not feature-specific copy.
+- When moving code into `shared`, remove feature prefixes from filenames. Example: `results-score-circle.tsx` becomes `score-circle.tsx`.
