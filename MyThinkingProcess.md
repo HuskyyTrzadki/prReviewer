@@ -473,3 +473,10 @@ during styling i like to do much more via actually coding, its much simpler some
 i decide to omit 18.  [omitted] ensure test coverage is done for URL parsing. because we already have good test coverage i dont want to spend more time on tests.
 
 i look for quick wins now i notice that ideally ai would provide some reasoning of score, 1 sentance or so, this would give us much more insight.
+
+now super important part, "ensure code quality." here i am going to use ai to self-analyze, prompt. 
+" › go through FE code (omit BE) and make an audit of it, identidy weak points, not
+needed
+useffects, bad typings, look for quick wins, biggest improvements in quality that
+doesnt need much efford.  use $next-best-practices $typescript-best-practices "
+in the meantime i look for stuff i can find, for unused code/deps i m going to run knip. https://knip.dev/ we have quite a lot of unused exports/types.

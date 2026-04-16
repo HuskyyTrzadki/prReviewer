@@ -70,9 +70,15 @@ export const ResultsTableDesktop = ({
     <table className="w-full table-fixed border-collapse">
       <caption className="sr-only">Analyzed pull requests with sortable score columns.</caption>
       <colgroup>
-        <col className="w-[29%]" /> <col className="w-[9%]" /> <col className="w-[9%]" />
-        <col className="w-[8%]" /> <col className="w-[8%]" /> <col className="w-[9%]" />
-        <col className="w-[8%]" /> <col className="w-[8%]" /> <col className="w-[12%]" />
+        <col className="w-[29%]" />
+        <col className="w-[9%]" />
+        <col className="w-[9%]" />
+        <col className="w-[8%]" />
+        <col className="w-[8%]" />
+        <col className="w-[9%]" />
+        <col className="w-[8%]" />
+        <col className="w-[8%]" />
+        <col className="w-[12%]" />
       </colgroup>
       <thead>
         <tr className="border-b border-silver bg-ice-blue/70">

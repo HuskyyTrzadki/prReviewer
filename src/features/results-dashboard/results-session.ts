@@ -5,6 +5,13 @@ import {
 } from "@/features/pr-analysis/contracts/analysis-contracts";
 
 const analysisResultStorageKeyPrefix = "analysis-result:";
+const analysisResultSnapshotCache = new Map<
+  string,
+  {
+    rawValue: string | null;
+    snapshot: StoredAnalysisResult;
+  }
+>();
 
 type StorageLike = Pick<Storage, "getItem" | "removeItem" | "setItem">;
 
@@ -19,6 +26,14 @@ type StoredAnalysisResult =
   | {
       status: "error";
     };
+
+const emptyStoredAnalysisResult: StoredAnalysisResult = {
+  status: "empty",
+};
+
+const errorStoredAnalysisResult: StoredAnalysisResult = {
+  status: "error",
+};
 
 const getResultsStorage = (storage?: StorageLike) => {
   if (storage) {
@@ -45,27 +60,31 @@ export const storeAnalysisResult = (
     return;
   }
 
-  resultsStorage.setItem(
-    createAnalysisResultStorageKey(payload.repoId),
-    JSON.stringify(payload),
-  );
+  const key = createAnalysisResultStorageKey(payload.repoId);
+  const rawValue = JSON.stringify(payload);
+
+  resultsStorage.setItem(key, rawValue);
+  analysisResultSnapshotCache.set(key, {
+    rawValue,
+    snapshot: {
+      status: "success",
+      data: payload,
+    },
+  });
 };
 
-export const readAnalysisResult = (
+const parseStoredAnalysisResult = (
+  key: string,
   repoId: RepoId | string,
-  storage?: StorageLike,
+  rawValue: string | null,
+  resultsStorage: StorageLike,
 ): StoredAnalysisResult => {
-  const resultsStorage = getResultsStorage(storage);
-
-  if (!resultsStorage) {
-    return { status: "empty" };
-  }
-
-  const key = createAnalysisResultStorageKey(repoId);
-  const rawValue = resultsStorage.getItem(key);
-
   if (!rawValue) {
-    return { status: "empty" };
+    analysisResultSnapshotCache.set(key, {
+      rawValue,
+      snapshot: emptyStoredAnalysisResult,
+    });
+    return emptyStoredAnalysisResult;
   }
 
   try {
@@ -75,17 +94,53 @@ export const readAnalysisResult = (
 
     if (!parsedValue.success || parsedValue.data.repoId !== repoId) {
       resultsStorage.removeItem(key);
-      return { status: "error" };
+      analysisResultSnapshotCache.set(key, {
+        rawValue: null,
+        snapshot: errorStoredAnalysisResult,
+      });
+      return errorStoredAnalysisResult;
     }
 
-    return {
+    const snapshot: StoredAnalysisResult = {
       status: "success",
       data: parsedValue.data,
     };
+
+    analysisResultSnapshotCache.set(key, {
+      rawValue,
+      snapshot,
+    });
+
+    return snapshot;
   } catch {
     resultsStorage.removeItem(key);
-    return { status: "error" };
+    analysisResultSnapshotCache.set(key, {
+      rawValue: null,
+      snapshot: errorStoredAnalysisResult,
+    });
+    return errorStoredAnalysisResult;
   }
+};
+
+export const readAnalysisResult = (
+  repoId: RepoId | string,
+  storage?: StorageLike,
+): StoredAnalysisResult => {
+  const resultsStorage = getResultsStorage(storage);
+
+  if (!resultsStorage) {
+    return emptyStoredAnalysisResult;
+  }
+
+  const key = createAnalysisResultStorageKey(repoId);
+  const rawValue = resultsStorage.getItem(key);
+  const cachedSnapshot = analysisResultSnapshotCache.get(key);
+
+  if (cachedSnapshot && cachedSnapshot.rawValue === rawValue) {
+    return cachedSnapshot.snapshot;
+  }
+
+  return parseStoredAnalysisResult(key, repoId, rawValue, resultsStorage);
 };
 
 export type { StoredAnalysisResult };

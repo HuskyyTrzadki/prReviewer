@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 import {
   readAnalysisResult,
@@ -18,6 +18,12 @@ type ResultsDashboardViewState =
       status: "loading";
     }
   | StoredAnalysisResult;
+
+const loadingViewState: ResultsDashboardViewState = {
+  status: "loading",
+};
+
+const subscribeToStoredAnalysisResult = () => () => {};
 
 const LoadingState = () => (
   <section className="ds-section bg-ice-blue">
@@ -40,13 +46,11 @@ const LoadingState = () => (
 export const ResultsDashboardShell = ({
   repoId,
 }: ResultsDashboardShellProps) => {
-  const [viewState, setViewState] = useState<ResultsDashboardViewState>({
-    status: "loading",
-  });
-
-  useEffect(() => {
-    setViewState(readAnalysisResult(repoId));
-  }, [repoId]);
+  const viewState = useSyncExternalStore(
+    subscribeToStoredAnalysisResult,
+    () => readAnalysisResult(repoId),
+    () => loadingViewState,
+  );
 
   if (viewState.status === "loading") {
     return <LoadingState />;
