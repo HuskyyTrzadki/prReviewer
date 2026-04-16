@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+import { maxScoreValue } from "@/features/results-dashboard/results-score-constants";
+
 type ResultsScoreCircleSize = "lg" | "md" | "sm";
 
 type ResultsScoreCircleProps = {
@@ -13,6 +15,7 @@ const sizeByVariant = {
   lg: {
     circle: "size-[14.5rem]",
     denominator: "text-lg",
+    divider: "w-9",
     number: "text-[4.6rem]",
     ring: 12,
     svg: 232,
@@ -20,6 +23,7 @@ const sizeByVariant = {
   md: {
     circle: "size-[7.75rem]",
     denominator: "text-xs",
+    divider: "w-5",
     number: "text-[2.35rem]",
     ring: 8,
     svg: 124,
@@ -27,13 +31,15 @@ const sizeByVariant = {
   sm: {
     circle: "size-[5rem]",
     denominator: "text-[0.625rem]",
+    divider: "w-4",
     number: "text-[1.45rem]",
     ring: 6,
     svg: 80,
   },
 } as const;
 
-const clampScore = (value: number) => Math.max(0, Math.min(100, value));
+const clampScore = (value: number) =>
+  Math.max(0, Math.min(maxScoreValue, value));
 
 export const ResultsScoreCircle = ({
   className,
@@ -45,7 +51,7 @@ export const ResultsScoreCircle = ({
   const preset = sizeByVariant[size];
   const radius = (preset.svg - preset.ring) / 2;
   const circumference = 2 * Math.PI * radius;
-  const offset = circumference * (1 - clampedValue / 100);
+  const offset = circumference * (1 - clampedValue / maxScoreValue);
   const style = {
     "--score-circle-dasharray": `${circumference}`,
     "--score-circle-offset": `${offset}`,
@@ -88,9 +94,12 @@ export const ResultsScoreCircle = ({
           {clampedValue}
         </span>
         {showDenominator ? (
-          <span className={`mt-1 ${preset.denominator} font-medium text-dark-slate`}>
-            / 100
-          </span>
+          <div className="mt-2 flex flex-col items-center gap-1">
+            <span className={`h-px bg-dark-slate/30 ${preset.divider}`} />
+            <span className={`${preset.denominator} font-medium text-dark-slate`}>
+              {maxScoreValue}
+            </span>
+          </div>
         ) : null}
       </div>
     </div>
