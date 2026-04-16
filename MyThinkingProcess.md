@@ -463,3 +463,5 @@ i d like to reuse "repository score" circle. in quick read section, and Score Br
 sadly lighthouse cli connected on github didnt end up useful, at first i thought it would be great so see a lighthouse job on pr's however i stumbled across few issues there, and i didnt want to spend more time. 
 
 at the current moment performance is just 50. fcp is good but  lcp 7.2s is bad, i knew about this issue before as it was a warning in github pr, just decided to postpone it, the issue was simple "animate-hero-entry"
+
+i need to omit step 17 as well, sadly no time.
