@@ -9,12 +9,15 @@ export const SocialProofSection = () => {
     >
       <div className="ds-container">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <div className="max-w-2xl space-y-3">
+          <div className="max-w-2xl space-y-3 text-center lg:text-left">
             <p className="ds-overline text-navy">Social Proof</p>
-            <h2 className="ds-display-2 max-w-[18ch] text-balance" id="social-proof-title">
+            <h2
+              className="ds-display-2 mx-auto max-w-[18ch] text-balance lg:mx-0"
+              id="social-proof-title"
+            >
               Built for Fast Reviews Before the Deeper Technical Read.
             </h2>
-            <p className="ds-body max-w-[42rem]">
+            <p className="ds-body mx-auto max-w-[42rem] lg:mx-0">
               The landing flow is designed for the moments when engineering teams
               need quick signal on public repository output before they invest in a
               full pull request-by-pull request audit.

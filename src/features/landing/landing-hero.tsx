@@ -60,7 +60,7 @@ export const LandingHero = () => {
             <p className="text-sm font-medium text-navy sm:text-base">
               <span className="font-semibold">Excellent</span>
               <span className="mx-2 text-cool-gray">|</span>
-              <span>17,943 reviews on Trustpilot</span>
+              <span>1 000 reviews on Trustpilot</span>
             </p>
           </div>
 
