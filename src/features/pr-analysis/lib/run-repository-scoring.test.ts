@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 
-import type { RepositoryScoringSource } from "@/features/pr-analysis/contracts/analysis-source";
+import type {
+  PullRequestScoringSource,
+  RepositoryScoringSource,
+} from "@/features/pr-analysis/contracts/analysis-source";
 import { analysisFailedMessage } from "@/features/pr-analysis/lib/analysis-api-errors";
 import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import {
@@ -25,8 +28,8 @@ const repositoryScoringSource: RepositoryScoringSource = {
 
 describe("runRepositoryScoring", () => {
   it("returns scored and skipped pull requests from batched repository scoring", async () => {
-    const scorePullRequests = vi.fn(async (pullRequestBatch) => {
-      if (pullRequestBatch.some((pullRequest) => pullRequest.number === 4)) {
+    const scorePullRequests = vi.fn(async (pullRequestBatch: PullRequestScoringSource[]) => {
+      if (pullRequestBatch.some((pullRequest: PullRequestScoringSource) => pullRequest.number === 4)) {
         throw new Error("provider timeout");
       }
 
@@ -136,6 +139,46 @@ describe("runRepositoryScoring", () => {
         ],
       },
     });
+  });
+
+  it("starts later batches before earlier batches resolve", async () => {
+    let releaseFirstBatch: (() => void) | undefined;
+    const firstBatchGate = new Promise<void>((resolve) => {
+      releaseFirstBatch = resolve;
+    });
+
+    const scorePullRequests = vi.fn(async (pullRequestBatch: PullRequestScoringSource[]) => {
+      if (pullRequestBatch.some((pullRequest: PullRequestScoringSource) => pullRequest.number === 1)) {
+        await firstBatchGate;
+      }
+
+      return {
+        pullRequests: pullRequestBatch.map((pullRequest: PullRequestScoringSource) => ({
+          number: pullRequest.number,
+          ...createLlmPullRequestScore({
+            summary: `PR ${pullRequest.number} scored.`,
+          }),
+        })),
+      };
+    });
+
+    const scoringPromise = runRepositoryScoring(repositoryScoringSource, scorePullRequests);
+
+    await Promise.resolve();
+
+    expect(scorePullRequests).toHaveBeenCalledTimes(2);
+    expect(scorePullRequests.mock.calls[0]?.[0].map(({ number }) => number)).toEqual([
+      1, 2, 3,
+    ]);
+    expect(scorePullRequests.mock.calls[1]?.[0].map(({ number }) => number)).toEqual([
+      4,
+    ]);
+
+    releaseFirstBatch?.();
+
+    const result = await scoringPromise;
+
+    expect(result.ok).toBe(true);
   });
 
   it("returns a typed failure when every pull request batch is skipped", async () => {

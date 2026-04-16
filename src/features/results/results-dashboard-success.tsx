@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
 import { ResultsPrPreviewCard } from "@/features/results/results-pr-preview-card";
 import { ResultsScoreBreakdownList } from "@/features/results/results-score-breakdown-list";
@@ -163,6 +165,25 @@ export const ResultsDashboardSuccess = ({
           </article>
 
           <ResultsTableSection result={result} />
+
+          <article className="rounded-md border border-silver bg-white p-8">
+            <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-2">
+                <p className="ds-overline text-navy">Next Repository</p>
+                <h2 className="ds-heading-4 text-[1.5rem]">
+                  Run another PR analysis
+                </h2>
+                <p className="ds-caption max-w-[38rem] text-dark-slate">
+                  Head back to the homepage, drop in another public GitHub
+                  repository, and compare how its merged PR sample scores.
+                </p>
+              </div>
+
+              <Link className="ds-button-primary" href="/">
+                Analyze another repository
+              </Link>
+            </div>
+          </article>
         </div>
       </div>
     </section>
