@@ -52,6 +52,7 @@ describe("analysis contracts", () => {
   it("includes step 7 github analysis error codes", () => {
     expect(analysisApiErrorCodes).toEqual([
       "INVALID_REQUEST_BODY",
+      "CONFIGURATION_ERROR",
       "REPOSITORY_NOT_FOUND_OR_PRIVATE",
       "NO_MERGED_PULL_REQUESTS",
       "GITHUB_RATE_LIMITED",

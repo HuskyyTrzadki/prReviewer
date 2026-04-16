@@ -13,6 +13,9 @@ const getGoogleApiKey = () => {
   return apiKey;
 };
 
+export const isMissingGoogleApiKeyError = (error: unknown) =>
+  error instanceof Error && error.message === missingGoogleApiKeyMessage;
+
 export const assertGoogleApiKeyConfigured = () => {
   getGoogleApiKey();
 };

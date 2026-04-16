@@ -46,7 +46,7 @@ const LoadingState = () => (
 export const ResultsDashboardShell = ({
   repoId,
 }: ResultsDashboardShellProps) => {
-  const viewState = useSyncExternalStore(
+  const viewState = useSyncExternalStore<ResultsDashboardViewState>(
     subscribeToStoredAnalysisResult,
     () => readAnalysisResult(repoId),
     () => loadingViewState,

@@ -7,6 +7,7 @@ import type { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/
 import type { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import {
   analysisFailedMessage,
+  configurationErrorMessage,
   githubRateLimitedMessage,
   invalidAnalyzeRequestBodyMessage,
   noMergedPullRequestsMessage,
@@ -75,6 +76,34 @@ describe("POST /api/analyze", () => {
       code: "INVALID_REQUEST_BODY",
       message: invalidAnalyzeRequestBodyMessage,
     });
+  });
+
+  it("returns a typed 500 when server configuration is incomplete", async () => {
+    const originalGoogleApiKey = process.env.GOOGLE_API_KEY;
+    delete process.env.GOOGLE_API_KEY;
+
+    try {
+      const response = await POST(
+        createJsonRequest(
+          JSON.stringify({ repositoryUrl: "https://github.com/vercel/next.js" }),
+        ),
+      );
+      const payload = analyzeRepositoryResponseSchema.parse(await response.json());
+
+      expect(response.status).toBe(500);
+      expect(payload).toEqual({
+        status: "error",
+        code: "CONFIGURATION_ERROR",
+        message: configurationErrorMessage,
+      });
+      expect(prepareRepositoryAnalysisSourceMock).not.toHaveBeenCalled();
+    } finally {
+      if (originalGoogleApiKey === undefined) {
+        delete process.env.GOOGLE_API_KEY;
+      } else {
+        process.env.GOOGLE_API_KEY = originalGoogleApiKey;
+      }
+    }
   });
 
   it("returns a typed error for an unsupported repository URL", async () => {
