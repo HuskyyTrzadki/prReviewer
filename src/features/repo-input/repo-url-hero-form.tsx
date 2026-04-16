@@ -117,21 +117,21 @@ export const RepoUrlHeroForm = () => {
           </button>
         </div>
 
-        <div className="mt-3 flex flex-col gap-2 text-left">
-          <p className="ds-caption" id="repository-url-note">
-            Public repositories only.
-          </p>
-          <p
-            aria-live="polite"
-            className={statusClassName}
-            id="repository-url-status"
-            role={statusTone === "error" ? "alert" : "status"}
-          >
-            {statusMessage}
-          </p>
-        </div>
-
         {isSubmitting ? <AnalysisLoadingPanel tick={loadingTick} /> : null}
+      </div>
+
+      <div className="mt-3 flex flex-col gap-2 px-1 text-left">
+        <p className="ds-caption" id="repository-url-note">
+          Public repositories only.
+        </p>
+        <p
+          aria-live="polite"
+          className={statusClassName}
+          id="repository-url-status"
+          role={statusTone === "error" ? "alert" : "status"}
+        >
+          {statusMessage}
+        </p>
       </div>
     </form>
   );

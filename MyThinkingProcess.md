@@ -465,3 +465,5 @@ sadly lighthouse cli connected on github didnt end up useful, at first i thought
 at the current moment performance is just 50. fcp is good but  lcp 7.2s is bad, i knew about this issue before as it was a warning in github pr, just decided to postpone it, the issue was simple "animate-hero-entry"
 
 i need to omit step 17 as well, sadly no time.
+
+for lanidng page i notice we dont have arrow to scroll up and header  should be more similar to photo online, no navbar as well., i wouldnt use image for preview, instead do it via styles.
