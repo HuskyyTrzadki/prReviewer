@@ -4,7 +4,7 @@ export const DashboardPreviewSection = () => {
   return (
     <section
       aria-labelledby="dashboard-preview-title"
-      className="ds-section bg-white scroll-mt-24"
+      className="ds-deferred-section ds-section bg-white scroll-mt-24"
       id="dashboard-preview"
     >
       <div className="ds-container">

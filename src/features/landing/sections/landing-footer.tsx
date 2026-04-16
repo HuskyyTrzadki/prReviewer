@@ -7,7 +7,7 @@ const footerLinks = [
 
 export const LandingFooter = () => {
   return (
-    <footer className="border-t border-silver bg-ice-blue">
+    <footer className="ds-deferred-section border-t border-silver bg-ice-blue">
       <div className="ds-container py-8 sm:py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-xl space-y-3">

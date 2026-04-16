@@ -4,7 +4,7 @@ export const SocialProofSection = () => {
   return (
     <section
       aria-labelledby="social-proof-title"
-      className="ds-trust-bar scroll-mt-24"
+      className="ds-deferred-section ds-trust-bar scroll-mt-24"
       id="social-proof"
     >
       <div className="ds-container">
