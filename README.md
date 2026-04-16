@@ -96,6 +96,8 @@ The thing I regret most is not adding proper result caching, most likely with so
 - Improve the review algorithm itself. Right now the scoring flow is still fairly simple: it looks at PR title/body, basic metadata, and truncated diff excerpts for a limited number of files and PRs. It does not yet consider things like commit history, test changes, CI signals, broader repository context, or stronger heuristics around architectural impact :( ) I knew this was important, but it is backend-heavy work, so I chose to deprioritize it.
 - Improve handling for larger repositories: better batching, clearer limits, and likely async/background processing instead of keeping the whole analysis lifecycle inside one synchronous user flow :/  Right now the scoring path still processes PR batches in a simple loop, which works, but it is not the shape I would want long term.
 - Do one final polish pass on copy and UX states: loading, empty, rate limit, private repo, upstream failure, and missing environment configuration.
+- Table polish, it could look so much better.
+- Ideally user should be able to choose pr's to analyze instead of always getting recent 6.
 
 ## How I Used AI
 

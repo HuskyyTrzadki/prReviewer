@@ -103,51 +103,63 @@ export const runRepositoryScoring = async (
   source: RepositoryScoringSource,
   scorePullRequests: PullRequestScoreRunner,
 ): Promise<RepositoryScoringResult> => {
-  const scoredPullRequests = [];
-  const skippedPullRequests: SkippedPullRequest[] = [];
+  const batchResults = await Promise.all(
+    chunkPullRequests(source.pullRequests).map(async (pullRequestBatch) => {
+      const scoredPullRequests = [];
+      const skippedPullRequests: SkippedPullRequest[] = [];
 
-  for (const pullRequestBatch of chunkPullRequests(source.pullRequests)) {
-    try {
-      const rawScore = await scorePullRequests(pullRequestBatch, source.repository);
-      const requestedNumbers = new Set(
-        pullRequestBatch.map((pullRequest) => pullRequest.number),
-      );
-      const parsedScores = extractPullRequestScores(rawScore, requestedNumbers);
+      try {
+        const rawScore = await scorePullRequests(pullRequestBatch, source.repository);
+        const requestedNumbers = new Set(
+          pullRequestBatch.map((pullRequest) => pullRequest.number),
+        );
+        const parsedScores = extractPullRequestScores(rawScore, requestedNumbers);
 
-      if (parsedScores.size === 0) {
-        console.error("Pull request scoring returned invalid structured output", {
-          repository: source.repository.fullName,
-          pullRequestNumbers: pullRequestBatch.map((pullRequest) => pullRequest.number),
-          rawScore,
-        });
-      }
-
-      for (const pullRequest of pullRequestBatch) {
-        const parsedScore = parsedScores.get(pullRequest.number);
-
-        if (!parsedScore) {
-          skippedPullRequests.push(
-            createSkippedPullRequest(pullRequest.number, "LLM_INVALID_OUTPUT"),
-          );
-          continue;
+        if (parsedScores.size === 0) {
+          console.error("Pull request scoring returned invalid structured output", {
+            repository: source.repository.fullName,
+            pullRequestNumbers: pullRequestBatch.map((pullRequest) => pullRequest.number),
+            rawScore,
+          });
         }
 
-        scoredPullRequests.push(createScoredPullRequest(pullRequest, parsedScore));
-      }
-    } catch (error) {
-      console.error("Pull request scoring request failed", {
-        repository: source.repository.fullName,
-        pullRequestNumbers: pullRequestBatch.map((pullRequest) => pullRequest.number),
-        message: error instanceof Error ? error.message : String(error),
-      });
+        for (const pullRequest of pullRequestBatch) {
+          const parsedScore = parsedScores.get(pullRequest.number);
 
-      for (const pullRequest of pullRequestBatch) {
-        skippedPullRequests.push(
-          createSkippedPullRequest(pullRequest.number, "LLM_REQUEST_FAILED"),
-        );
+          if (!parsedScore) {
+            skippedPullRequests.push(
+              createSkippedPullRequest(pullRequest.number, "LLM_INVALID_OUTPUT"),
+            );
+            continue;
+          }
+
+          scoredPullRequests.push(createScoredPullRequest(pullRequest, parsedScore));
+        }
+      } catch (error) {
+        console.error("Pull request scoring request failed", {
+          repository: source.repository.fullName,
+          pullRequestNumbers: pullRequestBatch.map((pullRequest) => pullRequest.number),
+          message: error instanceof Error ? error.message : String(error),
+        });
+
+        for (const pullRequest of pullRequestBatch) {
+          skippedPullRequests.push(
+            createSkippedPullRequest(pullRequest.number, "LLM_REQUEST_FAILED"),
+          );
+        }
       }
-    }
-  }
+
+      return {
+        scoredPullRequests,
+        skippedPullRequests,
+      };
+    }),
+  );
+
+  const scoredPullRequests = batchResults.flatMap((batchResult) => batchResult.scoredPullRequests);
+  const skippedPullRequests = batchResults.flatMap(
+    (batchResult) => batchResult.skippedPullRequests,
+  );
 
   if (scoredPullRequests.length === 0) {
     return createAnalysisFailedResult();
