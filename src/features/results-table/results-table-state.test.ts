@@ -64,7 +64,7 @@ const pullRequests = [
     impactScore: 73,
     aiLeverageScore: 91,
     qualityScore: 84,
-    overallScore: 83,
+    overallScore: 85,
     summary: "AI-forward repository summary view",
   }),
 ];
@@ -110,7 +110,7 @@ describe("resultsTableState", () => {
       author: unknownAuthorFilterValue,
       size: "lg",
       aiMin: 85,
-      overallMin: 80,
+      overallMin: 85,
     });
 
     expect(filteredPullRequests.map((pullRequest) => pullRequest.number)).toEqual([
