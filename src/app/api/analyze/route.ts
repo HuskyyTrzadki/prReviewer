@@ -13,7 +13,7 @@ import { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prep
 import { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepare-repository-scoring-source";
 import {
   parseRepositoryUrl,
-} from "@/features/pr-analysis/lib/repository-url";
+} from "@/shared/lib/repository-url";
 import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import { scorePullRequestsWithGemini } from "@/features/pr-analysis/lib/score-pull-request-with-gemini";
 

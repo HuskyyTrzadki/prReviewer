@@ -4,10 +4,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 
 import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
+import {
+  defaultRepositoryUrlStatusMessage,
+  getRepositoryUrlFieldStatus,
+  validateRepositoryUrlForSubmit,
+} from "@/features/repo-input/repository-url-form-validation";
 
 const DEFAULT_REPOSITORY_URL = "";
 const loadingTickIntervalMs = 3200;
-const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
 const analysisServiceUnavailableMessage =
   "We could not reach the analysis service. Try again.";
 type FormStatusTone = "neutral" | "success" | "error";
@@ -22,7 +26,9 @@ export const RepoUrlHeroForm = () => {
   const [repositoryUrl, setRepositoryUrl] = useState(DEFAULT_REPOSITORY_URL);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingTick, setLoadingTick] = useState(0);
-  const [statusMessage, setStatusMessage] = useState(defaultStatusMessage);
+  const [statusMessage, setStatusMessage] = useState(
+    defaultRepositoryUrlStatusMessage,
+  );
   const [statusTone, setStatusTone] = useState<FormStatusTone>("neutral");
 
   useEffect(() => {
@@ -45,9 +51,16 @@ export const RepoUrlHeroForm = () => {
   ) => {
     event.preventDefault();
 
-    const trimmedRepositoryUrl = repositoryUrl.trim();
+    const validationResult = validateRepositoryUrlForSubmit(repositoryUrl);
 
-    setRepositoryUrl(trimmedRepositoryUrl);
+    if (!validationResult.ok) {
+      setRepositoryUrl(repositoryUrl.trim());
+      setStatusTone("error");
+      setStatusMessage(validationResult.message);
+      return;
+    }
+
+    setRepositoryUrl(validationResult.canonicalUrl);
     setIsSubmitting(true);
     setStatusTone("neutral");
     setStatusMessage("Starting repository analysis...");
@@ -58,7 +71,7 @@ export const RepoUrlHeroForm = () => {
           import("@/features/repo-input/submit-repository-analysis"),
           import("@/features/results/results-session"),
         ]);
-      const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
+      const response = await submitRepositoryAnalysis(validationResult.canonicalUrl);
 
       if (response.status === "error") {
         setStatusTone("error");
@@ -81,9 +94,36 @@ export const RepoUrlHeroForm = () => {
   };
 
   const statusClassName = statusClassNamesByTone[statusTone];
+  const handleChange: NonNullable<ComponentProps<"input">["onChange"]> = (
+    event,
+  ) => {
+    const nextRepositoryUrl = event.target.value;
+
+    setRepositoryUrl(nextRepositoryUrl);
+
+    if (statusTone !== "error") {
+      return;
+    }
+
+    const nextStatus = getRepositoryUrlFieldStatus(nextRepositoryUrl);
+
+    setStatusTone(nextStatus.tone);
+    setStatusMessage(nextStatus.message);
+  };
+  const handleBlur: NonNullable<ComponentProps<"input">["onBlur"]> = () => {
+    const nextStatus = getRepositoryUrlFieldStatus(repositoryUrl);
+
+    setStatusTone(nextStatus.tone);
+    setStatusMessage(nextStatus.message);
+  };
 
   return (
-    <form aria-busy={isSubmitting} className="w-full" onSubmit={handleSubmit}>
+    <form
+      aria-busy={isSubmitting}
+      className="w-full"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <label className="sr-only" htmlFor="repository-url">
         Public GitHub Repository URL
       </label>
@@ -101,11 +141,12 @@ export const RepoUrlHeroForm = () => {
             id="repository-url"
             inputMode="url"
             name="repositoryUrl"
-            onChange={(event) => setRepositoryUrl(event.target.value)}
+            onBlur={handleBlur}
+            onChange={handleChange}
             placeholder="https://github.com/owner/repository…"
             required
             spellCheck={false}
-            type="url"
+            type="text"
             value={repositoryUrl}
           />
 
