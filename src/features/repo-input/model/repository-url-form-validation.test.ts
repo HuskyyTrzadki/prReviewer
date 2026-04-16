@@ -4,7 +4,7 @@ import {
   defaultRepositoryUrlStatusMessage,
   getRepositoryUrlFieldStatus,
   validateRepositoryUrlForSubmit,
-} from "@/features/repo-input/repository-url-form-validation";
+} from "@/features/repo-input/model/repository-url-form-validation";
 
 describe("repositoryUrlFormValidation", () => {
   it("normalizes supported repository shorthand on submit", () => {

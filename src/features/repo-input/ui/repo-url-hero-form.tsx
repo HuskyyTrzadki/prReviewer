@@ -3,17 +3,16 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 
-import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
+import { startRepositoryAnalysis } from "@/features/repo-input/lib/start-repository-analysis";
 import {
   defaultRepositoryUrlStatusMessage,
   getRepositoryUrlFieldStatus,
   validateRepositoryUrlForSubmit,
-} from "@/features/repo-input/repository-url-form-validation";
+} from "@/features/repo-input/model/repository-url-form-validation";
+import { AnalysisLoadingPanel } from "@/features/repo-input/ui/analysis-loading-panel";
 
 const DEFAULT_REPOSITORY_URL = "";
 const loadingTickIntervalMs = 3200;
-const analysisServiceUnavailableMessage =
-  "We could not reach the analysis service. Try again.";
 type FormStatusTone = "neutral" | "success" | "error";
 const statusClassNamesByTone: Record<FormStatusTone, string> = {
   neutral: "ds-caption text-navy",
@@ -33,7 +32,6 @@ export const RepoUrlHeroForm = () => {
 
   useEffect(() => {
     if (!isSubmitting) {
-      setLoadingTick(0);
       return;
     }
 
@@ -61,36 +59,25 @@ export const RepoUrlHeroForm = () => {
     }
 
     setRepositoryUrl(validationResult.canonicalUrl);
+    setLoadingTick(0);
     setIsSubmitting(true);
     setStatusTone("neutral");
     setStatusMessage("Starting repository analysis...");
 
-    try {
-      const [{ submitRepositoryAnalysis }, { storeAnalysisResult }] =
-        await Promise.all([
-          import("@/features/repo-input/submit-repository-analysis"),
-          import("@/features/results/results-session"),
-        ]);
-      const response = await submitRepositoryAnalysis(validationResult.canonicalUrl);
+    const response = await startRepositoryAnalysis(validationResult.canonicalUrl);
 
-      if (response.status === "error") {
-        setStatusTone("error");
-        setStatusMessage(response.message);
-        return;
-      }
-
+    if (response.status === "success") {
       setStatusTone("success");
       setStatusMessage(
-        `Repository found. Opening results for ${response.repository.fullName}...`,
+        `Repository found. Opening results for ${response.repositoryFullName}...`,
       );
-      storeAnalysisResult(response);
       router.push(response.redirectUrl);
-    } catch {
+    } else {
       setStatusTone("error");
-      setStatusMessage(analysisServiceUnavailableMessage);
-    } finally {
-      setIsSubmitting(false);
+      setStatusMessage(response.message);
     }
+
+    setIsSubmitting(false);
   };
 
   const statusClassName = statusClassNamesByTone[statusTone];

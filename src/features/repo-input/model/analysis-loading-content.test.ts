@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   analysisLoadingPhases,
   getAnalysisLoadingSnapshot,
-} from "@/features/repo-input/analysis-loading-content";
+} from "@/features/repo-input/model/analysis-loading-content";
 
 describe("getAnalysisLoadingSnapshot", () => {
   it("starts with the first real analysis phase", () => {

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   invalidAnalyzeRepositoryResponseMessage,
   submitRepositoryAnalysis,
-} from "@/features/repo-input/submit-repository-analysis";
+} from "@/features/repo-input/lib/submit-repository-analysis";
 
 describe("submitRepositoryAnalysis", () => {
   it("returns a typed success payload from the analyze route", async () => {

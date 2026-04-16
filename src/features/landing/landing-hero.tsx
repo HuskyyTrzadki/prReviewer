@@ -1,5 +1,5 @@
 import { LandingHeroPreview } from "@/features/landing/landing-hero-preview";
-import { RepoUrlHeroForm } from "@/features/repo-input/repo-url-hero-form";
+import { RepoUrlHeroForm } from "@/features/repo-input/ui/repo-url-hero-form";
 
 const heroPills = [
   "Public GitHub repos",
