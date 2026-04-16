@@ -22,7 +22,7 @@ export const AnalysisLoadingPanel = ({
       className="mt-4 rounded-md border border-silver bg-ice-blue p-4 sm:p-5"
       role="status"
     >
-      <div className="grid gap-5 lg:grid-cols-[1fr_0.9fr]">
+      <div className="grid gap-5 lg:grid-cols-[1fr_minmax(18rem,0.95fr)]">
         <div className="space-y-4">
           <div className="space-y-2">
             <p className="ds-overline text-navy">Analysis in Progress</p>
@@ -65,27 +65,26 @@ export const AnalysisLoadingPanel = ({
           </div>
         </div>
 
-        <div className="rounded-md border border-silver bg-white p-4 sm:p-5">
-          <div className="flex items-start gap-4">
+        <div className="rounded-md border border-silver bg-white p-5 sm:p-6">
+          <div className="space-y-4">
             <span
               aria-hidden="true"
-              className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-soft-indigo text-lg text-indigo-violet"
+              className="inline-flex size-10 items-center justify-center rounded-full bg-soft-indigo text-lg text-indigo-violet"
             >
               ✦
             </span>
 
             <div className="min-w-0 space-y-3">
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 <p className="ds-overline text-navy">While You Wait</p>
                 <h4 className="text-base font-semibold text-navy sm:text-lg">
                   {insightLead}
                 </h4>
               </div>
 
-              <p className="rounded-xl bg-ice-blue px-4 py-3 text-sm leading-6 text-dark-slate sm:text-base">
+              <p className="rounded-xl bg-ice-blue px-4 py-4 text-sm leading-6 text-dark-slate sm:text-base">
                 {insightBody}
               </p>
-
             </div>
           </div>
         </div>
