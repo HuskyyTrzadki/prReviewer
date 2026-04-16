@@ -16,11 +16,11 @@ export const LandingHero = () => {
 
       <div className="ds-container relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-8 py-6 text-center sm:py-10 lg:py-16">
-          <span className="animate-hero-entry ds-overline rounded-full border border-silver bg-white px-4 py-2 text-navy shadow-soft">
+          <span className="ds-overline rounded-full border border-silver bg-white px-4 py-2 text-navy shadow-soft">
             Public Repo Review
           </span>
 
-          <div className="animate-hero-entry space-y-5">
+          <div className="space-y-5">
             <h1 className="ds-display-1 mx-auto max-w-[14ch] text-balance">
               Review Pull Requests With a Clearer Signal.
             </h1>
@@ -30,11 +30,11 @@ export const LandingHero = () => {
             </p>
           </div>
 
-          <div className="animate-hero-entry w-full max-w-4xl">
+          <div className="w-full max-w-4xl">
             <RepoUrlHeroForm />
           </div>
 
-          <ul className="animate-hero-entry flex flex-wrap justify-center gap-3">
+          <ul className="flex flex-wrap justify-center gap-3">
             {heroPills.map((pill) => (
               <li
                 className="rounded-full border border-silver bg-white px-4 py-2 text-sm font-medium text-dark-slate"

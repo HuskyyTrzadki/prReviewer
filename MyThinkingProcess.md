@@ -458,4 +458,8 @@ for ui chart i d like a radar instead of just plain bars, i d use recharts for q
 
 typical qa with ai, we just keep on improving designs, some of the stuff i like initially some we need to redesign slighy for example search bar in results should be in seperate row .. and so on.
 
-i d like to reuse "repository score" circle. in quick read section, and Score Breakdown i ll make it reusable, also animation on that would be great. 
+i d like to reuse "repository score" circle. in quick read section, and Score Breakdown i ll make it reusable, also animation on that would be great.
+
+sadly lighthouse cli connected on github didnt end up useful, at first i thought it would be great so see a lighthouse job on pr's however i stumbled across few issues there, and i didnt want to spend more time. 
+
+at the current moment performance is just 50. fcp is good but  lcp 7.2s is bad, i knew about this issue before as it was a warning in github pr, just decided to postpone it, the issue was simple "animate-hero-entry"

@@ -4,8 +4,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 
 import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
-import { submitRepositoryAnalysis } from "@/features/repo-input/submit-repository-analysis";
-import { storeAnalysisResult } from "@/features/results-dashboard/results-session";
 
 const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
 const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
@@ -54,6 +52,11 @@ export const RepoUrlHeroForm = () => {
     setStatusMessage("Starting repository analysis...");
 
     try {
+      const [{ submitRepositoryAnalysis }, { storeAnalysisResult }] =
+        await Promise.all([
+          import("@/features/repo-input/submit-repository-analysis"),
+          import("@/features/results-dashboard/results-session"),
+        ]);
       const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
 
       if (response.status === "error") {
