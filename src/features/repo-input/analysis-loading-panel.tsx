@@ -7,7 +7,7 @@ type AnalysisLoadingPanelProps = {
 export const AnalysisLoadingPanel = ({
   tick,
 }: AnalysisLoadingPanelProps) => {
-  const { currentPhase, insight, phases } = getAnalysisLoadingSnapshot(tick);
+  const {  insight, phases } = getAnalysisLoadingSnapshot(tick);
   const highlightedInsight = insight.split("? ");
   const insightLead =
     highlightedInsight.length > 1 ? `${highlightedInsight[0]}?` : "Review note";
@@ -24,14 +24,6 @@ export const AnalysisLoadingPanel = ({
     >
       <div className="grid gap-5 lg:grid-cols-[1fr_minmax(18rem,0.95fr)]">
         <div className="space-y-4">
-          <div className="space-y-2">
-            <p className="ds-overline text-navy">Analysis in Progress</p>
-            <h3 className="text-lg font-semibold text-navy sm:text-xl">
-              {currentPhase.title}
-            </h3>
-            <p className="ds-body-secondary">{currentPhase.description}</p>
-          </div>
-
           <div className="space-y-3">
             {phases.map((phase, index) => {
               const isCurrent = index === Math.min(tick, phases.length - 1);

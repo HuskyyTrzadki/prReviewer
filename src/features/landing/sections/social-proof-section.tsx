@@ -15,7 +15,7 @@ export const SocialProofSection = () => {
               className="ds-display-2 mx-auto max-w-[18ch] text-balance lg:mx-0"
               id="social-proof-title"
             >
-              Built for Fast Reviews Before the Deeper Technical Read.
+              Fast Signal Before the Full Pull Request Read.
             </h2>
             <p className="ds-body mx-auto max-w-[42rem] lg:mx-0">
               The landing flow is designed for the moments when engineering teams
