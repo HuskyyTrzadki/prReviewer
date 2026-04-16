@@ -2,6 +2,8 @@ import type { AnalysisApiErrorCode } from "@/features/pr-analysis/contracts/anal
 
 export const invalidAnalyzeRequestBodyMessage =
   "Request body must be valid JSON with a repositoryUrl field.";
+export const configurationErrorMessage =
+  "Server configuration is incomplete. Try again later.";
 export const repositoryNotFoundOrPrivateMessage =
   "This repository was not found or is private. Use a public GitHub repository URL.";
 export const noMergedPullRequestsMessage =
@@ -15,6 +17,7 @@ export const analysisFailedMessage =
 
 const analysisApiErrorStatusByCode: Record<AnalysisApiErrorCode, number> = {
   INVALID_REQUEST_BODY: 400,
+  CONFIGURATION_ERROR: 500,
   INVALID_REPOSITORY_URL: 400,
   UNSUPPORTED_REPOSITORY_HOST: 400,
   UNSUPPORTED_REPOSITORY_RESOURCE: 400,

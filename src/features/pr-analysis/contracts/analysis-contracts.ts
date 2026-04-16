@@ -3,7 +3,7 @@ import { z } from "zod";
 import {
   normalizedRepositorySchema,
 } from "@/features/pr-analysis/contracts/repository-contracts";
-import { repositoryUrlErrorCodes } from "@/features/pr-analysis/lib/repository-url";
+import { repositoryUrlErrorCodes } from "@/shared/lib/repository-url";
 import {
   repositoryScoreSummarySchema,
   scoredPullRequestSchema,
@@ -13,6 +13,7 @@ import {
 export const repoIdSchema = z.string().trim().min(1);
 export const analysisApiErrorCodes = [
   "INVALID_REQUEST_BODY",
+  "CONFIGURATION_ERROR",
   "REPOSITORY_NOT_FOUND_OR_PRIVATE",
   "NO_MERGED_PULL_REQUESTS",
   "GITHUB_RATE_LIMITED",
@@ -50,7 +51,7 @@ export const analyzeRepositoryResponseSchema = z.discriminatedUnion("status", [
   analysisApiErrorSchema,
 ]);
 
-export const analysisResultStatusSchema = z.enum([
+const analysisResultStatusSchema = z.enum([
   "pending",
   "completed",
   "failed",
@@ -63,17 +64,10 @@ export const analysisResultSchema = z.object({
 });
 
 export type RepoId = z.infer<typeof repoIdSchema>;
-export type AnalyzeRepositoryRequest = z.infer<
-  typeof analyzeRepositoryRequestSchema
->;
 export type AnalysisApiErrorCode = z.infer<typeof analysisApiErrorCodeSchema>;
-export type AnalysisApiError = z.infer<typeof analysisApiErrorSchema>;
 export type AnalyzeRepositorySuccess = z.infer<
   typeof analyzeRepositorySuccessSchema
 >;
 export type AnalyzeRepositoryResponse = z.infer<
   typeof analyzeRepositoryResponseSchema
 >;
-export type AnalysisResultStatus = z.infer<typeof analysisResultStatusSchema>;
-export type AnalysisResult = z.infer<typeof analysisResultSchema>;
-export { normalizedRepositorySchema, type NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";

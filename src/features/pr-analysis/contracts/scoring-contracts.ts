@@ -5,7 +5,7 @@ import { normalizedRepositorySchema } from "@/features/pr-analysis/contracts/rep
 const boundedScoreSchema = z.number().min(0).max(100);
 const scoreRationaleSchema = z.string().trim().min(1);
 
-export const llmScoreDimensionSchema = z.object({
+const llmScoreDimensionSchema = z.object({
   score: boundedScoreSchema,
   rationale: scoreRationaleSchema,
 });
@@ -21,11 +21,11 @@ export const llmPullRequestBatchItemSchema = llmPullRequestScoreSchema.extend({
   number: z.number().int().positive(),
 });
 
-export const llmPullRequestBatchScoreSchema = z.object({
+const llmPullRequestBatchScoreSchema = z.object({
   pullRequests: z.array(llmPullRequestBatchItemSchema),
 });
 
-export const skippedPullRequestReasonSchema = z.enum([
+const skippedPullRequestReasonSchema = z.enum([
   "LLM_INVALID_OUTPUT",
   "LLM_REQUEST_FAILED",
 ]);
@@ -72,17 +72,8 @@ export const scoredRepositoryAnalysisSchema = z.object({
 });
 
 export type LlmPullRequestScore = z.infer<typeof llmPullRequestScoreSchema>;
-export type LlmPullRequestBatchItem = z.infer<
-  typeof llmPullRequestBatchItemSchema
->;
 export type ScoredPullRequest = z.infer<typeof scoredPullRequestSchema>;
-export type SkippedPullRequestReason = z.infer<
-  typeof skippedPullRequestReasonSchema
->;
 export type SkippedPullRequest = z.infer<typeof skippedPullRequestSchema>;
-export type RepositoryScoreSummary = z.infer<
-  typeof repositoryScoreSummarySchema
->;
 export type ScoredRepositoryAnalysis = z.infer<
   typeof scoredRepositoryAnalysisSchema
 >;

@@ -5,14 +5,19 @@ import {
   analysisApiErrorSchema,
 } from "@/features/pr-analysis/contracts/analysis-contracts";
 import {
+  configurationErrorMessage,
   getAnalysisApiErrorStatus,
   invalidAnalyzeRequestBodyMessage,
 } from "@/features/pr-analysis/lib/analysis-api-errors";
+import {
+  assertGoogleApiKeyConfigured,
+  isMissingGoogleApiKeyError,
+} from "@/features/pr-analysis/lib/gemini-client";
 import { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
 import { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepare-repository-scoring-source";
 import {
   parseRepositoryUrl,
-} from "@/features/pr-analysis/lib/repository-url";
+} from "@/shared/lib/repository-url";
 import { runRepositoryScoring } from "@/features/pr-analysis/lib/run-repository-scoring";
 import { scorePullRequestsWithGemini } from "@/features/pr-analysis/lib/score-pull-request-with-gemini";
 
@@ -59,6 +64,16 @@ export const POST = async (request: Request) => {
       parsedRepository.error.code,
       parsedRepository.error.message,
     );
+  }
+
+  try {
+    assertGoogleApiKeyConfigured();
+  } catch (error) {
+    if (isMissingGoogleApiKeyError(error)) {
+      return createErrorResponse("CONFIGURATION_ERROR", configurationErrorMessage);
+    }
+
+    throw error;
   }
 
   const analysisSource = await prepareRepositoryAnalysisSource(parsedRepository.value);

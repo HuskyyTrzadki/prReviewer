@@ -1,38 +1,11 @@
 import type { ScoredPullRequest } from "@/features/pr-analysis/contracts/scoring-contracts";
 import {
-  defaultResultsTableState,
-  minimumScoreValues,
   scoreFieldByKey,
-  sizeFilters,
-  sizeLabels,
-  sortDirections,
-  sortKeys,
-  sortLabels,
   unknownAuthorFilterValue,
-  type MinimumScoreValue,
   type ResultsTableAuthorOption,
   type ResultsTableSizeFilter,
-  type ResultsTableSortDirection,
-  type ResultsTableSortKey,
   type ResultsTableState,
-} from "@/features/results-table/results-table-config";
-
-type SearchParamsLike = Pick<URLSearchParams, "get">;
-const mergedDateFormatter = new Intl.DateTimeFormat("en", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
-
-const parseMinimumScore = (
-  value: string | null,
-): MinimumScoreValue | null => {
-  const parsedValue = Number(value);
-
-  return minimumScoreValues.includes(parsedValue as MinimumScoreValue)
-    ? (parsedValue as MinimumScoreValue)
-    : null;
-};
+} from "@/features/results/results-table-config";
 
 const getPullRequestSizeValue = (pullRequest: ScoredPullRequest) =>
   pullRequest.additions + pullRequest.deletions;
@@ -55,50 +28,6 @@ const getPullRequestSizeFilter = (
   }
 
   return "lg";
-};
-
-export const parseResultsTableState = (
-  searchParams: SearchParamsLike,
-): ResultsTableState => {
-  const sort = searchParams.get("sort");
-  const dir = searchParams.get("dir");
-  const size = searchParams.get("size");
-
-  return {
-    q: searchParams.get("q")?.trim() ?? defaultResultsTableState.q,
-    author: searchParams.get("author")?.trim() ?? defaultResultsTableState.author,
-    size: sizeFilters.includes(size as ResultsTableSizeFilter)
-      ? (size as ResultsTableSizeFilter)
-      : defaultResultsTableState.size,
-    impactMin: parseMinimumScore(searchParams.get("impactMin")),
-    aiMin: parseMinimumScore(searchParams.get("aiMin")),
-    qualityMin: parseMinimumScore(searchParams.get("qualityMin")),
-    overallMin: parseMinimumScore(searchParams.get("overallMin")),
-    sort: sortKeys.includes(sort as ResultsTableSortKey)
-      ? (sort as ResultsTableSortKey)
-      : defaultResultsTableState.sort,
-    dir: sortDirections.includes(dir as ResultsTableSortDirection)
-      ? (dir as ResultsTableSortDirection)
-      : defaultResultsTableState.dir,
-  };
-};
-
-export const createResultsTableQueryString = (
-  state: ResultsTableState,
-): string => {
-  const params = new URLSearchParams();
-
-  if (state.q) params.set("q", state.q);
-  if (state.author) params.set("author", state.author);
-  if (state.size !== defaultResultsTableState.size) params.set("size", state.size);
-  if (state.impactMin) params.set("impactMin", String(state.impactMin));
-  if (state.aiMin) params.set("aiMin", String(state.aiMin));
-  if (state.qualityMin) params.set("qualityMin", String(state.qualityMin));
-  if (state.overallMin) params.set("overallMin", String(state.overallMin));
-  if (state.sort !== defaultResultsTableState.sort) params.set("sort", state.sort);
-  if (state.dir !== defaultResultsTableState.dir) params.set("dir", state.dir);
-
-  return params.toString();
 };
 
 export const filterAndSortPullRequests = (
@@ -182,29 +111,4 @@ export const getResultsTableAuthorOptions = (
       value,
       label: value === unknownAuthorFilterValue ? "Unknown author" : value,
     }));
-};
-
-export const formatPullRequestMergedDate = (mergedAt: string) =>
-  mergedDateFormatter.format(new Date(mergedAt));
-
-export const getResultsTableSortDirectionForKey = (
-  sort: ResultsTableSortKey,
-): ResultsTableSortDirection => (sort === "author" ? "asc" : "desc");
-
-export const getResultsTableSortLabel = (sort: ResultsTableSortKey) =>
-  sortLabels[sort];
-
-export const getResultsTableSizeLabel = (size: ResultsTableSizeFilter) =>
-  sizeLabels[size];
-
-export {
-  defaultResultsTableState,
-  minimumScoreValues,
-  sizeFilters,
-  unknownAuthorFilterValue,
-  type ResultsTableAuthorOption,
-  type ResultsTableSizeFilter,
-  type ResultsTableSortDirection,
-  type ResultsTableSortKey,
-  type ResultsTableState,
 };

@@ -5,7 +5,7 @@ import {
   createAnalysisResultStorageKey,
   readAnalysisResult,
   storeAnalysisResult,
-} from "@/features/results-dashboard/results-session";
+} from "@/features/results/results-session";
 
 const createStorage = () => {
   const values = new Map<string, string>();

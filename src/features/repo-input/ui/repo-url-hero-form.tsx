@@ -3,13 +3,16 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 
-import { AnalysisLoadingPanel } from "@/features/repo-input/analysis-loading-panel";
+import { startRepositoryAnalysis } from "@/features/repo-input/lib/start-repository-analysis";
+import {
+  defaultRepositoryUrlStatusMessage,
+  getRepositoryUrlFieldStatus,
+  validateRepositoryUrlForSubmit,
+} from "@/features/repo-input/model/repository-url-form-validation";
+import { AnalysisLoadingPanel } from "@/features/repo-input/ui/analysis-loading-panel";
 
-const DEFAULT_REPOSITORY_URL = "https://github.com/vercel/next.js";
+const DEFAULT_REPOSITORY_URL = "";
 const loadingTickIntervalMs = 3200;
-const defaultStatusMessage = `Ready to analyze: ${DEFAULT_REPOSITORY_URL}`;
-const analysisServiceUnavailableMessage =
-  "We could not reach the analysis service. Try again.";
 type FormStatusTone = "neutral" | "success" | "error";
 const statusClassNamesByTone: Record<FormStatusTone, string> = {
   neutral: "ds-caption text-navy",
@@ -22,12 +25,13 @@ export const RepoUrlHeroForm = () => {
   const [repositoryUrl, setRepositoryUrl] = useState(DEFAULT_REPOSITORY_URL);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loadingTick, setLoadingTick] = useState(0);
-  const [statusMessage, setStatusMessage] = useState(defaultStatusMessage);
+  const [statusMessage, setStatusMessage] = useState(
+    defaultRepositoryUrlStatusMessage,
+  );
   const [statusTone, setStatusTone] = useState<FormStatusTone>("neutral");
 
   useEffect(() => {
     if (!isSubmitting) {
-      setLoadingTick(0);
       return;
     }
 
@@ -45,45 +49,68 @@ export const RepoUrlHeroForm = () => {
   ) => {
     event.preventDefault();
 
-    const trimmedRepositoryUrl = repositoryUrl.trim();
+    const validationResult = validateRepositoryUrlForSubmit(repositoryUrl);
 
-    setRepositoryUrl(trimmedRepositoryUrl);
+    if (!validationResult.ok) {
+      setRepositoryUrl(repositoryUrl.trim());
+      setStatusTone("error");
+      setStatusMessage(validationResult.message);
+      return;
+    }
+
+    setRepositoryUrl(validationResult.canonicalUrl);
+    setLoadingTick(0);
     setIsSubmitting(true);
     setStatusTone("neutral");
     setStatusMessage("Starting repository analysis...");
 
-    try {
-      const [{ submitRepositoryAnalysis }, { storeAnalysisResult }] =
-        await Promise.all([
-          import("@/features/repo-input/submit-repository-analysis"),
-          import("@/features/results-dashboard/results-session"),
-        ]);
-      const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
+    const response = await startRepositoryAnalysis(validationResult.canonicalUrl);
 
-      if (response.status === "error") {
-        setStatusTone("error");
-        setStatusMessage(response.message);
-        return;
-      }
-
+    if (response.status === "success") {
       setStatusTone("success");
       setStatusMessage(
-        `Repository found. Opening results for ${response.repository.fullName}...`,
+        `Repository found. Opening results for ${response.repositoryFullName}...`,
       );
-      storeAnalysisResult(response);
       router.push(response.redirectUrl);
-    } catch {
+    } else {
       setStatusTone("error");
-      setStatusMessage(analysisServiceUnavailableMessage);
-    } finally {
-      setIsSubmitting(false);
+      setStatusMessage(response.message);
     }
+
+    setIsSubmitting(false);
   };
 
   const statusClassName = statusClassNamesByTone[statusTone];
+  const handleChange: NonNullable<ComponentProps<"input">["onChange"]> = (
+    event,
+  ) => {
+    const nextRepositoryUrl = event.target.value;
+
+    setRepositoryUrl(nextRepositoryUrl);
+
+    if (statusTone !== "error") {
+      return;
+    }
+
+    const nextStatus = getRepositoryUrlFieldStatus(nextRepositoryUrl);
+
+    setStatusTone(nextStatus.tone);
+    setStatusMessage(nextStatus.message);
+  };
+  const handleBlur: NonNullable<ComponentProps<"input">["onBlur"]> = () => {
+    const nextStatus = getRepositoryUrlFieldStatus(repositoryUrl);
+
+    setStatusTone(nextStatus.tone);
+    setStatusMessage(nextStatus.message);
+  };
 
   return (
-    <form aria-busy={isSubmitting} className="w-full" onSubmit={handleSubmit}>
+    <form
+      aria-busy={isSubmitting}
+      className="w-full"
+      noValidate
+      onSubmit={handleSubmit}
+    >
       <label className="sr-only" htmlFor="repository-url">
         Public GitHub Repository URL
       </label>
@@ -101,11 +128,12 @@ export const RepoUrlHeroForm = () => {
             id="repository-url"
             inputMode="url"
             name="repositoryUrl"
-            onChange={(event) => setRepositoryUrl(event.target.value)}
+            onBlur={handleBlur}
+            onChange={handleChange}
             placeholder="https://github.com/owner/repository…"
             required
             spellCheck={false}
-            type="url"
+            type="text"
             value={repositoryUrl}
           />
 

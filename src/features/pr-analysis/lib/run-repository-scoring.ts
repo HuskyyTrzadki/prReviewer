@@ -1,5 +1,6 @@
 import { type RepositoryScoringSource } from "@/features/pr-analysis/contracts/analysis-source";
-import type { AnalysisApiErrorCode, NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { AnalysisApiErrorCode } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";
 import {
   llmPullRequestBatchItemSchema,
   type LlmPullRequestScore,
@@ -28,7 +29,7 @@ type RepositoryScoringResult =
       error: RepositoryScoringFailure;
     };
 
-export type PullRequestScoreRunner = (
+type PullRequestScoreRunner = (
   pullRequests: RepositoryScoringSource["pullRequests"],
   repository: NormalizedRepository,
 ) => Promise<unknown>;

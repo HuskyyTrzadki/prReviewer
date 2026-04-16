@@ -1,4 +1,4 @@
-import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
+import { ScoreCircle } from "@/shared/ui/score-circle";
 
 const previewPullRequests = [
   { label: "Impact", title: "Refactor caching boundaries", value: "91" },
@@ -49,7 +49,7 @@ export const LandingHeroPreview = () => {
                 <p className="text-sm font-medium text-dark-slate">Repository Score</p>
               </div>
 
-              <ResultsScoreCircle
+              <ScoreCircle
                 className="transition-transform duration-300 group-hover/preview:scale-[1.03] group-focus-within/hero:scale-[1.06] motion-reduce:transition-none"
                 size="md"
                 value={87}
@@ -101,16 +101,7 @@ export const LandingHeroPreview = () => {
             </div>
           </div>
         </article>
-
-        <div className="absolute -left-6 bottom-7 z-20 rounded-2xl border border-silver bg-white px-4 py-3 shadow-soft transition-transform duration-300 group-hover/preview:-translate-x-1 group-hover/preview:translate-y-1 group-focus-within/hero:-translate-x-2 group-focus-within/hero:translate-y-2 motion-reduce:transition-none">
-          <p className="ds-overline text-navy">Top pull request</p>
-          <p className="mt-1 text-sm font-semibold text-navy">
-            Refactor caching boundaries
-          </p>
-          <p className="mt-1 text-sm text-dark-slate">Impact score: 91</p>
-        </div>
-
-        <div className="absolute -right-8 -top-10 z-20 rounded-xl border border-silver bg-white px-4 py-3 shadow-soft rotate-[4deg] transition-transform duration-300 group-hover/preview:translate-y-1 group-focus-within/hero:translate-y-2 motion-reduce:transition-none">
+        <div className="absolute -right-8 -top-14 z-20 rounded-xl border border-silver bg-white px-4 py-3 shadow-soft rotate-[4deg] transition-transform duration-300 group-hover/preview:translate-y-1 group-focus-within/hero:translate-y-2 motion-reduce:transition-none">
           <p className="ds-overline text-navy">AI reviewed</p>
           <p className="mt-1 text-sm font-medium text-dark-slate transition-opacity duration-200 group-focus-within/hero:opacity-0">
             Fast first-pass signal

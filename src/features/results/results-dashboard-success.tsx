@@ -1,9 +1,9 @@
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
-import { ResultsPrPreviewCard } from "@/features/results-dashboard/results-pr-preview-card";
-import { ResultsScoreBreakdownList } from "@/features/results-dashboard/results-score-breakdown-list";
-import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
-import { ResultsScoreRadarChart } from "@/features/results-dashboard/results-score-radar-chart";
-import { ResultsTableSection } from "@/features/results-table/results-table-section";
+import { ResultsPrPreviewCard } from "@/features/results/results-pr-preview-card";
+import { ResultsScoreBreakdownList } from "@/features/results/results-score-breakdown-list";
+import { ResultsScoreRadarChart } from "@/features/results/results-score-radar-chart";
+import { ResultsTableSection } from "@/features/results/results-table-section";
+import { ScoreCircle } from "@/shared/ui/score-circle";
 
 type ResultsDashboardSuccessProps = {
   result: AnalyzeRepositorySuccess;
@@ -51,7 +51,7 @@ export const ResultsDashboardSuccess = ({
                     <div className="space-y-3">
                       <p className="ds-overline text-navy">Repository Score</p>
                       <div className="flex justify-center">
-                        <ResultsScoreCircle
+                        <ScoreCircle
                           className="animate-score-circle-pop"
                           size="lg"
                           value={result.analysis.summary.overallScore}

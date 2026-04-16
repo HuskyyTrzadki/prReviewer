@@ -1,4 +1,4 @@
-import { getAnalysisLoadingSnapshot } from "@/features/repo-input/analysis-loading-content";
+import { getAnalysisLoadingSnapshot } from "@/features/repo-input/model/analysis-loading-content";
 
 type AnalysisLoadingPanelProps = {
   tick: number;
@@ -7,7 +7,7 @@ type AnalysisLoadingPanelProps = {
 export const AnalysisLoadingPanel = ({
   tick,
 }: AnalysisLoadingPanelProps) => {
-  const {  insight, phases } = getAnalysisLoadingSnapshot(tick);
+  const { insight, phases } = getAnalysisLoadingSnapshot(tick);
   const highlightedInsight = insight.split("? ");
   const insightLead =
     highlightedInsight.length > 1 ? `${highlightedInsight[0]}?` : "Review note";

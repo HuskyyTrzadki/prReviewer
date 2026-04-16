@@ -19,6 +19,10 @@ const axisLabelByDimension = {
   Impact: ["Impact"],
   Quality: ["Quality"],
 } as const;
+type ScoreDimension = keyof typeof axisLabelByDimension;
+
+const isScoreDimension = (value: string): value is ScoreDimension =>
+  Object.hasOwn(axisLabelByDimension, value);
 
 const RadarAxisTick = ({
   payload,
@@ -33,10 +37,9 @@ const RadarAxisTick = ({
     return null;
   }
 
-  const lines =
-    axisLabelByDimension[payload.value as keyof typeof axisLabelByDimension] ?? [
-      payload.value,
-    ];
+  const lines = isScoreDimension(payload.value)
+    ? axisLabelByDimension[payload.value]
+    : [payload.value];
 
   return (
     <text

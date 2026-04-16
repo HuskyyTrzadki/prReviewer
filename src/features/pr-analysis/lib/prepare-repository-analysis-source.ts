@@ -2,7 +2,7 @@ import {
   repositoryAnalysisSourceSchema,
   type RepositoryAnalysisSource,
 } from "@/features/pr-analysis/contracts/analysis-source";
-import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";
 import type { GithubAnalysisResult } from "@/features/pr-analysis/lib/github-analysis-errors";
 import {
   createGithubApiClient,

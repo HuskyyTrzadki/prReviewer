@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseRepositoryUrl } from "@/features/pr-analysis/lib/repository-url";
+import { parseRepositoryUrl } from "@/shared/lib/repository-url";
 
 describe("parseRepositoryUrl", () => {
   it("normalizes supported GitHub repository URL variants", () => {

@@ -1,15 +1,18 @@
 import {
   getResultsTableSizeLabel,
+  isResultsTableSizeFilter,
   minimumScoreValues,
+  minimumScoreFields,
   sizeFilters,
+  type MinimumScoreField,
   type ResultsTableAuthorOption,
   type ResultsTableSizeFilter,
   type ResultsTableState,
-} from "@/features/results-table/results-table-state";
+} from "@/features/results/results-table-state";
 import {
   ResultsTableField,
   ResultsTableSelectField,
-} from "@/features/results-table/results-table-field";
+} from "@/features/results/results-table-field";
 
 type ResultsTableControlsProps = {
   authorOptions: ResultsTableAuthorOption[];
@@ -25,12 +28,17 @@ type ResultsTableControlsProps = {
   state: ResultsTableState;
 };
 
-const scoreFilterGroups = [
-  { field: "impactMin", label: "Impact" },
-  { field: "aiMin", label: "AI Leverage" },
-  { field: "qualityMin", label: "Quality" },
-  { field: "overallMin", label: "Overall" },
-] as const;
+const scoreFilterLabelByField: Record<MinimumScoreField, string> = {
+  impactMin: "Impact",
+  aiMin: "AI Leverage",
+  qualityMin: "Quality",
+  overallMin: "Overall",
+};
+
+const scoreFilterGroups = minimumScoreFields.map((field) => ({
+  field,
+  label: scoreFilterLabelByField[field],
+}));
 
 export const ResultsTableControls = ({
   authorOptions,
@@ -42,14 +50,15 @@ export const ResultsTableControls = ({
   onSizeChange,
   state,
 }: ResultsTableControlsProps) => {
-  const hasActiveFilters =
+  const hasActiveFilters = Boolean(
     state.q ||
-    state.author ||
-    state.size !== "all" ||
-    state.impactMin ||
-    state.aiMin ||
-    state.qualityMin ||
-    state.overallMin;
+      state.author ||
+      state.size !== "all" ||
+      state.impactMin ||
+      state.aiMin ||
+      state.qualityMin ||
+      state.overallMin,
+  );
   const activeFilterCount = [
     Boolean(state.q),
     Boolean(state.author),
@@ -106,67 +115,74 @@ export const ResultsTableControls = ({
         </ResultsTableField>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
-        <ResultsTableField label="Author">
-          <ResultsTableSelectField>
-            <select
-              className="ds-select appearance-none pr-11"
-              name="authorFilter"
-              onChange={(event) => onAuthorChange(event.target.value)}
-              value={state.author}
-            >
-              <option value="">All Authors</option>
-              {authorOptions.map((authorOption) => (
-                <option key={authorOption.value} value={authorOption.value}>
-                  {authorOption.label}
-                </option>
-              ))}
-            </select>
-          </ResultsTableSelectField>
-        </ResultsTableField>
-
-        <ResultsTableField label="PR Size">
-          <ResultsTableSelectField>
-            <select
-              className="ds-select appearance-none pr-11"
-              name="sizeFilter"
-              onChange={(event) =>
-                onSizeChange(event.target.value as ResultsTableSizeFilter)
-              }
-              value={state.size}
-            >
-              {sizeFilters.map((sizeFilter) => (
-                <option key={sizeFilter} value={sizeFilter}>
-                  {getResultsTableSizeLabel(sizeFilter)}
-                </option>
-              ))}
-            </select>
-          </ResultsTableSelectField>
-        </ResultsTableField>
-
-        {scoreFilterGroups.map((scoreFilterGroup) => (
-          <ResultsTableField key={scoreFilterGroup.field} label={scoreFilterGroup.label}>
+          <ResultsTableField label="Author">
             <ResultsTableSelectField>
               <select
                 className="ds-select appearance-none pr-11"
-                name={scoreFilterGroup.field}
-                onChange={(event) =>
-                  onMinimumScoreChange(
-                    scoreFilterGroup.field,
-                    event.target.value ? Number(event.target.value) : null,
-                  )
-                }
-                value={state[scoreFilterGroup.field] ?? ""}
+                name="authorFilter"
+                onChange={(event) => onAuthorChange(event.target.value)}
+                value={state.author}
               >
-                <option value="">Any Score</option>
-                {minimumScoreValues.map((minimumScoreValue) => (
-                  <option key={minimumScoreValue} value={minimumScoreValue}>
-                    {minimumScoreValue}+
+                <option value="">All Authors</option>
+                {authorOptions.map((authorOption) => (
+                  <option key={authorOption.value} value={authorOption.value}>
+                    {authorOption.label}
                   </option>
                 ))}
               </select>
             </ResultsTableSelectField>
           </ResultsTableField>
-        ))}
+
+          <ResultsTableField label="PR Size">
+            <ResultsTableSelectField>
+              <select
+                className="ds-select appearance-none pr-11"
+                name="sizeFilter"
+                onChange={(event) => {
+                  const nextSize = event.target.value;
+
+                  if (isResultsTableSizeFilter(nextSize)) {
+                    onSizeChange(nextSize);
+                  }
+                }}
+                value={state.size}
+              >
+                {sizeFilters.map((sizeFilter) => (
+                  <option key={sizeFilter} value={sizeFilter}>
+                    {getResultsTableSizeLabel(sizeFilter)}
+                  </option>
+                ))}
+              </select>
+            </ResultsTableSelectField>
+          </ResultsTableField>
+
+          {scoreFilterGroups.map((scoreFilterGroup) => (
+            <ResultsTableField
+              key={scoreFilterGroup.field}
+              label={scoreFilterGroup.label}
+            >
+              <ResultsTableSelectField>
+                <select
+                  className="ds-select appearance-none pr-11"
+                  name={scoreFilterGroup.field}
+                  onChange={(event) =>
+                    onMinimumScoreChange(
+                      scoreFilterGroup.field,
+                      event.target.value ? Number(event.target.value) : null,
+                    )
+                  }
+                  value={state[scoreFilterGroup.field] ?? ""}
+                >
+                  <option value="">Any Score</option>
+                  {minimumScoreValues.map((minimumScoreValue) => (
+                    <option key={minimumScoreValue} value={minimumScoreValue}>
+                      {minimumScoreValue}+
+                    </option>
+                  ))}
+                </select>
+              </ResultsTableSelectField>
+            </ResultsTableField>
+          ))}
         </div>
       </div>
 
