@@ -1,4 +1,4 @@
-import type { NormalizedRepository } from "@/features/pr-analysis/contracts/analysis-contracts";
+import type { NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";
 import type {
   NormalizedPullRequestSource,
   PullRequestScoringSource,
@@ -13,7 +13,7 @@ import type {
 
 type GithubRequestHeaders = Record<string, string | number | undefined>;
 
-export type TestGithubRequestError = Error & {
+type TestGithubRequestError = Error & {
   response?: {
     headers?: GithubRequestHeaders;
   };

@@ -52,4 +52,4 @@ export const getAnalysisLoadingSnapshot = (tick: number) => {
   };
 };
 
-export { analysisLoadingInsights, analysisLoadingPhases };
+export { analysisLoadingPhases };

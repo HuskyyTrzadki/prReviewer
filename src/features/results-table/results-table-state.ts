@@ -20,7 +20,6 @@ export {
   minimumScoreFields,
   minimumScoreValues,
   type MinimumScoreField,
-  type MinimumScoreValue,
   type ResultsTableAuthorOption,
   type ResultsTableSizeFilter,
   type ResultsTableSortDirection,

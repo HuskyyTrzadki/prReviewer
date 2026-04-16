@@ -50,7 +50,7 @@ export const analyzeRepositoryResponseSchema = z.discriminatedUnion("status", [
   analysisApiErrorSchema,
 ]);
 
-export const analysisResultStatusSchema = z.enum([
+const analysisResultStatusSchema = z.enum([
   "pending",
   "completed",
   "failed",
@@ -63,17 +63,10 @@ export const analysisResultSchema = z.object({
 });
 
 export type RepoId = z.infer<typeof repoIdSchema>;
-export type AnalyzeRepositoryRequest = z.infer<
-  typeof analyzeRepositoryRequestSchema
->;
 export type AnalysisApiErrorCode = z.infer<typeof analysisApiErrorCodeSchema>;
-export type AnalysisApiError = z.infer<typeof analysisApiErrorSchema>;
 export type AnalyzeRepositorySuccess = z.infer<
   typeof analyzeRepositorySuccessSchema
 >;
 export type AnalyzeRepositoryResponse = z.infer<
   typeof analyzeRepositoryResponseSchema
 >;
-export type AnalysisResultStatus = z.infer<typeof analysisResultStatusSchema>;
-export type AnalysisResult = z.infer<typeof analysisResultSchema>;
-export { normalizedRepositorySchema, type NormalizedRepository } from "@/features/pr-analysis/contracts/repository-contracts";

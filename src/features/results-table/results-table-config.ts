@@ -104,8 +104,6 @@ export {
   scoreFieldByKey,
   sizeFilters,
   sizeLabels,
-  sortDirections,
-  sortKeys,
   sortLabels,
   unknownAuthorFilterValue,
   type MinimumScoreField,

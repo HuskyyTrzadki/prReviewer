@@ -4,21 +4,21 @@ export const repositoryUrlErrorCodes = [
   "UNSUPPORTED_REPOSITORY_RESOURCE",
 ] as const;
 
-export type RepositoryUrlErrorCode = (typeof repositoryUrlErrorCodes)[number];
+type RepositoryUrlErrorCode = (typeof repositoryUrlErrorCodes)[number];
 
-export type RepositoryUrlError = {
+type RepositoryUrlError = {
   code: RepositoryUrlErrorCode;
   message: string;
 };
 
-export type ParsedRepositoryUrl = {
+type ParsedRepositoryUrl = {
   owner: string;
   repo: string;
   fullName: string;
   canonicalUrl: string;
 };
 
-export type ParseRepositoryUrlResult =
+type ParseRepositoryUrlResult =
   | {
       ok: true;
       value: ParsedRepositoryUrl;
@@ -126,5 +126,3 @@ export const parseRepositoryUrl = (input: string): ParseRepositoryUrlResult => {
     },
   };
 };
-
-export const isRepositoryUrl = (input: string) => parseRepositoryUrl(input).ok;
