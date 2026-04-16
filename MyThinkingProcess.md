@@ -467,3 +467,5 @@ at the current moment performance is just 50. fcp is good but  lcp 7.2s is bad, 
 i need to omit step 17 as well, sadly no time.
 
 for lanidng page i notice we dont have arrow to scroll up and header  should be more similar to photo online, no navbar as well., i wouldnt use image for preview, instead do it via styles.
+
+during styling i like to do much more via actually coding, its much simpler sometimes to change paddings/gaps/and so on via hand than paste ss's to ai.

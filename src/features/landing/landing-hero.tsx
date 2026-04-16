@@ -28,7 +28,7 @@ export const LandingHero = () => {
             </span>
 
             <div className="space-y-5 text-left">
-              <h1 className="ds-display-1 max-w-[11ch] text-balance">
+              <h1 className="ds-display-1  text-balance">
                 See What Public Repositories Actually Ship.
               </h1>
               <p className="ds-body-lg max-w-[34rem] text-pretty">

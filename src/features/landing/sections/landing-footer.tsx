@@ -9,15 +9,7 @@ export const LandingFooter = () => {
   return (
     <footer className="ds-deferred-section border-t border-silver bg-ice-blue">
       <div className="ds-container py-8 sm:py-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-xl space-y-3">
-            <p className="ds-overline text-navy">PR Reviewer Photo Aid</p>
-            <p className="ds-body text-navy">
-              Review public GitHub repositories through the lens of impact, AI
-              leverage, and quality.
-            </p>
-          </div>
-
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-center">
           <nav aria-label="Footer" className="flex flex-wrap gap-3 sm:gap-5">
             {footerLinks.map((link) => (
               <a

@@ -1,3 +1,4 @@
+import { ResultsScoreCircle } from "@/features/results-dashboard/results-score-circle";
 import { previewMetrics, previewPullRequests } from "./landing-sections.data";
 
 export const DashboardPreviewSection = () => {
@@ -25,16 +26,9 @@ export const DashboardPreviewSection = () => {
           <div className="grid lg:grid-cols-[0.92fr_1.08fr]">
             <aside className="border-b border-silver bg-ice-blue px-6 py-8 sm:px-8 lg:border-b-0 lg:border-r">
               <div className="space-y-8">
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <p className="ds-overline text-navy">Repository Score</p>
-                  <div className="flex items-end gap-4">
-                    <span className="font-serif text-[4.5rem] leading-none tracking-[-0.04em] text-navy tabular-nums">
-                      87
-                    </span>
-                    <span className="pb-2 text-base font-medium text-dark-slate">
-                      / 100
-                    </span>
-                  </div>
+                  <ResultsScoreCircle size="lg" value={87} />
                   <p className="ds-body-secondary max-w-sm">
                     vercel/next.js would surface as a high-signal repository with
                     strong impact and consistently solid execution.
