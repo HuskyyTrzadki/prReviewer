@@ -106,7 +106,7 @@ export const ResultsTableMobile = ({
 
           <div className="flex flex-wrap items-center gap-3">
             <a
-              className="ds-button-secondary h-10 px-4 text-sm"
+              className="ds-button-primary h-10 px-4 text-sm"
               href={pullRequest.htmlUrl}
               rel="noreferrer"
               target="_blank"
@@ -114,12 +114,12 @@ export const ResultsTableMobile = ({
               Open PR
             </a>
             <a
-              className="text-sm font-medium text-indigo-violet transition-colors duration-150 hover:text-indigo-violet-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-violet/20 focus-visible:ring-offset-2"
+              className="ds-button-secondary h-10 px-4 text-sm"
               href={`${pullRequest.htmlUrl}/files`}
               rel="noreferrer"
               target="_blank"
             >
-              View Diff
+              View diff
             </a>
           </div>
         </div>
