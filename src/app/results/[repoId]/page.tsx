@@ -1,4 +1,4 @@
-import { ResultsDashboardShell } from "@/features/results-dashboard/results-dashboard-shell";
+import { ResultsDashboardShell } from "@/features/results/results-dashboard-shell";
 
 const ResultsPage = async ({
   params,

@@ -8,6 +8,7 @@ import {
   getAnalysisApiErrorStatus,
   invalidAnalyzeRequestBodyMessage,
 } from "@/features/pr-analysis/lib/analysis-api-errors";
+import { assertGoogleApiKeyConfigured } from "@/features/pr-analysis/lib/gemini-client";
 import { prepareRepositoryAnalysisSource } from "@/features/pr-analysis/lib/prepare-repository-analysis-source";
 import { prepareRepositoryScoringSource } from "@/features/pr-analysis/lib/prepare-repository-scoring-source";
 import {
@@ -60,6 +61,8 @@ export const POST = async (request: Request) => {
       parsedRepository.error.message,
     );
   }
+
+  assertGoogleApiKeyConfigured();
 
   const analysisSource = await prepareRepositoryAnalysisSource(parsedRepository.value);
 

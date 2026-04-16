@@ -8,11 +8,11 @@ import {
   type ResultsTableAuthorOption,
   type ResultsTableSizeFilter,
   type ResultsTableState,
-} from "@/features/results-table/results-table-state";
+} from "@/features/results/results-table-state";
 import {
   ResultsTableField,
   ResultsTableSelectField,
-} from "@/features/results-table/results-table-field";
+} from "@/features/results/results-table-field";
 
 type ResultsTableControlsProps = {
   authorOptions: ResultsTableAuthorOption[];

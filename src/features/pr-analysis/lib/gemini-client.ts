@@ -1,16 +1,21 @@
 import { GoogleGenAI } from "@google/genai";
 
-const missingGoogleApiKeyMessage =
+export const missingGoogleApiKeyMessage =
   "Missing GOOGLE_API_KEY for Gemini pull request scoring.";
 
-export const createGeminiClient = () => {
+const getGoogleApiKey = () => {
   const apiKey = process.env.GOOGLE_API_KEY?.trim();
 
   if (!apiKey) {
     throw new Error(missingGoogleApiKeyMessage);
   }
 
-  return new GoogleGenAI({ apiKey });
+  return apiKey;
 };
 
-export { missingGoogleApiKeyMessage };
+export const assertGoogleApiKeyConfigured = () => {
+  getGoogleApiKey();
+};
+
+export const createGeminiClient = () =>
+  new GoogleGenAI({ apiKey: getGoogleApiKey() });

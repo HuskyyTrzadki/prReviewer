@@ -5,7 +5,7 @@ import {
   type ResultsTableAuthorOption,
   type ResultsTableSizeFilter,
   type ResultsTableState,
-} from "@/features/results-table/results-table-config";
+} from "@/features/results/results-table-config";
 
 const getPullRequestSizeValue = (pullRequest: ScoredPullRequest) =>
   pullRequest.additions + pullRequest.deletions;

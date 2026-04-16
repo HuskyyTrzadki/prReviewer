@@ -2,11 +2,11 @@ export {
   defaultResultsTableState,
   sizeFilters,
   unknownAuthorFilterValue,
-} from "@/features/results-table/results-table-config";
+} from "@/features/results/results-table-config";
 export {
   filterAndSortPullRequests,
   getResultsTableAuthorOptions,
-} from "@/features/results-table/results-table-data";
+} from "@/features/results/results-table-data";
 export {
   formatPullRequestMergedDate,
   createResultsTableQueryString,
@@ -14,7 +14,7 @@ export {
   getResultsTableSortDirectionForKey,
   getResultsTableSortLabel,
   parseResultsTableState,
-} from "@/features/results-table/results-table-query-state";
+} from "@/features/results/results-table-query-state";
 export {
   isResultsTableSizeFilter,
   minimumScoreFields,
@@ -25,4 +25,4 @@ export {
   type ResultsTableSortDirection,
   type ResultsTableSortKey,
   type ResultsTableState,
-} from "@/features/results-table/results-table-config";
+} from "@/features/results/results-table-config";

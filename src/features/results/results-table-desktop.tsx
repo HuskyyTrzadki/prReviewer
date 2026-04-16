@@ -4,7 +4,7 @@ import {
   getResultsTableSortLabel,
   type ResultsTableSortDirection,
   type ResultsTableSortKey,
-} from "@/features/results-table/results-table-state";
+} from "@/features/results/results-table-state";
 
 type ResultsTableDesktopProps = {
   onSortChange: (sort: ResultsTableSortKey) => void;

@@ -56,7 +56,7 @@ export const RepoUrlHeroForm = () => {
       const [{ submitRepositoryAnalysis }, { storeAnalysisResult }] =
         await Promise.all([
           import("@/features/repo-input/submit-repository-analysis"),
-          import("@/features/results-dashboard/results-session"),
+          import("@/features/results/results-session"),
         ]);
       const response = await submitRepositoryAnalysis(trimmedRepositoryUrl);
 

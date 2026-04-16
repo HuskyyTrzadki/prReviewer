@@ -1,6 +1,6 @@
 import type { ScoredPullRequest } from "@/features/pr-analysis/contracts/scoring-contracts";
-import { ResultsTableScorePill } from "@/features/results-table/results-table-score-pill";
-import { formatPullRequestMergedDate } from "@/features/results-table/results-table-state";
+import { ResultsTableScorePill } from "@/features/results/results-table-score-pill";
+import { formatPullRequestMergedDate } from "@/features/results/results-table-state";
 
 type ResultsTableMobileProps = {
   pullRequests: ScoredPullRequest[];

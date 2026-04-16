@@ -11,7 +11,7 @@ import {
   type ResultsTableSortDirection,
   type ResultsTableSortKey,
   type ResultsTableState,
-} from "@/features/results-table/results-table-config";
+} from "@/features/results/results-table-config";
 
 type SearchParamsLike = Pick<URLSearchParams, "get">;
 

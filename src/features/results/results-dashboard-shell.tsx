@@ -5,9 +5,9 @@ import { useSyncExternalStore } from "react";
 import {
   readAnalysisResult,
   type StoredAnalysisResult,
-} from "@/features/results-dashboard/results-session";
-import { ResultsDashboardSuccess } from "@/features/results-dashboard/results-dashboard-success";
-import { ResultsStatePanel } from "@/features/results-dashboard/results-state-panel";
+} from "@/features/results/results-session";
+import { ResultsDashboardSuccess } from "@/features/results/results-dashboard-success";
+import { ResultsStatePanel } from "@/features/results/results-state-panel";
 
 type ResultsDashboardShellProps = {
   repoId: string;

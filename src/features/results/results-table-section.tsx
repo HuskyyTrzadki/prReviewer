@@ -4,9 +4,9 @@ import { useMemo, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import type { AnalyzeRepositorySuccess } from "@/features/pr-analysis/contracts/analysis-contracts";
-import { ResultsTableControls } from "@/features/results-table/results-table-controls";
-import { ResultsTableDesktop } from "@/features/results-table/results-table-desktop";
-import { ResultsTableMobile } from "@/features/results-table/results-table-mobile";
+import { ResultsTableControls } from "@/features/results/results-table-controls";
+import { ResultsTableDesktop } from "@/features/results/results-table-desktop";
+import { ResultsTableMobile } from "@/features/results/results-table-mobile";
 import {
   createResultsTableQueryString,
   defaultResultsTableState,
@@ -17,7 +17,7 @@ import {
   type ResultsTableSizeFilter,
   type ResultsTableSortKey,
   parseResultsTableState,
-} from "@/features/results-table/results-table-state";
+} from "@/features/results/results-table-state";
 
 type ResultsTableSectionProps = {
   result: AnalyzeRepositorySuccess;

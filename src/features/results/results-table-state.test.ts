@@ -9,7 +9,7 @@ import {
   getResultsTableAuthorOptions,
   parseResultsTableState,
   unknownAuthorFilterValue,
-} from "@/features/results-table/results-table-state";
+} from "@/features/results/results-table-state";
 
 const createScoredPullRequest = (
   number: number,
